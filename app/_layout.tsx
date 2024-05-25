@@ -14,7 +14,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useColorScheme } from '@/components/useColorScheme';
 import { getAddressFromCoordinates } from '@/lib';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { Slot } from 'expo-router';
+import { Slot, Stack } from 'expo-router';
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -49,28 +49,28 @@ export default function RootLayout() {
 		}
 	}, [loaded]);
 	// Check for location permissions
-	// useEffect(() => {
-	// 	(async () => {
-	// 		let { status } = await Location.requestForegroundPermissionsAsync();
-	// 		if (status !== 'granted') {
-	// 			// setErrorMsg('Permission to access location was denied');
-	// 			return;
-	// 		}
-	// 		//  Get user's current location
-	// 		let {
-	// 			coords: { longitude, latitude },
-	// 		} = await Location.getCurrentPositionAsync({});
-	// 		const location = { longitude, latitude };
-	// 		// setUserLocation(location);
+	useEffect(() => {
+		(async () => {
+			let { status } = await Location.requestForegroundPermissionsAsync();
+			if (status !== 'granted') {
+				// setErrorMsg('Permission to access location was denied');
+				return;
+			}
+			//  Get user's current location
+			let {
+				coords: { longitude, latitude },
+			} = await Location.getCurrentPositionAsync({});
+			const location = { longitude, latitude };
+			// setUserLocation(location);
 
-	// 		/**
-	// 		 * ! This call is billed on google, use Sparingly or use the MapBox API in development.
-	// 		 */
-	// 		// const address = await getAddressFromCoordinates(location);
-	// 		// console.log('🚀 ~ address:', address);
-	// 		// setCurrentAddress(address);
-	// 	})();
-	// }, []);
+			/**
+			 * ! This call is billed on google, use Sparingly or use the MapBox API in development.
+			 */
+			// const address = await getAddressFromCoordinates(location);
+			// console.log('🚀 ~ address:', address);
+			// setCurrentAddress(address);
+		})();
+	}, []);
 
 	if (!loaded) {
 		return null;
@@ -83,7 +83,19 @@ export default function RootLayout() {
 					value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
 				>
 					<BottomSheetModalProvider>
-						<Slot />
+						{/* <Slot /> */}
+						<Stack>
+							<Stack.Screen
+								name='(authenticated)'
+								options={{ headerShown: false }}
+							/>
+							<Stack.Screen name='login' options={{ headerShown: false }} />
+							<Stack.Screen name='register' options={{ headerShown: false }} />
+							<Stack.Screen
+								name='confirmation'
+								options={{ headerShown: false }}
+							/>
+						</Stack>
 					</BottomSheetModalProvider>
 				</ThemeProvider>
 			</GestureHandlerRootView>

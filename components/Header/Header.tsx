@@ -20,11 +20,12 @@ export function Header() {
 					marginTop: 18,
 					padding: 8,
 					paddingHorizontal: 3,
+					paddingRight: 5,
 				}}
 			>
 				<LocationBar />
 				{/* <TouchableOpacity> */}
-				<Link href={'/notifications'} asChild>
+				<Link push href={'/(nonTabs)/notifications'} asChild>
 					<Bell
 						size={24}
 						style={{ alignSelf: 'flex-end' }}

@@ -47,17 +47,17 @@ function ProfileOptions() {
 		{
 			icon: <Wallet color={color} />,
 			title: 'My Wallet',
-			href: '/(nonTabs)/wallet',
+			href: '/wallet',
 		},
 		{
 			icon: <Hammer color={color} />,
 			title: 'Manage Profile',
-			href: '/(nonTabs)/manageProfile',
+			href: '/manageProfile',
 		},
 		{
 			icon: <Tag color={color} />,
 			title: 'Promo codes',
-			href: '/(nonTabs)/promocodes',
+			href: '/promocodes',
 		},
 		{
 			icon: <CircleHelp color={color} />,
@@ -67,7 +67,7 @@ function ProfileOptions() {
 		{
 			icon: <MessageCircleQuestion color={color} />,
 			title: 'Support',
-			href: '/(nonTabs)/support',
+			href: '/support',
 		},
 		{
 			icon: <LogOut color={color} />,
@@ -93,7 +93,7 @@ function Option({
 	return (
 		<TouchableOpacity
 			style={styles.option}
-			onPress={() => router.navigate(item.href)}
+			onPress={() => router.push(item.href)}
 		>
 			<View style={{ flexDirection: 'row', gap: 20 }}>
 				<View>{item.icon}</View>
