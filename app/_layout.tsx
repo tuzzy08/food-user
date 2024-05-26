@@ -51,24 +51,28 @@ export default function RootLayout() {
 	// Check for location permissions
 	useEffect(() => {
 		(async () => {
-			let { status } = await Location.requestForegroundPermissionsAsync();
-			if (status !== 'granted') {
-				// setErrorMsg('Permission to access location was denied');
-				return;
-			}
-			//  Get user's current location
-			let {
-				coords: { longitude, latitude },
-			} = await Location.getCurrentPositionAsync({});
-			const location = { longitude, latitude };
-			// setUserLocation(location);
+			try {
+				let { status } = await Location.requestForegroundPermissionsAsync();
+				if (status !== 'granted') {
+					// setErrorMsg('Permission to access location was denied');
+					return;
+				}
+				//  Get user's current location
+				let {
+					coords: { longitude, latitude },
+				} = await Location.getCurrentPositionAsync({});
+				const location = { longitude, latitude };
+				// setUserLocation(location);
 
-			/**
-			 * ! This call is billed on google, use Sparingly or use the MapBox API in development.
-			 */
-			// const address = await getAddressFromCoordinates(location);
-			// console.log('🚀 ~ address:', address);
-			// setCurrentAddress(address);
+				/**
+				 * ! This call is billed on google, use Sparingly or use the MapBox API in development.
+				 */
+				// const address = await getAddressFromCoordinates(location);
+				// console.log('🚀 ~ address:', address);
+				// setCurrentAddress(address);
+			} catch (error) {
+				console.log('🚀 ~ RootLayout ~ error:', error);
+			}
 		})();
 	}, []);
 

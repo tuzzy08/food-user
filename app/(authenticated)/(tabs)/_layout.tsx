@@ -26,18 +26,19 @@ export default function TabLayout() {
 				screenOptions={{
 					tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
 					tabBarStyle: {
-						height: hp('10%'),
-						paddingBottom: 9,
+						height: hp('9.5%'),
+						paddingBottom: 12,
 					},
-					tabBarLabelStyle: { fontSize: 11 },
+					tabBarLabelStyle: { fontSize: 12, fontWeight: '600' },
 				}}
 			>
 				<Tabs.Screen
 					name='index'
 					options={{
+						title: 'Home',
 						headerTitle: '',
 						tabBarIcon: ({ color }) => (
-							<Home size={25} color={color} style={styles.tabIcon} />
+							<Home size={28} color={color} style={styles.tabIcon} />
 						),
 						header: () => <Header />,
 					}}
@@ -47,7 +48,7 @@ export default function TabLayout() {
 					options={{
 						title: 'Orders',
 						tabBarIcon: ({ color }) => (
-							<ClipboardList size={25} color={color} style={styles.tabIcon} />
+							<ClipboardList size={28} color={color} style={styles.tabIcon} />
 						),
 					}}
 				/>
@@ -57,7 +58,7 @@ export default function TabLayout() {
 					options={{
 						title: 'Search',
 						tabBarIcon: ({ color }) => (
-							<Search size={25} color={color} style={styles.tabIcon} />
+							<Search size={28} color={color} style={styles.tabIcon} />
 						),
 					}}
 				/>
@@ -67,7 +68,7 @@ export default function TabLayout() {
 						headerShown: false,
 						title: 'Profile',
 						tabBarIcon: ({ color }) => (
-							<User size={25} color={color} style={styles.tabIcon} />
+							<User size={28} color={color} style={styles.tabIcon} />
 						),
 					}}
 				/>
