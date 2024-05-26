@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as Location from 'expo-location';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-// import { useBoundStore } from '@/store/store';
+import { useBoundStore } from '@/store/store';
 import { useColorScheme } from '@/components/useColorScheme';
 import { getAddressFromCoordinates } from '@/lib';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -31,7 +31,9 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 	console.log('🚀 ~ RootLayout');
-	// const setUserLocation = useBoundStore((state) => state.setUserLocation);
+	const setUserLocation = useBoundStore((state) => state.setUserLocation);
+	const setCurrentAddress = useBoundStore((state) => state.setCurrentAddress);
+
 	const colorScheme = useColorScheme();
 	const [loaded, error] = useFonts({
 		SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -54,7 +56,7 @@ export default function RootLayout() {
 			try {
 				let { status } = await Location.requestForegroundPermissionsAsync();
 				if (status !== 'granted') {
-					// setErrorMsg('Permission to access location was denied');
+					console.log('Permission to access location was denied');
 					return;
 				}
 				//  Get user's current location
@@ -62,14 +64,14 @@ export default function RootLayout() {
 					coords: { longitude, latitude },
 				} = await Location.getCurrentPositionAsync({});
 				const location = { longitude, latitude };
-				// setUserLocation(location);
+				setUserLocation(location);
 
 				/**
 				 * ! This call is billed on google, use Sparingly or use the MapBox API in development.
 				 */
-				// const address = await getAddressFromCoordinates(location);
-				// console.log('🚀 ~ address:', address);
-				// setCurrentAddress(address);
+				const address = await getAddressFromCoordinates(location);
+				console.log('🚀 ~ address:', address);
+				setCurrentAddress(address);
 			} catch (error) {
 				console.log('🚀 ~ RootLayout ~ error:', error);
 			}

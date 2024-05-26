@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { getAddressFromCoordinates } from '@/lib';
+import { useBoundStore } from '@/store/store';
 
 export function Map({
 	initialCoords,
@@ -8,6 +10,8 @@ export function Map({
 	initialCoords: { longitude: number; latitude: number };
 	style: any;
 }) {
+	const setUserLocation = useBoundStore((state) => state.setUserLocation);
+	const setCurrentAddress = useBoundStore((state) => state.setCurrentAddress);
 	return (
 		<MapView
 			provider={PROVIDER_GOOGLE}
@@ -26,7 +30,16 @@ export function Map({
 					latitude: initialCoords.latitude,
 					longitude: initialCoords.longitude,
 				}}
-				onDragEnd={(e) => console.log(e.nativeEvent.coordinate)}
+				onDragEnd={async (e) => {
+					console.log(e.nativeEvent.coordinate);
+					const { longitude, latitude } = e.nativeEvent.coordinate;
+					setUserLocation({ latitude, longitude });
+					const address = await getAddressFromCoordinates({
+						latitude,
+						longitude,
+					});
+					setCurrentAddress(address);
+				}}
 			/>
 		</MapView>
 	);

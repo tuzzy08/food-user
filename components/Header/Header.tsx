@@ -24,9 +24,7 @@ export function Header() {
 					flexDirection: 'row',
 					marginTop: 18,
 					padding: 8,
-					paddingHorizontal: 3,
-					paddingRight: 5,
-					paddingLeft: 10,
+					paddingHorizontal: 13,
 				}}
 			>
 				<Link href={'/notifications'} asChild>

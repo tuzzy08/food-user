@@ -16,9 +16,7 @@ export function LocationBar() {
 			<TouchableOpacity onPress={() => router.navigate('/mapPage')}>
 				<View style={styles.addressBox}>
 					<MapPin size={15} color={Colors.primary} />
-					<Text
-						style={styles.addressText}
-					>{`#3 Joshua Close, Nvigwe Woji`}</Text>
+					<Text style={styles.addressText}>{summarizedAddress}</Text>
 					<ChevronDown
 						size={19}
 						color={

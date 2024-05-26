@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { ScrollView, StyleSheet, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import {
@@ -33,9 +34,11 @@ export default function Page() {
 					]}
 				>
 					{/* Categories */}
+
 					<View style={{ marginTop: -4 }}>
 						<CategoryList />
 					</View>
+
 					{/* Ad Banner */}
 					<View style={styles.banner}>
 						<Banner />

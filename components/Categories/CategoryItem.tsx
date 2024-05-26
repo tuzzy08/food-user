@@ -38,10 +38,6 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.secondary,
 		elevation: 3,
 		shadowColor: 'rgb(100 116 139);',
-
-		// shadowOpacity: 0.8,
-		// shadowRadius: 25,
-		// shadowOffset: { width: 1, height: 13 },
 	},
 	itemTitle: {
 		fontSize: 12,
