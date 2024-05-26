@@ -30,7 +30,6 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-	console.log('🚀 ~ RootLayout');
 	const setUserLocation = useBoundStore((state) => state.setUserLocation);
 	const setCurrentAddress = useBoundStore((state) => state.setCurrentAddress);
 
@@ -69,9 +68,8 @@ export default function RootLayout() {
 				/**
 				 * ! This call is billed on google, use Sparingly or use the MapBox API in development.
 				 */
-				const address = await getAddressFromCoordinates(location);
-				console.log('🚀 ~ address:', address);
-				setCurrentAddress(address);
+				// const address = await getAddressFromCoordinates(location);
+				// setCurrentAddress(address);
 			} catch (error) {
 				console.log('🚀 ~ RootLayout ~ error:', error);
 			}

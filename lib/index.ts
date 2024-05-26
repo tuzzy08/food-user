@@ -4,7 +4,6 @@ export async function getAddressFromCoordinates(
 	coordinates: Coordinates,
 	options?: any
 ) {
-	console.log('called');
 	let result;
 	const google_map_api_url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates.latitude},${coordinates.longitude}&location_type=ROOFTOP&result_type=street_address&key=${process.env.EXPO_PUBLIC_GOOGLE_API_KEY}`;
 	try {
@@ -19,7 +18,7 @@ export async function getAddressFromCoordinates(
 
 export function wrapString(input: string): string {
 	const maxLength = 29;
-	if (input.length > maxLength) {
+	if (input && input.length > maxLength) {
 		return input.substring(0, maxLength - 3) + '...';
 	}
 	return input;

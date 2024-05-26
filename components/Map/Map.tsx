@@ -31,7 +31,6 @@ export function Map({
 					longitude: initialCoords.longitude,
 				}}
 				onDragEnd={async (e) => {
-					console.log(e.nativeEvent.coordinate);
 					const { longitude, latitude } = e.nativeEvent.coordinate;
 					setUserLocation({ latitude, longitude });
 					const address = await getAddressFromCoordinates({

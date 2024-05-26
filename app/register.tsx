@@ -51,8 +51,6 @@ export default function Page() {
 		},
 	});
 	const onSubmit = async (data: formDataType) => {
-		console.log('🚀 ~ onSubmit ~ data:', data);
-
 		// TODO: Properly handle user signups
 		const pinId = await handleSignUp(data);
 		if (pinId) setPinId(pinId);

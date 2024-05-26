@@ -45,7 +45,6 @@ const TOKEN_KEY = 'authToken';
 export const AuthContext = createContext<AuthData>(defaultContext);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-	console.log('Called 🚀 ~ AuthProvider ~ children:', children);
 	const setPinId = useBoundStore((state) => state.setPinId);
 	const setPhone = useBoundStore((state) => state.setPhone);
 
@@ -62,7 +61,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
 		async function loadToken() {
 			const token = await getFromSecureStore(TOKEN_KEY);
-			console.log('🚀 ~ loadedTokenFromStore ~ token:', token);
 			if (token)
 				setAuthState((state) => ({
 					...state,
@@ -93,7 +91,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				return response.json();
 			})
 			.then((data) => {
-				console.log('🚀 ~ handleSignUp ~ data:', data);
 				const { pinId } = data;
 				if (!pinId) throw new Error('No pinId in response');
 				return pinId;
@@ -129,7 +126,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			setLoading(true);
 			const { verified, access_token } = await verifyOtp(phone, pinId, otp);
 			if (verified && access_token) {
-				console.log('🚀 ~ handleSignIn ~ token:', access_token);
 				// * User was authenticated
 				setAuthState((state) => ({
 					...state,
