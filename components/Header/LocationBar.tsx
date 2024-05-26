@@ -15,7 +15,7 @@ export function LocationBar() {
 		<View style={styles.container}>
 			<TouchableOpacity onPress={() => router.navigate('/mapPage')}>
 				<View style={styles.addressBox}>
-					<MapPin size={12} color={Colors.secondary} />
+					<MapPin size={15} color={Colors.primary} />
 					<Text
 						style={styles.addressText}
 					>{`#3 Joshua Close, Nvigwe Woji`}</Text>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		gap: 3,
+		gap: 5,
 	},
 	addressText: {
 		fontSize: 13,

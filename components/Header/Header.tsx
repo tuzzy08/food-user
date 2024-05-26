@@ -1,4 +1,9 @@
-import { StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+import {
+	Pressable,
+	StyleSheet,
+	TouchableOpacity,
+	useColorScheme,
+} from 'react-native';
 import { View, Text } from '@/components/Themed';
 import {
 	widthPercentageToDP as wp,
@@ -7,8 +12,8 @@ import {
 import { Image } from 'expo-image';
 import Colors from '@/constants/Colors';
 import { LocationBar } from './LocationBar';
-import { Bell } from 'lucide-react-native';
-import { Link } from 'expo-router';
+import { Bell, ShoppingBasket } from 'lucide-react-native';
+import { Link, router } from 'expo-router';
 
 export function Header() {
 	const colorScheme = useColorScheme();
@@ -21,19 +26,20 @@ export function Header() {
 					padding: 8,
 					paddingHorizontal: 3,
 					paddingRight: 5,
+					paddingLeft: 10,
 				}}
 			>
-				<LocationBar />
-				{/* <TouchableOpacity> */}
-				<Link push href={'/(nonTabs)/notifications'} asChild>
+				<Link href={'/notifications'} asChild>
 					<Bell
 						size={24}
 						style={{ alignSelf: 'flex-end' }}
 						color={Colors.secondary}
 					/>
 				</Link>
-
-				{/* </TouchableOpacity> */}
+				<LocationBar />
+				<Pressable onPress={() => router.push('/orders')}>
+					<ShoppingBasket size={24} color={Colors.secondary} />
+				</Pressable>
 			</View>
 		</View>
 	);

@@ -11,10 +11,12 @@ import Colors from '@/constants/Colors';
 export function Search() {
 	const colorScheme = useColorScheme();
 	const color = colorScheme === 'dark' ? Colors.dark.text : Colors.light.text;
+	const bgColor = colorScheme === 'dark' ? Colors.dark.background : Colors.grey;
 	// Form control
 	const {
 		control,
 		handleSubmit,
+		reset,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
@@ -27,11 +29,11 @@ export function Search() {
 	};
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, { backgroundColor: bgColor }]}>
 			<View
 				style={{
 					flexDirection: 'row',
-					backgroundColor: Colors.lightGrey,
+					backgroundColor: bgColor,
 					alignItems: 'center',
 					gap: 20,
 				}}
@@ -45,8 +47,9 @@ export function Search() {
 						}}
 						render={({ field: { onChange, onBlur, value } }) => (
 							<TextInput
-								style={[styles.input, { color }]}
+								style={[styles.input, { backgroundColor: bgColor, color }]}
 								placeholder='Chinese fried rice, eba ....'
+								placeholderTextColor={color}
 								onBlur={onBlur}
 								onChangeText={onChange}
 								value={value}
@@ -56,7 +59,7 @@ export function Search() {
 					/>
 				</View>
 			</View>
-			<Pressable>
+			<Pressable onPress={() => reset()}>
 				<CircleX size={24} color={color} />
 			</Pressable>
 		</View>
@@ -70,7 +73,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		width: wp('90%'),
 		height: hp('8%'),
-		borderWidth: 0.5,
+		borderWidth: 0.3,
 		borderRadius: 5,
 		borderColor: Colors.grey,
 		backgroundColor: Colors.lightGrey,
@@ -82,7 +85,6 @@ const styles = StyleSheet.create({
 	input: {
 		height: hp('6%'),
 		width: wp('58%'),
-		backgroundColor: Colors.lightGrey,
 		fontSize: 18,
 	},
 });
