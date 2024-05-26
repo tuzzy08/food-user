@@ -1,6 +1,5 @@
 name: EAS Build Staging
 on:
-  workflow_dispatch:
   push:
     branches:
       - staging
