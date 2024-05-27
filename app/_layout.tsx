@@ -68,8 +68,8 @@ export default function RootLayout() {
 				/**
 				 * ! This call is billed on google, use Sparingly or use the MapBox API in development.
 				 */
-				// const address = await getAddressFromCoordinates(location);
-				// setCurrentAddress(address);
+				const address = await getAddressFromCoordinates(location);
+				setCurrentAddress(address);
 			} catch (error) {
 				console.log('🚀 ~ RootLayout ~ error:', error);
 			}

@@ -4,14 +4,14 @@ import {
 	ThemeProvider,
 } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Slot, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import 'react-native-reanimated';
 import { Redirect } from 'expo-router';
 import { useAuth } from '@/hooks/useAuth';
-
 import { useColorScheme } from '@/components/useColorScheme';
+import { NotificationsProvider } from '@/contexts/NotificationsContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -24,6 +24,7 @@ export default function AuthLayout() {
 	// if (authState!.authenticated !== true || authState!.token === null) {
 	// 	return <Redirect href='/login' />;
 	// }
+
 	const colorScheme = useColorScheme();
 	const [loaded] = useFonts({
 		SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
@@ -41,9 +42,11 @@ export default function AuthLayout() {
 
 	return (
 		<ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-			<Stack>
-				<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-			</Stack>
+			<NotificationsProvider>
+				<Stack>
+					<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+				</Stack>
+			</NotificationsProvider>
 		</ThemeProvider>
 	);
 }

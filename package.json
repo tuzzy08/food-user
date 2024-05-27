@@ -51,7 +51,9 @@
     "react-native-web": "~0.19.6",
     "socket.io-client": "^4.7.5",
     "zustand": "^4.5.2",
-    "expo-dev-client": "~4.0.14"
+    "expo-dev-client": "~4.0.14",
+    "expo-notifications": "~0.28.3",
+    "expo-device": "~6.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
