@@ -3,6 +3,7 @@ import { create, StateCreator } from 'zustand';
 interface CartItem {
 	itemId: string;
 	itemTitle: string;
+	imgUrl: string;
 	itemVendorId: string;
 	itemVendorTitle: string;
 	itemQty: number;
@@ -40,6 +41,7 @@ interface CartSlice {
 	increaseItemQty: (itemId: string) => void;
 	decreaseItemQty: (itemId: string) => void;
 	clearCart: () => void;
+	checkout: (userId: string, items: CartItem[]) => void;
 }
 // Create Store Slices
 const createLocationSlice: StateCreator<
@@ -123,6 +125,28 @@ const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
 		set((state) => ({
 			items: [],
 		})),
+	checkout: async (userId: string, items: CartItem[]) => {
+		try {
+			const response = await fetch(`${process.env.EXPO_API_URL}/checkout`, {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+					// Authorization: `Bearer ${authState.token}`,
+				},
+				body: JSON.stringify({
+					userId,
+					items,
+				}),
+			});
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
+		} catch (error) {
+			console.log(error);
+		}
+	},
 });
 
 export const useBoundStore = create<UserLocationSlice & CartSlice & OtpSlice>()(

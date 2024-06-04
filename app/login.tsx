@@ -5,6 +5,7 @@ import {
 	TextInput,
 	View,
 	Text,
+	TouchableOpacity,
 } from 'react-native';
 import { Image } from 'expo-image';
 import {
@@ -13,7 +14,6 @@ import {
 } from 'react-native-responsive-screen';
 import { useForm, Controller } from 'react-hook-form';
 import Colors from '@/constants/Colors';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { router } from 'expo-router';
