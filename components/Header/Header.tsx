@@ -12,7 +12,7 @@ import {
 import { Image } from 'expo-image';
 import Colors from '@/constants/Colors';
 import { LocationBar } from './LocationBar';
-import { Bell, ShoppingBasket } from 'lucide-react-native';
+import { Bell, ShoppingBag } from 'lucide-react-native';
 import { Link, router } from 'expo-router';
 
 export function Header() {
@@ -33,10 +33,12 @@ export function Header() {
 						style={{ alignSelf: 'flex-end' }}
 						color={Colors.secondary}
 					/>
+					{/* {<View></View>} */}
 				</Link>
 				<LocationBar />
 				<Pressable onPress={() => router.push('/orders')}>
-					<ShoppingBasket size={24} color={Colors.secondary} />
+					<ShoppingBag size={23} color={Colors.secondary} />
+					{<View style={styles.badge}></View>}
 				</Pressable>
 			</View>
 		</View>
@@ -52,5 +54,14 @@ const styles = StyleSheet.create({
 		width: 28,
 		height: 28,
 		borderRadius: 30,
+	},
+	badge: {
+		position: 'absolute',
+		top: -3,
+		right: -3,
+		width: wp('3%'),
+		height: wp('3%'),
+		borderRadius: wp('10%'),
+		backgroundColor: Colors.primary,
 	},
 });

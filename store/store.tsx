@@ -11,9 +11,9 @@ interface CartItem {
 }
 
 interface OtpSlice {
-	otp: string;
-	pinId: string;
-	phone: string;
+	otp: string | null;
+	pinId: string | null;
+	phone: string | null;
 	// setOtp: (otp: string) => void;
 	setPinId: (pinId: string) => void;
 	setPhone: (phone: string) => void;
@@ -22,10 +22,10 @@ interface UserLocationSlice {
 	userLocation: {
 		longitude: number;
 		latitude: number;
-	};
-	userGeoHash: string;
-	currentAddress: string;
-	deliveryAddress: string;
+	} | null;
+	userGeoHash: string | null;
+	currentAddress: string | null;
+	deliveryAddress: string | null;
 	setUserLocation: (coordinates: {
 		longitude: number;
 		latitude: number;
@@ -50,13 +50,10 @@ const createLocationSlice: StateCreator<
 	[],
 	UserLocationSlice
 > = (set) => ({
-	userLocation: {
-		longitude: 6.4,
-		latitude: 5.3,
-	},
-	userGeoHash: '',
-	currentAddress: '',
-	deliveryAddress: '',
+	userLocation: null,
+	userGeoHash: null,
+	currentAddress: null,
+	deliveryAddress: null,
 	setUserLocation: (coordinates: { longitude: number; latitude: number }) =>
 		set((state) => ({
 			userLocation: {
@@ -72,9 +69,9 @@ const createLocationSlice: StateCreator<
 });
 
 const createOtpSlice: StateCreator<OtpSlice, [], [], OtpSlice> = (set) => ({
-	otp: '',
-	pinId: '',
-	phone: '',
+	otp: null,
+	pinId: null,
+	phone: null,
 	// setOtp: (otp: string) => set(() => ({ otp: otp })),
 	setPinId: (pinId: string) => set(() => ({ pinId: pinId })),
 	setPhone: (phone: string) => set(() => ({ phone: phone })),

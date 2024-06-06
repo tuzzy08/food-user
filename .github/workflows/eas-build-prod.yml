@@ -1,6 +1,6 @@
 name: EAS Build Production
 on:
-  push:
+  pull_request:
     branches:
       - production
 jobs:
