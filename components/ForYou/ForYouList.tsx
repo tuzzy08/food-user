@@ -1,23 +1,34 @@
-import { StyleSheet } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import { StyleSheet, FlatList } from 'react-native';
 import { View, Text } from '@/components/Themed';
-import data from './data';
-import { VendorCard } from '../VendorCard';
+import { useEffect, useState } from 'react';
+import { Vendor_Data, useForYouVendors } from '@/hooks/useForYouVendors';
+import { useBoundStore } from '@/store/store';
+import { ForYouCard } from './ForYouCard';
 
 export function ForYouList() {
+	const [vendors, setVendors] = useState<Vendor_Data[]>([]);
+	const user_position = useBoundStore((state) => state.userLocation);
+
+	useEffect(() => {
+		async function fetchClosestVendors() {
+			if (user_position) {
+				const vendors = await useForYouVendors(
+					user_position.latitude,
+					user_position.longitude
+				);
+				console.log('closest', vendors);
+				setVendors(vendors);
+			}
+		}
+		fetchClosestVendors();
+	}, []);
 	return (
 		<View style={styles.listContainer}>
-			<FlashList
-				data={data}
-				renderItem={({ item }) => (
-					<VendorCard
-						item={item}
-						style={{ marginRight: 15, height: 240, width: 270 }}
-					/>
-				)}
-				estimatedItemSize={15}
+			<FlatList
+				data={vendors}
+				renderItem={({ item }) => <ForYouCard vendor={item} />}
+				keyExtractor={(item) => item._id}
 				horizontal
-				contentContainerStyle={{ paddingHorizontal: 1 }}
 				showsHorizontalScrollIndicator={false}
 			/>
 		</View>
@@ -26,6 +37,10 @@ export function ForYouList() {
 
 const styles = StyleSheet.create({
 	listContainer: {
-		flex: 1,
+		minHeight: 240,
+		minWidth: 320.5,
+		// borderColor: 'red',
+		// borderWidth: 1,
+		// backgroundColor: 'green',
 	},
 });

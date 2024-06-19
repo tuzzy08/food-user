@@ -1,5 +1,10 @@
 import { Suspense } from 'react';
-import { ScrollView, StyleSheet, useColorScheme } from 'react-native';
+import {
+	ScrollView,
+	StyleSheet,
+	useColorScheme,
+	Dimensions,
+} from 'react-native';
 import { SafeAreaView } from 'react-native';
 import {
 	widthPercentageToDP as wp,
@@ -13,17 +18,20 @@ import Colors from '@/constants/Colors';
 import data from '@/components/ForYou/data';
 import { VendorCard } from '@/components/VendorCard';
 import { Restaurants } from '@/components/Restaurants/Restaurants';
+import { SpotlightCard } from '@/components/Spotlight/Spotlight';
+import { ForYouSkeleton } from '@/components/ForYou/ForYouSkeleton';
+import { CategoriesSkeleton } from '@/components/Categories/CategoriesSkeleton';
+import { SpotlightSkeleton } from '@/components/Spotlight/SpotlightSkeleton';
 
 export default function Page() {
 	const colorScheme = useColorScheme();
-	const spotlight = getRandomItem(data);
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<ScrollView
 				contentContainerStyle={styles.scrollView}
 				showsVerticalScrollIndicator={false}
 			>
-				{/* Root View */}
 				<View
 					style={[
 						styles.container,
@@ -33,22 +41,20 @@ export default function Page() {
 						},
 					]}
 				>
-					{/* Categories */}
-
 					<View style={{ marginTop: -4 }}>
-						<CategoryList />
+						<Suspense fallback={<CategoriesSkeleton />}>
+							<CategoryList />
+						</Suspense>
 					</View>
-
-					{/* Ad Banner */}
 					<View style={styles.banner}>
 						<Banner />
 					</View>
 					<View style={styles.foryouContainer}>
-						{/* <View style={styles.foryou}> */}
-						<Text style={styles.HeaderText}>For You</Text>
-						<ForYou />
+						<Suspense fallback={<Text>Loading...</Text>}>
+							<Text style={styles.HeaderText}>For You</Text>
+							<ForYou />
+						</Suspense>
 					</View>
-					{/* Spotlight */}
 					<View
 						style={[
 							styles.spotlight,
@@ -62,17 +68,12 @@ export default function Page() {
 							},
 						]}
 					>
-						<Text style={styles.HeaderText}>Spotlight</Text>
-						<VendorCard
-							item={spotlight}
-							style={{
-								width: '80%',
-								height: '95%',
-							}}
-						/>
+						<Suspense fallback={<Text>Loading...</Text>}>
+							<Text style={styles.HeaderText}>Spotlight</Text>
+							<SpotlightCard />
+						</Suspense>
 					</View>
-					{/* Restaurant List */}
-					<View style={styles.vendorList}>
+					<View style={[styles.vendorList]}>
 						<Restaurants />
 					</View>
 				</View>
@@ -81,21 +82,16 @@ export default function Page() {
 	);
 }
 
-function getRandomItem(array: typeof data) {
-	const randomIndex = Math.floor(Math.random() * array.length);
-	return array[randomIndex];
-}
-
 const styles = StyleSheet.create({
 	scrollView: {
 		flexGrow: 1,
+		paddingTop: 5,
 	},
 	container: { flex: 1 },
 	title: {
 		fontSize: 20,
 		fontWeight: 'bold',
 	},
-
 	banner: {
 		alignItems: 'center',
 		marginTop: -35,
@@ -103,33 +99,26 @@ const styles = StyleSheet.create({
 	},
 	foryouContainer: {
 		marginTop: 15,
-		// /borderColor: 'blue',
-		// bor/derWidth: 0.5,
 		paddingVertical: 10,
 		paddingLeft: 10,
-		gap: 10,
 	},
-	foryou: {},
 	HeaderText: {
 		fontSize: 16,
 		fontWeight: '600',
 	},
 	spotlight: {
-		// borderWidth: 0.5,
-		// borderColor: 'green',
-		height: hp('40%'),
+		height: hp('38%'),
 		width: '100%',
 		marginTop: 15,
-		padding: 10,
+		padding: 8,
 		gap: 15,
 	},
 	vendorList: {
-		// flex: 1,
+		flex: 1,
 		marginTop: 15,
-		// borderWidth: 0.5,
-		// borderColor: 'white',
-		width: '100%',
-		paddingHorizontal: 20,
 		paddingTop: 30,
+		paddingBottom: 5,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });

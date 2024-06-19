@@ -1,15 +1,9 @@
-import {
-	Pressable,
-	StyleSheet,
-	TouchableOpacity,
-	useColorScheme,
-} from 'react-native';
+import { Pressable, StyleSheet, useColorScheme } from 'react-native';
 import { View, Text } from '@/components/Themed';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { Image } from 'expo-image';
 import Colors from '@/constants/Colors';
 import { LocationBar } from './LocationBar';
 import { Bell, ShoppingBag } from 'lucide-react-native';
@@ -33,7 +27,6 @@ export function Header() {
 						style={{ alignSelf: 'flex-end' }}
 						color={Colors.secondary}
 					/>
-					{/* {<View></View>} */}
 				</Link>
 				<LocationBar />
 				<Pressable onPress={() => router.push('/orders')}>

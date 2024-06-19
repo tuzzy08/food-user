@@ -21,6 +21,23 @@ type Data = {
 	startingPrice: number;
 };
 
+type Vendor_Data = {
+	_id: string;
+	vendor_payout_bank_name: string;
+	vendor_payout_account_number: string;
+	vendor_title: string;
+	vendor_logo_url: string;
+	vendor_email: string;
+	vendor_contact_phone: string;
+	vendor_address: string;
+	_geoloc: any;
+	vendor_categories: any;
+	vendor_items: any;
+	vendor_isVerified: boolean;
+	vendor_isActive: boolean;
+	vendor_isOpen: boolean;
+};
+
 const data: Data[] = [
 	{
 		id: 1,

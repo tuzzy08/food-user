@@ -13,8 +13,9 @@ import { useState } from 'react';
 
 export default function Page() {
 	const vendor = useLocalSearchParams();
-	const url = vendor.imgUrl as string;
-	const res = parseInt(url);
+	console.log('vendor', vendor);
+	const url = vendor.imgUrl;
+	// const res = parseInt(url);
 	const colorScheme = useColorScheme();
 	const [selected, setSelected] = useState('All');
 	// const [active, setSelected] = useState(false);
@@ -31,7 +32,7 @@ export default function Page() {
 						height: hp('30%'),
 					}}
 				>
-					<Header imgUrl={res} />
+					<Header imgUrl={url} />
 				</View>
 				{/* Menu items */}
 				<View style={styles.menu}>

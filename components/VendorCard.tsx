@@ -1,63 +1,77 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from '@/components/Themed';
 import Colors from '@/constants/Colors';
-import { Image, ImageSource } from 'expo-image';
+import { Image } from 'expo-image';
 import { Rating } from '@/components/Rating';
 import { useRouter } from 'expo-router';
-type ImgUrl =
-	| string
-	| number
-	| ImageSource
-	| ImageSource[]
-	| string[]
-	| null
-	| undefined;
 
-type ForYouItem = {
-	id: number;
-	title: string;
-	imgUrl: ImgUrl;
-	href: string;
-	rating: number;
-	startingPrice: number;
+type VendorProps = {
+	_id: string;
+	vendor_title: string;
+	vendor_logo_url: string;
+	vendor_email: string;
+	vendor_contact_phone: string;
+	vendor_address: string;
+	_geoloc: any;
+	vendor_min_price: number;
+	vendor_categories: any;
+	vendor_items: any;
+	vendor_isVerified: boolean;
+	vendor_isActive: boolean;
+	vendor_isOpen: boolean;
+	vendor_rating: number;
 };
 
-export function VendorCard({ item, style }: { item: ForYouItem; style?: {} }) {
+export function VendorCard({
+	vendor,
+	style,
+}: {
+	vendor: VendorProps;
+	style?: {};
+}) {
 	const router = useRouter();
 	return (
-		<TouchableOpacity
-			onPress={() =>
-				router.navigate({
-					params: { vendorId: item.id, imgUrl: item.imgUrl },
-					pathname: `/[vendorId]`,
-				})
-			}
-		>
-			<View style={[styles.itemContainer, { ...style }]}>
-				{/* Image Section */}
-				<View style={{ width: '100%', height: '70%' }}>
-					<Image source={item.imgUrl} style={styles.itemImage} />
-				</View>
-				{/* Details section / Footer */}
-				<View style={styles.footer}>
-					<View style={styles.footerTop}>
-						<Text style={{ paddingVertical: 3 }}>{item.title}</Text>
+		vendor && (
+			<TouchableOpacity
+				onPress={() =>
+					router.navigate({
+						params: {
+							vendorId: vendor._id,
+							imgUrl: vendor ? vendor.vendor_logo_url : '',
+						},
+						pathname: `/[vendorId]`,
+					})
+				}
+			>
+				<View style={[styles.itemContainer, { ...style }]}>
+					{/* Image Section */}
+					<View style={{ width: '100%', height: '70%' }}>
+						<Image
+							source={vendor ? vendor.vendor_logo_url : ''}
+							style={styles.itemImage}
+						/>
 					</View>
-					<View style={styles.footerBottom}>
-						<View style={{ flexDirection: 'row' }}>
-							<Text
-								style={{ fontSize: 11 }}
-							>{`From  ₦${item.startingPrice} | `}</Text>
-							<Text style={{ fontSize: 11, color: Colors.primary }}>
-								Closed
-							</Text>
+					{/* Details section / Footer */}
+					<View style={styles.footer}>
+						<View style={styles.footerTop}>
+							<Text style={{ paddingVertical: 3 }}>{vendor.vendor_title}</Text>
 						</View>
+						<View style={styles.footerBottom}>
+							<View style={{ flexDirection: 'row' }}>
+								<Text
+									style={{ fontSize: 11 }}
+								>{`From  ₦${vendor.vendor_min_price} | `}</Text>
+								<Text style={{ fontSize: 11, color: Colors.primary }}>
+									Closed
+								</Text>
+							</View>
 
-						<Rating rating={item.rating} />
+							<Rating rating={vendor.vendor_rating} />
+						</View>
 					</View>
 				</View>
-			</View>
-		</TouchableOpacity>
+			</TouchableOpacity>
+		)
 	);
 }
 

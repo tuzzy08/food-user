@@ -1,4 +1,6 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+if (__DEV__) {
+	require('../ReactotronConfig');
+}
 import {
 	DarkTheme,
 	DefaultTheme,
@@ -65,7 +67,6 @@ export default function RootLayout() {
 					coords: { longitude, latitude },
 				} = await Location.getCurrentPositionAsync({});
 				const location = { longitude, latitude };
-				console.log('🚀 ~ User location:', location);
 				setUserLocation(location);
 
 				if (currentAddress === null) {
