@@ -14,6 +14,7 @@ import * as Location from 'expo-location';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useBoundStore } from '@/store/store';
 import { useColorScheme } from '@/components/useColorScheme';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getAddressFromCoordinates } from '@/lib';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Slot, Stack } from 'expo-router';
@@ -30,6 +31,8 @@ export {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
 	const setUserLocation = useBoundStore((state) => state.setUserLocation);
@@ -93,19 +96,24 @@ export default function RootLayout() {
 					value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
 				>
 					<BottomSheetModalProvider>
-						{/* <Slot /> */}
-						<Stack>
-							<Stack.Screen
-								name='(authenticated)'
-								options={{ headerShown: false }}
-							/>
-							<Stack.Screen name='login' options={{ headerShown: false }} />
-							<Stack.Screen name='register' options={{ headerShown: false }} />
-							<Stack.Screen
-								name='confirmation'
-								options={{ headerShown: false }}
-							/>
-						</Stack>
+						<QueryClientProvider client={queryClient}>
+							{/* <Slot /> */}
+							<Stack>
+								<Stack.Screen
+									name='(authenticated)'
+									options={{ headerShown: false }}
+								/>
+								<Stack.Screen name='login' options={{ headerShown: false }} />
+								<Stack.Screen
+									name='register'
+									options={{ headerShown: false }}
+								/>
+								<Stack.Screen
+									name='confirmation'
+									options={{ headerShown: false }}
+								/>
+							</Stack>
+						</QueryClientProvider>
 					</BottomSheetModalProvider>
 				</ThemeProvider>
 			</GestureHandlerRootView>

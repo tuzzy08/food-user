@@ -42,18 +42,14 @@ export default function Page() {
 					]}
 				>
 					<View style={{ marginTop: -4 }}>
-						<Suspense fallback={<CategoriesSkeleton />}>
-							<CategoryList />
-						</Suspense>
+						<CategoryList />
 					</View>
 					<View style={styles.banner}>
 						<Banner />
 					</View>
 					<View style={styles.foryouContainer}>
-						<Suspense fallback={<Text>Loading...</Text>}>
-							<Text style={styles.HeaderText}>For You</Text>
-							<ForYou />
-						</Suspense>
+						<Text style={styles.HeaderText}>For You</Text>
+						<ForYou />
 					</View>
 					<View
 						style={[
@@ -68,10 +64,8 @@ export default function Page() {
 							},
 						]}
 					>
-						<Suspense fallback={<Text>Loading...</Text>}>
-							<Text style={styles.HeaderText}>Spotlight</Text>
-							<SpotlightCard />
-						</Suspense>
+						<Text style={styles.HeaderText}>Spotlight</Text>
+						<SpotlightCard />
 					</View>
 					<View style={[styles.vendorList]}>
 						<Restaurants />

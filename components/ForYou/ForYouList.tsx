@@ -1,27 +1,43 @@
 import { StyleSheet, FlatList } from 'react-native';
-import { View, Text } from '@/components/Themed';
 import { useEffect, useState } from 'react';
-import { Vendor_Data, useForYouVendors } from '@/hooks/useForYouVendors';
+import { useQuery } from '@tanstack/react-query';
+import { View, Text } from '@/components/Themed';
+import { Vendor_Data } from '@/hooks/useForYouVendors';
 import { useBoundStore } from '@/store/store';
 import { ForYouCard } from './ForYouCard';
+import { ForYouSkeleton } from './ForYouSkeleton';
 
 export function ForYouList() {
-	const [vendors, setVendors] = useState<Vendor_Data[]>([]);
 	const user_position = useBoundStore((state) => state.userLocation);
+	const [vendors, setVendors] = useState<Vendor_Data[]>([]);
+	// TODO: Implement case where you cant get user loction
+	const {
+		isPending,
+		error,
+		data: closest_vendors,
+	} = useQuery({
+		queryKey: [
+			'forYouVendors',
+			user_position?.latitude,
+			user_position?.longitude,
+		],
+		queryFn: () =>
+			user_position
+				? fetch(
+						`${process.env.EXPO_PUBLIC_API_URL}/vendors/closest?lat=${user_position.latitude}&lng=${user_position.longitude}`
+				  ).then((res) => res.json())
+				: Promise.resolve([]),
+		enabled: !!user_position, // Only run the query if user_position is available
+	});
 
 	useEffect(() => {
-		async function fetchClosestVendors() {
-			if (user_position) {
-				const vendors = await useForYouVendors(
-					user_position.latitude,
-					user_position.longitude
-				);
-				console.log('closest', vendors);
-				setVendors(vendors);
-			}
+		if (closest_vendors && closest_vendors.length > 0) {
+			setVendors(closest_vendors);
 		}
-		fetchClosestVendors();
-	}, []);
+	}, [closest_vendors]);
+
+	if (isPending) return <ForYouSkeleton />;
+	if (error) return <Text>{'An error has occurred: ' + error.message}</Text>;
 	return (
 		<View style={styles.listContainer}>
 			<FlatList

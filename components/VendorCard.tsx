@@ -36,8 +36,7 @@ export function VendorCard({
 				onPress={() =>
 					router.navigate({
 						params: {
-							vendorId: vendor._id,
-							imgUrl: vendor ? vendor.vendor_logo_url : '',
+							vendor: JSON.stringify(vendor),
 						},
 						pathname: `/[vendorId]`,
 					})

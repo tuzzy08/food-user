@@ -16,9 +16,18 @@ import Colors from '@/constants/Colors';
 import { Categories } from './Categories';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { View, Text } from '../Themed';
+import { Category } from '@/app/(authenticated)/(tabs)/[vendorId]';
 
-export function Menu() {
-	const [active, setActive] = useState('All');
+export function Menu({ categories }: { categories: Category[] }) {
+	// Extract category names
+	const category_names = categories?.reduce((acc: string[], cat: Category) => {
+		acc.push(cat.name);
+		return acc;
+	}, []);
+	console.log('category_names', category_names);
+	const [activeCategory, setActiveCategory] = useState('All');
+	const [allCategories] = useState<Array<Category>>(categories);
+	const [activeItems, setActiveItems] = useState();
 	// * Backdrop Component
 	const renderBackdrop = useCallback(
 		(props: any) => (
@@ -53,7 +62,11 @@ export function Menu() {
 					borderColor: Colors.lightGrey,
 				}}
 			>
-				<Categories category={active} setCategory={setActive} />
+				<Categories
+					activeCategory={activeCategory}
+					categoryNames={category_names}
+					setActiveCategory={setActiveCategory}
+				/>
 			</View>
 			<MenuList showModal={showModal} />
 			{/* Meal Options Bottom Sheet	 */}

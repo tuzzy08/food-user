@@ -5,26 +5,49 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Vendor_Data, useVendors } from '@/hooks/useVendors';
+import { useQuery } from '@tanstack/react-query';
+import { SpotlightSkeleton } from './SpotlightSkeleton';
+
+function getRandomItem(vendors: Vendor_Data[]): Vendor_Data {
+	const randomIndex = Math.floor(Math.random() * vendors.length);
+	return vendors[randomIndex];
+}
 
 export function SpotlightCard() {
 	const router = useRouter();
 	const [spotlight_vendor, setSpotlightVendor] = useState<Vendor_Data>();
 
+	const {
+		isPending,
+		error,
+		data: all_vendors,
+	} = useQuery({
+		queryKey: ['allVendors'],
+		queryFn: () =>
+			fetch(`${process.env.EXPO_PUBLIC_API_URL}/vendors`).then((res) =>
+				res.json()
+			),
+	});
+
 	useEffect(() => {
-		async function fetchSpotlightVendor() {
-			const vendors = await useVendors();
-			const spotlight = getRandomItem(vendors);
+		if (all_vendors && all_vendors.length > 0) {
+			const spotlight = getRandomItem(all_vendors);
 			setSpotlightVendor(spotlight);
 		}
-		fetchSpotlightVendor();
-	}, []);
+	}, [all_vendors]);
+
+	if (isPending) return <SpotlightSkeleton />;
+
+	if (error) return <Text>{'An error has occured' + error.message}</Text>;
+
+	if (!spotlight_vendor) return null;
+
 	return (
 		<TouchableOpacity
 			onPress={() =>
 				router.navigate({
 					params: {
-						vendorId: spotlight_vendor?._id,
-						imgUrl: spotlight_vendor ? spotlight_vendor.vendor_logo_url : '',
+						vendor: JSON.stringify(spotlight_vendor),
 					},
 					pathname: `/[vendorId]`,
 				})
@@ -41,7 +64,7 @@ export function SpotlightCard() {
 					}}
 				>
 					<Image
-						source={spotlight_vendor ? spotlight_vendor.vendor_logo_url : ''}
+						source={spotlight_vendor.vendor_logo_url}
 						style={styles.itemImage}
 					/>
 				</View>
@@ -49,14 +72,14 @@ export function SpotlightCard() {
 				<View style={styles.footer}>
 					<View style={styles.footerTop}>
 						<Text style={{ paddingVertical: 3 }}>
-							{spotlight_vendor?.vendor_title}
+							{spotlight_vendor.vendor_title}
 						</Text>
 					</View>
 					<View style={styles.footerBottom}>
 						<View style={{ flexDirection: 'row' }}>
 							<Text
 								style={{ fontSize: 11 }}
-							>{`From  ₦${spotlight_vendor?.vendor_min_price} | `}</Text>
+							>{`From  ₦${spotlight_vendor.vendor_min_price} | `}</Text>
 							<Text style={{ fontSize: 11, color: Colors.primary }}>
 								Closed
 							</Text>
@@ -66,11 +89,6 @@ export function SpotlightCard() {
 			</View>
 		</TouchableOpacity>
 	);
-}
-
-function getRandomItem(vendors: Vendor_Data[]): Vendor_Data {
-	const randomIndex = Math.floor(Math.random() * vendors.length);
-	return vendors[randomIndex];
 }
 
 const styles = StyleSheet.create({
