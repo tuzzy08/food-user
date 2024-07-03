@@ -32,7 +32,7 @@ interface CartItem {
 }
 interface CartSlice {
 	cart: Array<CartItem>;
-	addItem: (item: Item) => void;
+	addItem: (item: Item, qty: number) => void;
 	deleteItem: (itemId: string) => void;
 	increaseItemQty: (itemId: string) => void;
 	decreaseItemQty: (itemId: string) => void;

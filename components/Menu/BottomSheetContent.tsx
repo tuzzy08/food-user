@@ -26,7 +26,9 @@ export function BottomSheetContent({
 		setPrevItem(selectedItem);
 		setItemQty(1);
 	}
-	// const addItem = useBoundStore((state) => state.addItem);
+	const cart = useBoundStore((state) => state.cart);
+	console.log(cart);
+	const addItem = useBoundStore((state) => state.addItem);
 	// const increaseItemQty = useBoundStore((state) => state.increaseItemQty);
 	// const decreaseItemQty = useBoundStore((state) => state.decreaseItemQty);
 	// const deleteItem = useBoundStore((state) => state.deleteItem);
@@ -87,7 +89,12 @@ export function BottomSheetContent({
 						</Pressable>
 					</BottomSheetView>
 					{/* Add to cart button */}
-					<TouchableOpacity style={styles.addToCartButton}>
+					<TouchableOpacity
+						style={styles.addToCartButton}
+						onPress={() => {
+							addItem(selectedItem!, itemQty);
+						}}
+					>
 						<Text style={styles.addToCartButtonText}>{`ADD `}</Text>
 						<Text
 							style={styles.addToCartButtonTotalPriceText}

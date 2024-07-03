@@ -8,9 +8,11 @@ import Colors from '@/constants/Colors';
 import { LocationBar } from './LocationBar';
 import { Bell, ShoppingBag } from 'lucide-react-native';
 import { Link, router } from 'expo-router';
+import { useBoundStore } from '@/store/store';
 
 export function Header() {
 	const colorScheme = useColorScheme();
+	const cart = useBoundStore((state) => state.cart);
 	return (
 		<View style={styles.container}>
 			<View
@@ -31,7 +33,7 @@ export function Header() {
 				<LocationBar />
 				<Pressable onPress={() => router.push('/orders')}>
 					<ShoppingBag size={23} color={Colors.secondary} />
-					{<View style={styles.badge}></View>}
+					{cart.length > 0 ? <View style={styles.badge}></View> : null}
 				</Pressable>
 			</View>
 		</View>
