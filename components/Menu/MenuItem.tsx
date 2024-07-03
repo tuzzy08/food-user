@@ -1,5 +1,6 @@
-import Colors from '@/constants/Colors';
+import { Dispatch, SetStateAction } from 'react';
 import { StyleSheet, useColorScheme } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
@@ -7,20 +8,16 @@ import {
 import { Image } from 'expo-image';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { View, Text } from '../Themed';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import Colors from '@/constants/Colors';
 import { Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
-import { Dispatch, SetStateAction } from 'react';
 
 export function MenuItem({
 	item,
-	setSelectedItem,
 	showModal,
 }: {
 	item: Item;
-	setSelectedItem: Dispatch<SetStateAction<Item | undefined>>;
-	showModal: () => void;
+	showModal: (data: Item) => void;
 }) {
-	const colorScheme = useColorScheme();
 	return (
 		<View style={styles.container}>
 			<Image
@@ -51,8 +48,7 @@ export function MenuItem({
 				<TouchableOpacity
 					style={styles.addButton}
 					onPress={() => {
-						setSelectedItem(item);
-						showModal();
+						showModal(item);
 					}}
 				>
 					<Text style={{ alignSelf: 'center' }}>ADD</Text>

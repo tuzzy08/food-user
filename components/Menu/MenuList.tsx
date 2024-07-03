@@ -7,11 +7,9 @@ import { MenuItem } from './MenuItem';
 
 export function MenuList({
 	showModal,
-	setSelectedItem,
 	items,
 }: {
-	showModal: () => void;
-	setSelectedItem: Dispatch<SetStateAction<Item | undefined>>;
+	showModal: (data: Item) => void;
 	items: Item[] | undefined;
 }) {
 	return (
@@ -19,11 +17,7 @@ export function MenuList({
 			<FlashList
 				data={items}
 				renderItem={({ item }) => (
-					<MenuItem
-						showModal={showModal}
-						item={item}
-						setSelectedItem={setSelectedItem}
-					/>
+					<MenuItem showModal={showModal} item={item} />
 				)}
 				estimatedItemSize={12}
 				showsVerticalScrollIndicator={false}

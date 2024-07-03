@@ -1,14 +1,5 @@
+import { Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
 import { create, StateCreator } from 'zustand';
-
-interface CartItem {
-	itemId: string;
-	itemTitle: string;
-	imgUrl: string;
-	itemVendorId: string;
-	itemVendorTitle: string;
-	itemQty: number;
-	itemPrice: number;
-}
 
 interface OtpSlice {
 	otp: string | null;
@@ -34,14 +25,19 @@ interface UserLocationSlice {
 	setCurrentAddress: (address: string) => void;
 	setDeliveryAddress: (address: string) => void;
 }
+
+interface CartItem {
+	item: Item;
+	qty: number;
+}
 interface CartSlice {
-	items: CartItem[];
-	addItem: (item: CartItem) => void;
+	cart: Array<CartItem>;
+	addItem: (item: Item) => void;
 	deleteItem: (itemId: string) => void;
 	increaseItemQty: (itemId: string) => void;
 	decreaseItemQty: (itemId: string) => void;
 	clearCart: () => void;
-	checkout: (userId: string, items: CartItem[]) => void;
+	checkout: (userId: string, items: { item: Item; qty: number }[]) => void;
 }
 // Create Store Slices
 const createLocationSlice: StateCreator<
@@ -78,49 +74,59 @@ const createOtpSlice: StateCreator<OtpSlice, [], [], OtpSlice> = (set) => ({
 });
 
 const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
-	items: [],
-	addItem: (item: CartItem) =>
+	cart: [],
+	addItem: (item: Item, qty: number = 1) =>
 		set((state) => ({
-			items: [...state.items, item],
+			cart: [...state.cart, { item, qty }],
 		})),
 	deleteItem: (itemId: string) =>
 		set((state) => {
 			const updatedItems = [
-				...state.items.filter((item, i) => item.itemId !== itemId),
+				...state.cart.filter((cart_item, i) => cart_item.item._id !== itemId),
 			];
 			return {
-				items: [...updatedItems],
+				cart: [...updatedItems],
 			};
 		}),
 	increaseItemQty: (itemId: string) =>
 		set((state) => {
 			// Fetch the item from array in state
-			const item = state.items.find((item) => item.itemId === itemId);
+			const item = state.cart.find(
+				(cart_item) => cart_item.item._id === itemId
+			);
 
-			if (!item || item?.itemQty < 0) return {};
+			if (!item || item?.qty < 0) return {};
 			// Update it's quantity
-			item.itemQty += 1;
+			item.qty += 1;
 			return {
 				// Filter out the item and merge in the updated item
-				items: [...state.items.filter((item) => item.itemId !== itemId), item],
+				cart: [
+					...state.cart.filter((cart_item) => cart_item.item._id !== itemId),
+					item,
+				],
 			};
 		}),
 	decreaseItemQty: (itemId: string) =>
 		set((state) => {
 			// Fetch the item from array in state
-			const item = state.items.find((item) => item.itemId === itemId);
+			const item = state.cart.find(
+				(cart_item) => cart_item.item._id === itemId
+			);
 
-			if (!item || item?.itemQty <= 0) return {};
+			if (!item || item?.qty <= 0) return {};
 			// Update it's quantity
-			item.itemQty -= 1;
+			item.qty -= 1;
 			return {
 				// Filter out the item and merge in the updated item
-				items: [...state.items.filter((item) => item.itemId !== itemId), item],
+				cart: [
+					...state.cart.filter((cart_item) => cart_item.item._id !== itemId),
+					item,
+				],
 			};
 		}),
 	clearCart: () =>
 		set((state) => ({
-			items: [],
+			cart: [],
 		})),
 	checkout: async (userId: string, items: CartItem[]) => {
 		try {

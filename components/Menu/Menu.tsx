@@ -13,6 +13,8 @@ import { View } from '../Themed';
 import { Category, Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
 import { BottomSheet, useBottomSheetBackHandler } from './BottomSheet';
 import { MenuList } from './MenuList';
+import { BottomSheetContent } from './BottomSheetContent';
+import data from './data';
 
 export function Menu({ categories }: { categories: Category[] }) {
 	// Default Category & Items
@@ -39,8 +41,8 @@ export function Menu({ categories }: { categories: Category[] }) {
 	// * Modal SnapPoints
 	const snapPoints = useMemo(() => ['85%'], []);
 	// * Modal Callbacks
-	const showModal = useCallback(() => {
-		bottomSheetModalRef.current?.present();
+	const showModal = useCallback((data: Item) => {
+		bottomSheetModalRef.current?.present(data);
 	}, []);
 	const handleSheetChanges = useCallback((index: number) => {
 		console.log('handleSheetChanges', index);
@@ -62,18 +64,18 @@ export function Menu({ categories }: { categories: Category[] }) {
 					}
 				/>
 			</View>
-			<MenuList
-				showModal={showModal}
-				items={activeItems}
-				setSelectedItem={setSelectedItem}
-			/>
+			<MenuList showModal={showModal} items={activeItems} />
 			{/* Meal Options Bottom Sheet	 */}
 			<BottomSheet
 				bottomSheetModalRef={bottomSheetModalRef}
 				handleSheetChanges={handleSheetPositionChange}
 				snapPoints={snapPoints}
-				selectedItem={selectedItem}
-			/>
+				// key={selectedItem?._id}
+			>
+				{({ data }: { data: Item }) => (
+					<BottomSheetContent selectedItem={data} />
+				)}
+			</BottomSheet>
 		</View>
 	);
 }
