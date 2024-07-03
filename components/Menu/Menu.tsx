@@ -6,28 +6,35 @@ import {
 	BottomSheetBackdrop,
 	TouchableOpacity,
 } from '@gorhom/bottom-sheet';
-// import {
-// 	widthPercentageToDP as wp,
-// 	heightPercentageToDP as hp,
-// } from 'react-native-responsive-screen';
-import data from './data';
 import { MenuItem } from './MenuItem';
 import Colors from '@/constants/Colors';
 import { Categories } from './Categories';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import {
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { View, Text } from '../Themed';
-import { Category } from '@/app/(authenticated)/(tabs)/[vendorId]';
+import { Category, Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
 
 export function Menu({ categories }: { categories: Category[] }) {
-	// Extract category names
-	const category_names = categories?.reduce((acc: string[], cat: Category) => {
-		acc.push(cat.name);
-		return acc;
-	}, []);
-	console.log('category_names', category_names);
-	const [activeCategory, setActiveCategory] = useState('All');
-	const [allCategories] = useState<Array<Category>>(categories);
-	const [activeItems, setActiveItems] = useState();
+	// Default Category & Items
+	const default_category_name = 'All';
+	const default_items = categories.find(
+		(c) => c.name === default_category_name
+	)?.items;
+	// Active Items
+	const [activeItems, setActiveItems] = useState<Item[] | undefined>(
+		default_items
+	);
+	// Default Category
+	const [activeCategoryName, setActiveCategoryName] = useState<string>(
+		default_category_name
+	);
+
 	// * Backdrop Component
 	const renderBackdrop = useCallback(
 		(props: any) => (
@@ -53,7 +60,6 @@ export function Menu({ categories }: { categories: Category[] }) {
 	const handleSheetChanges = useCallback((index: number) => {
 		console.log('handleSheetChanges', index);
 	}, []);
-	const colorScheme = useColorScheme();
 	return (
 		<View style={{ flex: 1 }}>
 			<View
@@ -63,14 +69,16 @@ export function Menu({ categories }: { categories: Category[] }) {
 				}}
 			>
 				<Categories
-					activeCategory={activeCategory}
-					categoryNames={category_names}
-					setActiveCategory={setActiveCategory}
+					activeCategoryName={activeCategoryName as string}
+					categories={categories}
+					setActiveItems={setActiveItems}
+					setActiveCategoryName={
+						setActiveCategoryName as Dispatch<SetStateAction<string>>
+					}
 				/>
 			</View>
-			<MenuList showModal={showModal} />
+			<MenuList showModal={showModal} items={activeItems} />
 			{/* Meal Options Bottom Sheet	 */}
-
 			<BottomSheetModal
 				ref={bottomSheetModalRef}
 				index={0}
@@ -169,11 +177,17 @@ export function Menu({ categories }: { categories: Category[] }) {
 	);
 }
 
-function MenuList({ showModal }: { showModal: () => void }) {
+function MenuList({
+	showModal,
+	items,
+}: {
+	showModal: () => void;
+	items: Item[] | undefined;
+}) {
 	return (
 		<View style={styles.menu}>
 			<FlashList
-				data={data}
+				data={items}
 				renderItem={({ item }) => (
 					<MenuItem showModal={showModal} item={item} />
 				)}

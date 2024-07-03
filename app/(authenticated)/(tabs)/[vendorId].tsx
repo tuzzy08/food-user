@@ -1,5 +1,5 @@
 import { StyleSheet, useColorScheme, SafeAreaView } from 'react-native';
-import { useLocalSearchParams, Link } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import {
 	widthPercentageToDP as wp,
@@ -9,8 +9,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Text, View } from '@/components/Themed';
 import { Header } from '@/components/RestaurantView';
 import { Menu } from '@/components/Menu';
-import { useState } from 'react';
 import Colors from '@/constants/Colors';
+import { MenuListSkeleton } from '@/components/Menu/MenuListSkeleton';
+import { HeaderSkeleton } from '@/components/RestaurantView/Header/HeaderSkeleton';
 export interface Item {
 	_id: string;
 	item_title: string;
@@ -34,10 +35,9 @@ export default function Page() {
 	const colorScheme = useColorScheme();
 	const params = useLocalSearchParams();
 	const vendor = JSON.parse(params.vendor as string);
-	console.log('vendor', vendor);
 	// Fetch items for this vendor
 	const {
-		isPending,
+		isLoading,
 		error,
 		data: items,
 	} = useQuery({
@@ -66,12 +66,15 @@ export default function Page() {
 		},
 		[]
 	);
+	const default_category_name = 'All';
 	// TODO: Add default "All" category
-	sorted_categories.unshift({
-		id: 'All',
-		name: 'All',
-		items: [items],
+	sorted_categories?.unshift({
+		id: default_category_name,
+		name: default_category_name,
+		items: items,
 	});
+
+	if (isLoading) return <MenuListSkeleton />;
 
 	return (
 		<>
@@ -85,12 +88,20 @@ export default function Page() {
 						height: hp('30%'),
 					}}
 				>
-					<Header imgUrl={vendor.vendor_logo_url} />
+					{isLoading ? (
+						<HeaderSkeleton />
+					) : (
+						<Header imgUrl={vendor.vendor_logo_url} />
+					)}
 				</View>
 				{/* Menu items */}
-				<View style={styles.menu}>
-					<Menu categories={sorted_categories} />
-				</View>
+				{isLoading ? (
+					<MenuListSkeleton />
+				) : (
+					<View style={styles.menu}>
+						<Menu categories={sorted_categories} />
+					</View>
+				)}
 			</View>
 		</>
 	);

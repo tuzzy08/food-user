@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		paddingTop: 5,
 	},
-	container: { flex: 1 },
+	container: { flex: 1, marginLeft: 5 },
 	title: {
 		fontSize: 20,
 		fontWeight: 'bold',

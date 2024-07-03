@@ -13,22 +13,24 @@ import { View, Text } from '../Themed';
 import Colors from '@/constants/Colors';
 // import categories from './mockCategries';
 import { Dispatch, SetStateAction, useState } from 'react';
-
-type Category = {
-	id: number;
-	vendorId: number;
-	title: string;
-};
+import { Category, Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
 
 export function Categories({
-	activeCategory,
-	categoryNames,
-	setActiveCategory,
+	activeCategoryName,
+	categories,
+	setActiveCategoryName,
+	setActiveItems,
 }: {
-	activeCategory: string;
-	categoryNames: string[];
-	setActiveCategory: Dispatch<SetStateAction<string>>;
+	activeCategoryName: string;
+	categories: Category[];
+	setActiveCategoryName: Dispatch<SetStateAction<string>>;
+	setActiveItems: Dispatch<SetStateAction<Item[] | undefined>>;
 }) {
+	// Extract category names
+	const categoryNames = categories?.reduce((acc: string[], cat: Category) => {
+		acc.push(cat.name);
+		return acc;
+	}, []);
 	return (
 		<View style={styles.container}>
 			<FlashList
@@ -37,11 +39,13 @@ export function Categories({
 				renderItem={({ item }) => (
 					<CategoryItem
 						item={item}
-						activeCategory={activeCategory}
-						setActiveCategory={setActiveCategory}
+						categories={categories}
+						activeCategoryName={activeCategoryName}
+						setActiveCategoryName={setActiveCategoryName}
+						setActiveItems={setActiveItems}
 					/>
 				)}
-				extraData={activeCategory}
+				extraData={activeCategoryName}
 				estimatedItemSize={15}
 				horizontal
 				showsHorizontalScrollIndicator={false}
@@ -52,16 +56,24 @@ export function Categories({
 
 function CategoryItem({
 	item,
-	activeCategory,
-	setActiveCategory,
+	activeCategoryName,
+	categories,
+	setActiveCategoryName,
+	setActiveItems,
 }: {
 	item: string;
-	activeCategory: string;
-	setActiveCategory: Dispatch<SetStateAction<string>>;
+	activeCategoryName: string;
+	categories: Category[];
+	setActiveCategoryName: Dispatch<SetStateAction<string>>;
+	setActiveItems: Dispatch<SetStateAction<Item[] | undefined>>;
 }) {
 	// const [selected, setSelected] = useState('All');
 	const setFoodCategory = (category: string) => {
-		setActiveCategory(category);
+		setActiveCategoryName(category);
+		setActiveItems((prev) => {
+			const category_items = categories.find((c) => c.name === category)?.items;
+			return category_items;
+		});
 	};
 	return (
 		<Pressable
@@ -69,7 +81,7 @@ function CategoryItem({
 				setFoodCategory(item);
 			}}
 		>
-			<View style={[styles.item, activeCategory === item && styles.active]}>
+			<View style={[styles.item, activeCategoryName === item && styles.active]}>
 				<Text>{item}</Text>
 			</View>
 		</Pressable>
@@ -79,6 +91,10 @@ function CategoryItem({
 const styles = StyleSheet.create({
 	container: {
 		height: hp('8%'),
+		flexDirection: 'row',
+		alignItems: 'center',
+		// justifyContent: 'center',
+		// backgroundColor: Colors.secondary,
 	},
 	item: {
 		marginRight: 10,
