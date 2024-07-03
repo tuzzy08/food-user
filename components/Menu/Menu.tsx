@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { View } from '../Themed';
 import { Category, Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
-import { BottomSheet } from './BottomSheet';
+import { BottomSheet, useBottomSheetBackHandler } from './BottomSheet';
 import { MenuList } from './MenuList';
 
 export function Menu({ categories }: { categories: Category[] }) {
@@ -33,6 +33,9 @@ export function Menu({ categories }: { categories: Category[] }) {
 
 	// * Reference to BottomSheet Modal
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+	// * BottomSheet back(hardware) handler
+	const { handleSheetPositionChange } =
+		useBottomSheetBackHandler(bottomSheetModalRef);
 	// * Modal SnapPoints
 	const snapPoints = useMemo(() => ['85%'], []);
 	// * Modal Callbacks
@@ -67,7 +70,7 @@ export function Menu({ categories }: { categories: Category[] }) {
 			{/* Meal Options Bottom Sheet	 */}
 			<BottomSheet
 				bottomSheetModalRef={bottomSheetModalRef}
-				handleSheetChanges={handleSheetChanges}
+				handleSheetChanges={handleSheetPositionChange}
 				snapPoints={snapPoints}
 				selectedItem={selectedItem}
 			/>
