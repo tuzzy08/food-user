@@ -9,12 +9,15 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { View, Text } from '../Themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
+import { Dispatch, SetStateAction } from 'react';
 
 export function MenuItem({
 	item,
+	setSelectedItem,
 	showModal,
 }: {
 	item: Item;
+	setSelectedItem: Dispatch<SetStateAction<Item | undefined>>;
 	showModal: () => void;
 }) {
 	const colorScheme = useColorScheme();
@@ -45,7 +48,13 @@ export function MenuItem({
 				<Text
 					style={{ marginTop: 8, color: Colors.grey }}
 				>{`₦${item.item_price}`}</Text>
-				<TouchableOpacity style={styles.addButton} onPress={() => showModal()}>
+				<TouchableOpacity
+					style={styles.addButton}
+					onPress={() => {
+						setSelectedItem(item);
+						showModal();
+					}}
+				>
 					<Text style={{ alignSelf: 'center' }}>ADD</Text>
 				</TouchableOpacity>
 			</View>

@@ -9,7 +9,6 @@ import { useQuery } from '@tanstack/react-query';
 import { Text, View } from '@/components/Themed';
 import { Header } from '@/components/RestaurantView';
 import { Menu } from '@/components/Menu';
-import Colors from '@/constants/Colors';
 import { MenuListSkeleton } from '@/components/Menu/MenuListSkeleton';
 import { HeaderSkeleton } from '@/components/RestaurantView/Header/HeaderSkeleton';
 export interface Item {
@@ -110,6 +109,5 @@ export default function Page() {
 const styles = StyleSheet.create({
 	menu: {
 		flex: 1,
-		// marginHorizontal: 5,
 	},
 });

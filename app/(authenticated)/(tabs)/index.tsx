@@ -1,10 +1,4 @@
-import { Suspense } from 'react';
-import {
-	ScrollView,
-	StyleSheet,
-	useColorScheme,
-	Dimensions,
-} from 'react-native';
+import { ScrollView, StyleSheet, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import {
 	widthPercentageToDP as wp,
@@ -15,13 +9,8 @@ import { CategoryList } from '@/components/Categories/CategoryList';
 import { Banner } from '@/components/Banner';
 import { ForYou } from '@/components/ForYou';
 import Colors from '@/constants/Colors';
-import data from '@/components/ForYou/data';
-import { VendorCard } from '@/components/VendorCard';
 import { Restaurants } from '@/components/Restaurants/Restaurants';
 import { SpotlightCard } from '@/components/Spotlight/Spotlight';
-import { ForYouSkeleton } from '@/components/ForYou/ForYouSkeleton';
-import { CategoriesSkeleton } from '@/components/Categories/CategoriesSkeleton';
-import { SpotlightSkeleton } from '@/components/Spotlight/SpotlightSkeleton';
 
 export default function Page() {
 	const colorScheme = useColorScheme();
