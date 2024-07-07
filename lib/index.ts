@@ -8,7 +8,14 @@ export async function getAddressFromCoordinates(
 	const google_map_api_url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates.latitude},${coordinates.longitude}&location_type=ROOFTOP&result_type=street_address&key=${process.env.EXPO_PUBLIC_GOOGLE_API_KEY}`;
 	try {
 		const response = await fetch(google_map_api_url);
+		if (!response.ok) {
+			throw new Error('Network error: Failed to fetch address');
+		}
 		const json = await response.json();
+		if (json.status === 'ZERO_RESULTS') {
+			throw new Error('No results found');
+		}
+		console.log(json);
 		result = json.results[0].formatted_address;
 	} catch (error) {
 		console.error(error);
