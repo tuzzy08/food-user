@@ -26,7 +26,7 @@ interface UserLocationSlice {
 	setDeliveryAddress: (address: string) => void;
 }
 
-interface CartItem {
+export interface CartItem {
 	item: Item;
 	qty: number;
 }

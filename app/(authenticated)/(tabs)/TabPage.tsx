@@ -1,11 +1,15 @@
-import { StyleSheet, FlatList, Animated, Dimensions } from 'react-native';
+import { StyleSheet, FlatList, Animated } from 'react-native';
+import { Image } from 'expo-image';
 import { Text, View } from '@/components/Themed';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { SharedValue } from 'react-native-reanimated';
 import { LegacyRef, forwardRef, useCallback, useRef } from 'react';
+import { Order } from './orders';
+import { CartItem } from '@/store/store';
+import { OrderTab } from '@/components/OrderTab/OrderTab';
+import { CartItemList } from '@/components/CartItemList/CartItemList';
 
 const TabTitles = {
 	MyCart: 'My Cart',
@@ -19,8 +23,12 @@ export const TabPage = forwardRef(
 	(
 		{
 			scrollX,
+			orders,
+			cart,
 		}: {
 			scrollX: any;
+			cart: CartItem[];
+			orders: Order[];
 		},
 		ref: LegacyRef<FlatList<string>>
 	) => {
@@ -39,8 +47,14 @@ export const TabPage = forwardRef(
 					)}
 					showsHorizontalScrollIndicator={false}
 					renderItem={({ item }: { item: string }) => (
+						// item === 'My Cart' ? (
+						// 	<TabContent cart={cart} />
+						// ) : (
+						// 	<TabContent orders={orders} />
+						// )
 						<View style={styles.tab}>
-							<Text>{item}</Text>
+							{/* <Text>{item}</Text> */}
+							<TabContent item={item} cart={cart} orders={orders} />
 						</View>
 					)}
 					keyExtractor={(item) => item}
@@ -49,6 +63,42 @@ export const TabPage = forwardRef(
 		);
 	}
 );
+
+function TabContent({
+	orders,
+	cart,
+	item,
+}: {
+	orders?: Order[];
+	cart?: CartItem[];
+	item: string;
+}) {
+	if (item === 'My Cart') {
+		if (cart && cart.length > 0) {
+			return <CartItemList cart={cart} />;
+		} else {
+			return <EmptyCart />;
+		}
+	} else {
+		if (orders && orders.length > 0) {
+			return <OrderTab orders={orders} />;
+		} else {
+			return <EmptyCart />;
+		}
+	}
+}
+
+export function EmptyCart() {
+	return (
+		<View style={styles.emptyCart}>
+			<Image
+				source={require('@/assets/images/empty-cart.png')}
+				style={{ width: 150, height: 150 }}
+			/>
+			<Text style={styles.emptyCartText}>Your cart is empty</Text>
+		</View>
+	);
+}
 
 const styles = StyleSheet.create({
 	container: {
@@ -66,4 +116,7 @@ const styles = StyleSheet.create({
 		// borderWidth: 1,
 		// borderColor: 'yellow',
 	},
+	tabContent: {},
+	emptyCart: {},
+	emptyCartText: {},
 });

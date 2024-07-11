@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 	banner: {
 		width: wp('85%'),
 		height: hp('8%'),
-		borderColor: Colors.secondary,
+		borderColor: Colors.grey,
 		borderWidth: 0.4,
 		borderRadius: 8,
 		justifyContent: 'center',

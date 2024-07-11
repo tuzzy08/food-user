@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import { View, Text } from '@/components/Themed';
 import Colors from '@/constants/Colors';
 import { Image } from 'expo-image';
@@ -24,12 +24,13 @@ type VendorProps = {
 
 export function VendorCard({
 	vendor,
-	style,
-}: {
+}: // style,
+{
 	vendor: VendorProps;
-	style?: {};
+	// style?: {};
 }) {
 	const router = useRouter();
+	const color = useColorScheme();
 	return (
 		vendor && (
 			<TouchableOpacity
@@ -41,22 +42,62 @@ export function VendorCard({
 						pathname: `/[vendorId]`,
 					})
 				}
+				style={[{ borderRadius: 10 }, { marginBottom: 10 }]}
 			>
-				<View style={[styles.itemContainer, { ...style }]}>
-					{/* Image Section */}
-					<View style={{ width: '100%', height: '70%' }}>
-						<Image
-							source={vendor ? vendor.vendor_logo_url : ''}
-							style={styles.itemImage}
-						/>
-					</View>
-					{/* Details section / Footer */}
-					<View style={styles.footer}>
-						<View style={styles.footerTop}>
-							<Text style={{ paddingVertical: 3 }}>{vendor.vendor_title}</Text>
+				<View style={styles.container}>
+					<Image
+						source={vendor ? vendor.vendor_logo_url : ''}
+						style={styles.image}
+					/>
+					<View
+						style={[
+							styles.footer,
+							{
+								backgroundColor:
+									color === 'dark'
+										? Colors.dark.alt.background
+										: Colors.light.background,
+							},
+						]}
+					>
+						<View
+							style={[
+								styles.footerTop,
+								{
+									backgroundColor:
+										color === 'dark'
+											? Colors.dark.alt.background
+											: Colors.light.background,
+								},
+								,
+							]}
+						>
+							<Text style={{}}>{vendor.vendor_title}</Text>
+							<Rating rating={vendor.vendor_rating} />
 						</View>
-						<View style={styles.footerBottom}>
-							<View style={{ flexDirection: 'row' }}>
+
+						<View
+							style={[
+								styles.footerBottom,
+								{
+									backgroundColor:
+										color === 'dark'
+											? Colors.dark.alt.background
+											: Colors.light.background,
+								},
+							]}
+						>
+							<View
+								style={[
+									{ flexDirection: 'row' },
+									{
+										backgroundColor:
+											color === 'dark'
+												? Colors.dark.alt.background
+												: Colors.light.background,
+									},
+								]}
+							>
 								<Text
 									style={{ fontSize: 11 }}
 								>{`From  ₦${vendor.vendor_min_price} | `}</Text>
@@ -64,8 +105,6 @@ export function VendorCard({
 									Closed
 								</Text>
 							</View>
-
-							<Rating rating={vendor.vendor_rating} />
 						</View>
 					</View>
 				</View>
@@ -75,29 +114,32 @@ export function VendorCard({
 }
 
 const styles = StyleSheet.create({
-	itemContainer: {
-		// gap: 5,
-		// borderColor: 'red',
-		// borderWidth: 0.5,
+	container: {
+		width: 320,
+		height: 240,
+		alignItems: 'center',
 	},
-	itemImage: {
-		height: '100%',
+	image: {
 		width: '100%',
-		borderRadius: 6,
+		height: '70%',
+		borderTopLeftRadius: 10,
+		borderTopRightRadius: 10,
 	},
 	itemTitle: {
 		fontSize: 12,
 		fontWeight: '400',
 	},
 	footer: {
-		height: '30%',
+		paddingHorizontal: 5,
+		borderBottomLeftRadius: 10,
+		borderBottomRightRadius: 10,
 		width: '100%',
-		gap: 4,
-		// borderColor: 'green',
-		// borderWidth: 0.5,
+		height: '30%',
 	},
 	footerTop: {
-		paddingHorizontal: 3,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingTop: 15,
 	},
 	footerBottom: {
 		flexDirection: 'row',

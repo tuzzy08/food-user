@@ -44,6 +44,9 @@ export function Menu({ categories }: { categories: Category[] }) {
 	const showModal = useCallback((data: Item) => {
 		bottomSheetModalRef.current?.present(data);
 	}, []);
+	const closeModal = useCallback(() => {
+		bottomSheetModalRef.current?.close();
+	}, []);
 	const handleSheetChanges = useCallback((index: number) => {
 		console.log('handleSheetChanges', index);
 	}, []);
@@ -73,7 +76,7 @@ export function Menu({ categories }: { categories: Category[] }) {
 				// key={selectedItem?._id}
 			>
 				{({ data }: { data: Item }) => (
-					<BottomSheetContent selectedItem={data} />
+					<BottomSheetContent closeModal={closeModal} selectedItem={data} />
 				)}
 			</BottomSheet>
 		</View>

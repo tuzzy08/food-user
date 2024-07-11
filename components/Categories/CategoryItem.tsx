@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 		height: 41,
 		width: 41,
 		borderRadius: 50,
-		backgroundColor: Colors.secondary,
+		// backgroundColor: Colors.secondary,
 		elevation: 3,
 		shadowColor: 'rgb(100 116 139);',
 	},

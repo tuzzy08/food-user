@@ -15,7 +15,6 @@ export async function getAddressFromCoordinates(
 		if (json.status === 'ZERO_RESULTS') {
 			throw new Error('No results found');
 		}
-		console.log(json);
 		result = json.results[0].formatted_address;
 	} catch (error) {
 		console.error(error);

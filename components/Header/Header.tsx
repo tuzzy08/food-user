@@ -33,7 +33,11 @@ export function Header() {
 				<LocationBar />
 				<Pressable onPress={() => router.push('/orders')}>
 					<ShoppingBag size={23} color={Colors.secondary} />
-					{cart.length > 0 ? <View style={styles.badge}></View> : null}
+					{cart.length > 0 ? (
+						<View
+							style={[styles.badge, { backgroundColor: Colors.primary }]}
+						></View>
+					) : null}
 				</Pressable>
 			</View>
 		</View>
@@ -57,6 +61,5 @@ const styles = StyleSheet.create({
 		width: wp('3%'),
 		height: wp('3%'),
 		borderRadius: wp('10%'),
-		backgroundColor: Colors.primary,
 	},
 });

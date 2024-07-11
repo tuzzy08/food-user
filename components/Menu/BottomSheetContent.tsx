@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import Toast from 'react-native-root-toast';
 import {
 	BottomSheetView,
 	BottomSheetModal,
@@ -11,12 +13,16 @@ import { Image } from 'expo-image';
 import { Pressable, StyleSheet } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useBoundStore } from '@/store/store';
-import { useState } from 'react';
+
+const minusText = '-';
+const plusText = '+';
 
 export function BottomSheetContent({
 	selectedItem,
+	closeModal,
 }: {
 	selectedItem: Item | undefined;
+	closeModal: () => void;
 }) {
 	const [itemQty, setItemQty] = useState(1);
 	const totalPrice = selectedItem?.item_price! * itemQty;
@@ -27,11 +33,20 @@ export function BottomSheetContent({
 		setItemQty(1);
 	}
 	const cart = useBoundStore((state) => state.cart);
-	console.log(cart);
+	// console.log(cart);
 	const addItem = useBoundStore((state) => state.addItem);
-	// const increaseItemQty = useBoundStore((state) => state.increaseItemQty);
-	// const decreaseItemQty = useBoundStore((state) => state.decreaseItemQty);
-	// const deleteItem = useBoundStore((state) => state.deleteItem);
+
+	const handleAddToCart = () => {
+		addItem(selectedItem!, itemQty);
+		Toast.show('Added to cart!', {
+			duration: Toast.durations.LONG,
+			position: Toast.positions.TOP,
+			delay: 350,
+			opacity: 0.8,
+			hideOnPress: true,
+		});
+		closeModal();
+	};
 	return (
 		<BottomSheetView>
 			{/* Food image here */}
@@ -67,7 +82,7 @@ export function BottomSheetContent({
 							}}
 							style={styles.quantityButton}
 						>
-							<Text style={styles.quantityButtonText}>-</Text>
+							<Text style={styles.quantityButtonText}>{minusText}</Text>
 						</Pressable>
 						<Text
 							style={{
@@ -85,15 +100,13 @@ export function BottomSheetContent({
 							}}
 							style={styles.quantityButton}
 						>
-							<Text style={styles.quantityButtonText}>+</Text>
+							<Text style={styles.quantityButtonText}>{plusText}</Text>
 						</Pressable>
 					</BottomSheetView>
 					{/* Add to cart button */}
 					<TouchableOpacity
 						style={styles.addToCartButton}
-						onPress={() => {
-							addItem(selectedItem!, itemQty);
-						}}
+						onPress={() => handleAddToCart()}
 					>
 						<Text style={styles.addToCartButtonText}>{`ADD `}</Text>
 						<Text

@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import { View, Text } from '@/components/Themed';
 import Colors from '@/constants/Colors';
 import { Image } from 'expo-image';
@@ -23,6 +23,7 @@ type VendorProps = {
 
 export function ForYouCard({ vendor }: { vendor: VendorProps }) {
 	const router = useRouter();
+	const color = useColorScheme();
 	return (
 		<TouchableOpacity
 			onPress={() =>
@@ -50,16 +51,44 @@ export function ForYouCard({ vendor }: { vendor: VendorProps }) {
 					/>
 				</View>
 				{/* Details section / Footer */}
-				<View style={styles.footer}>
-					<View style={styles.footerTop}>
-						<Text style={{ paddingVertical: 3 }}>{vendor.vendor_title}</Text>
-					</View>
-					<View style={styles.footerBottom}>
-						<View style={{ flexDirection: 'row' }}>
+				<View
+					style={[
+						styles.footer,
+						{
+							backgroundColor:
+								color === 'dark'
+									? Colors.dark.alt.background
+									: Colors.light.background,
+						},
+					]}
+				>
+					<Text style={{ paddingVertical: 3, marginTop: 5 }}>
+						{vendor.vendor_title}
+					</Text>
+					<View
+						style={[
+							styles.footerBottom,
+							{
+								backgroundColor:
+									color === 'dark'
+										? Colors.dark.alt.background
+										: Colors.light.background,
+							},
+						]}
+					>
+						<View
+							style={{
+								flexDirection: 'row',
+								backgroundColor:
+									color === 'dark'
+										? Colors.dark.alt.background
+										: Colors.light.background,
+							}}
+						>
 							<Text
 								style={{ fontSize: 11 }}
 							>{`From  ₦${vendor.vendor_min_price} | `}</Text>
-							<Text style={{ fontSize: 11, color: Colors.primary }}>
+							<Text style={{ fontSize: 11, color: Colors.errorColor }}>
 								Closed
 							</Text>
 						</View>
@@ -73,14 +102,15 @@ export function ForYouCard({ vendor }: { vendor: VendorProps }) {
 const styles = StyleSheet.create({
 	itemContainer: {
 		marginRight: 15,
-		height: 240,
+		height: 220,
 		width: 270,
 		// gap: 5,
 	},
 	itemImage: {
 		height: '100%',
 		width: '100%',
-		borderRadius: 6,
+		borderTopLeftRadius: 10,
+		borderTopRightRadius: 10,
 	},
 	itemTitle: {
 		fontSize: 12,
@@ -90,6 +120,9 @@ const styles = StyleSheet.create({
 		height: '30%',
 		width: '100%',
 		gap: 4,
+		borderBottomLeftRadius: 10,
+		borderBottomRightRadius: 10,
+		paddingLeft: 5,
 	},
 	footerTop: {
 		paddingHorizontal: 3,

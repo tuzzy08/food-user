@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as Location from 'expo-location';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { RootSiblingParent } from 'react-native-root-siblings';
 import { useBoundStore } from '@/store/store';
 import { useColorScheme } from '@/components/useColorScheme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -95,26 +96,27 @@ export default function RootLayout() {
 				<ThemeProvider
 					value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
 				>
-					<BottomSheetModalProvider>
-						<QueryClientProvider client={queryClient}>
-							{/* <Slot /> */}
-							<Stack>
-								<Stack.Screen
-									name='(authenticated)'
-									options={{ headerShown: false }}
-								/>
-								<Stack.Screen name='login' options={{ headerShown: false }} />
-								<Stack.Screen
-									name='register'
-									options={{ headerShown: false }}
-								/>
-								<Stack.Screen
-									name='confirmation'
-									options={{ headerShown: false }}
-								/>
-							</Stack>
-						</QueryClientProvider>
-					</BottomSheetModalProvider>
+					<RootSiblingParent>
+						<BottomSheetModalProvider>
+							<QueryClientProvider client={queryClient}>
+								<Stack>
+									<Stack.Screen
+										name='(authenticated)'
+										options={{ headerShown: false }}
+									/>
+									<Stack.Screen name='login' options={{ headerShown: false }} />
+									<Stack.Screen
+										name='register'
+										options={{ headerShown: false }}
+									/>
+									<Stack.Screen
+										name='confirmation'
+										options={{ headerShown: false }}
+									/>
+								</Stack>
+							</QueryClientProvider>
+						</BottomSheetModalProvider>
+					</RootSiblingParent>
 				</ThemeProvider>
 			</GestureHandlerRootView>
 		</AuthProvider>

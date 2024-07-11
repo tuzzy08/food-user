@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		paddingTop: 5,
 	},
-	container: { flex: 1, marginLeft: 5 },
+	container: { flex: 1 },
 	title: {
 		fontSize: 20,
 		fontWeight: 'bold',
@@ -97,11 +97,12 @@ const styles = StyleSheet.create({
 		gap: 15,
 	},
 	vendorList: {
-		flex: 1,
+		// flex: 1,
 		marginTop: 15,
 		paddingTop: 30,
 		paddingBottom: 5,
-		justifyContent: 'center',
-		alignItems: 'center',
+		paddingLeft: 15,
+		// borderColor: 'red',
+		// borderWidth: 1,
 	},
 });

@@ -24,7 +24,7 @@ export default function TabLayout() {
 			<StatusBar backgroundColor={colorScheme === 'dark' ? '#000' : '#FFF'} />
 			<Tabs
 				screenOptions={{
-					tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+					tabBarActiveTintColor: Colors.primary,
 					tabBarStyle: {
 						height: hp('10%'),
 						paddingBottom: 10,

@@ -33,7 +33,7 @@ export function Restaurants() {
 				renderItem={({ item }) => (
 					<VendorCard
 						vendor={item}
-						style={{ marginBottom: 30, width: 309, height: 250 }}
+						// style={{ marginBottom: 30, width: 309, height: 250 }}
 					/>
 				)}
 				estimatedItemSize={50} // Adjust this value based on the average item height
