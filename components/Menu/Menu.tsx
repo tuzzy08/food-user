@@ -14,9 +14,10 @@ import { Category, Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
 import { BottomSheet, useBottomSheetBackHandler } from './BottomSheet';
 import { MenuList } from './MenuList';
 import { BottomSheetContent } from './BottomSheetContent';
-import data from './data';
+import { useBoundStore } from '@/store/store';
 
 export function Menu({ categories }: { categories: Category[] }) {
+	const cart = useBoundStore((state) => state.cart);
 	// Default Category & Items
 	const default_category_name = 'All';
 	const default_items = categories.find(
@@ -45,10 +46,7 @@ export function Menu({ categories }: { categories: Category[] }) {
 		bottomSheetModalRef.current?.present(data);
 	}, []);
 	const closeModal = useCallback(() => {
-		bottomSheetModalRef.current?.close();
-	}, []);
-	const handleSheetChanges = useCallback((index: number) => {
-		console.log('handleSheetChanges', index);
+		bottomSheetModalRef.current?.dismiss();
 	}, []);
 	return (
 		<View style={{ flex: 1 }}>
@@ -73,7 +71,6 @@ export function Menu({ categories }: { categories: Category[] }) {
 				bottomSheetModalRef={bottomSheetModalRef}
 				handleSheetChanges={handleSheetPositionChange}
 				snapPoints={snapPoints}
-				// key={selectedItem?._id}
 			>
 				{({ data }: { data: Item }) => (
 					<BottomSheetContent closeModal={closeModal} selectedItem={data} />

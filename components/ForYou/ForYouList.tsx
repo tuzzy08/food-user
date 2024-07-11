@@ -10,6 +10,7 @@ import { ForYouSkeleton } from './ForYouSkeleton';
 export function ForYouList() {
 	const user_position = useBoundStore((state) => state.userLocation);
 	const [vendors, setVendors] = useState<Vendor_Data[]>([]);
+
 	// TODO: Implement case where you cant get user loction
 	const {
 		isPending,
@@ -55,8 +56,5 @@ const styles = StyleSheet.create({
 	listContainer: {
 		minHeight: 240,
 		minWidth: 320.5,
-		// borderColor: 'red',
-		// borderWidth: 1,
-		// backgroundColor: 'green',
 	},
 });

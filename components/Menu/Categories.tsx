@@ -1,9 +1,4 @@
-import {
-	Pressable,
-	StyleSheet,
-	TouchableOpacity,
-	useColorScheme,
-} from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
@@ -31,6 +26,9 @@ export function Categories({
 		acc.push(cat.name);
 		return acc;
 	}, []);
+	// Check if there are no categories
+	if (categoryNames.length === 1 && categoryNames[0] === 'All')
+		return <Text>No categories added.</Text>;
 	return (
 		<View style={styles.container}>
 			<FlashList

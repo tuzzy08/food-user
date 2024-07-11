@@ -1,7 +1,6 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { Text, View } from '@/components/Themed';
-import Colors from '@/constants/Colors';
 
 type CategoryItem = {
 	id: number;

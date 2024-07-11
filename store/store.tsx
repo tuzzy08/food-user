@@ -37,7 +37,7 @@ interface CartSlice {
 	increaseItemQty: (itemId: string) => void;
 	decreaseItemQty: (itemId: string) => void;
 	clearCart: () => void;
-	checkout: (userId: string, items: { item: Item; qty: number }[]) => void;
+	checkout: (userId: string, cart: Array<CartItem>) => void;
 }
 // Create Store Slices
 const createLocationSlice: StateCreator<

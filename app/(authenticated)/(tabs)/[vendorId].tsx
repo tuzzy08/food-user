@@ -98,7 +98,7 @@ export default function Page() {
 					<MenuListSkeleton />
 				) : (
 					<View style={styles.menu}>
-						<Menu categories={sorted_categories} />
+						<Menu categories={sorted_categories} key={vendor._id} />
 					</View>
 				)}
 			</View>

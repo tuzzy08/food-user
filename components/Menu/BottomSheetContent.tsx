@@ -1,18 +1,13 @@
 import { useState } from 'react';
 import Toast from 'react-native-root-toast';
-import {
-	BottomSheetView,
-	BottomSheetModal,
-	BottomSheetBackdrop,
-	TouchableOpacity,
-	BottomSheetModalProps,
-} from '@gorhom/bottom-sheet';
+import { BottomSheetView, TouchableOpacity } from '@gorhom/bottom-sheet';
 import { View, Text } from '../Themed';
 import { Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useBoundStore } from '@/store/store';
+import { FloatingButton } from './FloatingButton';
 
 const minusText = '-';
 const plusText = '+';
@@ -33,17 +28,17 @@ export function BottomSheetContent({
 		setItemQty(1);
 	}
 	const cart = useBoundStore((state) => state.cart);
-	// console.log(cart);
 	const addItem = useBoundStore((state) => state.addItem);
 
 	const handleAddToCart = () => {
 		addItem(selectedItem!, itemQty);
 		Toast.show('Added to cart!', {
-			duration: Toast.durations.LONG,
-			position: Toast.positions.TOP,
+			duration: Toast.durations.SHORT,
+			position: Toast.positions.BOTTOM,
 			delay: 350,
 			opacity: 0.8,
 			hideOnPress: true,
+			backgroundColor: Colors.primary,
 		});
 		closeModal();
 	};
@@ -114,8 +109,12 @@ export function BottomSheetContent({
 						>{`(₦${totalPrice})`}</Text>
 					</TouchableOpacity>
 				</BottomSheetView>
+
 				{/*  */}
 			</BottomSheetView>
+			{cart.length > 0 ? (
+				<FloatingButton closeModal={closeModal} cartlength={cart.length} />
+			) : null}
 		</BottomSheetView>
 	);
 }

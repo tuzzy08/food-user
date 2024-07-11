@@ -9,7 +9,7 @@ import { wrapString } from '@/lib';
 export function LocationBar() {
 	const colorScheme = useColorScheme();
 	const currentAddress = useBoundStore((state) => state.currentAddress);
-	const summarizedAddress = wrapString(currentAddress);
+	const summarizedAddress = wrapString(currentAddress!);
 
 	return (
 		<View style={styles.container}>
