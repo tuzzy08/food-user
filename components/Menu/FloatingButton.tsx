@@ -12,9 +12,11 @@ import Colors from '@/constants/Colors';
 export function FloatingButton({
 	cartlength,
 	closeModal,
+	totalPrice,
 }: {
 	cartlength: number;
 	closeModal: () => void;
+	totalPrice: number;
 }) {
 	const { width } = useWindowDimensions();
 	return (
@@ -25,8 +27,9 @@ export function FloatingButton({
 			}}
 		>
 			<View style={[styles.container, { width: width * 0.93 }]}>
+				{/* <ShoppingBasket size={20} color={Colors.dark.text} /> */}
 				<Text style={styles.buttonText}>{`View cart(${cartlength})`}</Text>
-				<ShoppingBasket size={20} color={Colors.dark.text} />
+				<Text style={styles.buttonText}>{`₦${totalPrice}`}</Text>
 			</View>
 		</TouchableOpacity>
 	);

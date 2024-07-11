@@ -28,6 +28,10 @@ export function BottomSheetContent({
 		setItemQty(1);
 	}
 	const cart = useBoundStore((state) => state.cart);
+	const cart_total = cart.reduce(
+		(acc, item) => acc + item.item.item_price * item.qty,
+		0
+	);
 	const addItem = useBoundStore((state) => state.addItem);
 
 	const handleAddToCart = () => {
@@ -113,7 +117,11 @@ export function BottomSheetContent({
 				{/*  */}
 			</BottomSheetView>
 			{cart.length > 0 ? (
-				<FloatingButton closeModal={closeModal} cartlength={cart.length} />
+				<FloatingButton
+					closeModal={closeModal}
+					cartlength={cart.length}
+					totalPrice={cart_total}
+				/>
 			) : null}
 		</BottomSheetView>
 	);
@@ -171,8 +179,8 @@ const styles = StyleSheet.create({
 	},
 	quantityButton: {
 		borderWidth: 1.5,
-		width: 40,
-		height: 40,
+		width: 35,
+		height: 35,
 		borderRadius: 50,
 		borderColor: Colors.grey,
 		justifyContent: 'center',
