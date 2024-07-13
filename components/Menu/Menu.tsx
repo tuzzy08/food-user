@@ -10,11 +10,11 @@ import {
 	useState,
 } from 'react';
 import { View } from '../Themed';
-import { Category, Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
+import { Category } from '@/app/(authenticated)/(tabs)/[vendorId]';
 import { BottomSheet, useBottomSheetBackHandler } from './BottomSheet';
 import { MenuList } from './MenuList';
 import { BottomSheetContent } from './BottomSheetContent';
-import { useBoundStore } from '@/store/store';
+import { ModifiedItem, useBoundStore } from '@/store/store';
 
 export function Menu({ categories }: { categories: Category[] }) {
 	const cart = useBoundStore((state) => state.cart);
@@ -24,7 +24,7 @@ export function Menu({ categories }: { categories: Category[] }) {
 		(c) => c.name === default_category_name
 	)?.items;
 	// Active Items
-	const [activeItems, setActiveItems] = useState<Item[] | undefined>(
+	const [activeItems, setActiveItems] = useState<ModifiedItem[] | undefined>(
 		default_items
 	);
 	// Default Category
@@ -32,7 +32,7 @@ export function Menu({ categories }: { categories: Category[] }) {
 		default_category_name
 	);
 	// Currently selected item
-	const [selectedItem, setSelectedItem] = useState<Item | undefined>();
+	const [selectedItem, setSelectedItem] = useState<ModifiedItem | undefined>();
 
 	// * Reference to BottomSheet Modal
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -42,7 +42,7 @@ export function Menu({ categories }: { categories: Category[] }) {
 	// * Modal SnapPoints
 	const snapPoints = useMemo(() => ['85%'], []);
 	// * Modal Callbacks
-	const showModal = useCallback((data: Item) => {
+	const showModal = useCallback((data: ModifiedItem) => {
 		bottomSheetModalRef.current?.present(data);
 	}, []);
 	const closeModal = useCallback(() => {
@@ -72,7 +72,7 @@ export function Menu({ categories }: { categories: Category[] }) {
 				handleSheetChanges={handleSheetPositionChange}
 				snapPoints={snapPoints}
 			>
-				{({ data }: { data: Item }) => (
+				{({ data }: { data: ModifiedItem }) => (
 					<BottomSheetContent closeModal={closeModal} selectedItem={data} />
 				)}
 			</BottomSheet>

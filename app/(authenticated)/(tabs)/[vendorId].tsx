@@ -11,23 +11,12 @@ import { Header } from '@/components/RestaurantView';
 import { Menu } from '@/components/Menu';
 import { MenuListSkeleton } from '@/components/Menu/MenuListSkeleton';
 import { HeaderSkeleton } from '@/components/RestaurantView/Header/HeaderSkeleton';
-export interface Item {
-	_id: string;
-	item_title: string;
-	item_image_url: string;
-	item_description: string;
-	item_price: number;
-	item_in_stock: boolean;
-	item_cook_time: number;
-	item_category_id: string;
-	item_category: string;
-	item_vendor: string;
-}
+import { ItemFromAPI, ModifiedItem } from '@/store/store';
 
 export interface Category {
 	id: string;
 	name: string;
-	items: Item[];
+	items: ModifiedItem[];
 }
 
 export default function Page() {
@@ -46,10 +35,20 @@ export default function Page() {
 				`${process.env.EXPO_PUBLIC_API_URL}/vendors/${vendor._id}/items`
 			).then((res) => res.json()),
 	});
+	// Extend the items with vendor info
+	const extended_items = items?.map((item: ItemFromAPI) => {
+		return {
+			...item,
+			vendor_id: vendor._id,
+			vendor_title: vendor.vendor_title,
+			vendor_logo_url: vendor.vendor_logo_url,
+		};
+	});
+	console.log('extended_items', extended_items);
 
 	// Sort the items by category
-	const sorted_categories: Array<Category> = items?.reduce(
-		(acc: Array<Category>, item: Item) => {
+	const sorted_categories: Array<Category> = extended_items?.reduce(
+		(acc: Array<Category>, item: ModifiedItem) => {
 			if (!acc.find((cat: Category) => cat.id === item.item_category_id)) {
 				acc.push({
 					id: item.item_category_id,
@@ -70,7 +69,7 @@ export default function Page() {
 	sorted_categories?.unshift({
 		id: default_category_name,
 		name: default_category_name,
-		items: items,
+		items: extended_items,
 	});
 
 	if (isLoading) return <MenuListSkeleton />;

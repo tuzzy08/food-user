@@ -9,7 +9,7 @@ import { LegacyRef, forwardRef, useCallback, useRef } from 'react';
 import { Order } from './orders';
 import { CartItem } from '@/store/store';
 import { OrderTab } from '@/components/OrderTab/OrderTab';
-import { CartItemList } from '@/components/CartItemList/CartItemList';
+import { CartList } from '@/components/Cart/CartList';
 
 const TabTitles = {
 	MyCart: 'My Cart',
@@ -47,13 +47,7 @@ export const TabPage = forwardRef(
 					)}
 					showsHorizontalScrollIndicator={false}
 					renderItem={({ item }: { item: string }) => (
-						// item === 'My Cart' ? (
-						// 	<TabContent cart={cart} />
-						// ) : (
-						// 	<TabContent orders={orders} />
-						// )
 						<View style={styles.tab}>
-							{/* <Text>{item}</Text> */}
 							<TabContent item={item} cart={cart} orders={orders} />
 						</View>
 					)}
@@ -75,7 +69,8 @@ function TabContent({
 }) {
 	if (item === 'My Cart') {
 		if (cart && cart.length > 0) {
-			return <CartItemList cart={cart} />;
+			const groupedItems = groupCartItemByVendor(cart);
+			return <CartList cart={groupedItems} />;
 		} else {
 			return <EmptyCart />;
 		}
@@ -102,21 +97,37 @@ export function EmptyCart() {
 
 const styles = StyleSheet.create({
 	container: {
-		// flex: 1,
+		flex: 1,
 		// width: '100%',
-		// height: '80%',
+		// height: '100%',
 		// borderWidth: 1,
-		// borderColor: 'red',
+		// borderColor: 'yellow',
 	},
 	tab: {
 		width: wp('100%'),
-		height: hp('60%'),
+		height: hp('65%'),
 		justifyContent: 'center',
 		alignItems: 'center',
 		// borderWidth: 1,
-		// borderColor: 'yellow',
+		// borderColor: 'blue',
 	},
 	tabContent: {},
 	emptyCart: {},
 	emptyCartText: {},
 });
+
+function groupCartItemByVendor(cart: CartItem[]) {
+	const groupedItems = cart.reduce(
+		(acc: { [key: string]: CartItem[] }, item) => {
+			const { vendor_title } = item.item;
+			if (acc[vendor_title]) {
+				acc[vendor_title].push(item);
+			} else {
+				acc[vendor_title] = [item];
+			}
+			return acc;
+		},
+		{}
+	);
+	return Object.entries(groupedItems);
+}

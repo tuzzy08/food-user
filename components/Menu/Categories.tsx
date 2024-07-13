@@ -6,9 +6,9 @@ import {
 import { FlashList } from '@shopify/flash-list';
 import { View, Text } from '../Themed';
 import Colors from '@/constants/Colors';
-// import categories from './mockCategries';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Category, Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
+import { Category } from '@/app/(authenticated)/(tabs)/[vendorId]';
+import { ModifiedItem } from '@/store/store';
 
 export function Categories({
 	activeCategoryName,
@@ -19,7 +19,7 @@ export function Categories({
 	activeCategoryName: string;
 	categories: Category[];
 	setActiveCategoryName: Dispatch<SetStateAction<string>>;
-	setActiveItems: Dispatch<SetStateAction<Item[] | undefined>>;
+	setActiveItems: Dispatch<SetStateAction<ModifiedItem[] | undefined>>;
 }) {
 	// Extract category names
 	const categoryNames = categories?.reduce((acc: string[], cat: Category) => {
@@ -63,9 +63,8 @@ function CategoryItem({
 	activeCategoryName: string;
 	categories: Category[];
 	setActiveCategoryName: Dispatch<SetStateAction<string>>;
-	setActiveItems: Dispatch<SetStateAction<Item[] | undefined>>;
+	setActiveItems: Dispatch<SetStateAction<ModifiedItem[] | undefined>>;
 }) {
-	// const [selected, setSelected] = useState('All');
 	const setFoodCategory = (category: string) => {
 		setActiveCategoryName(category);
 		setActiveItems((prev) => {
@@ -91,12 +90,9 @@ const styles = StyleSheet.create({
 		height: hp('8%'),
 		flexDirection: 'row',
 		alignItems: 'center',
-		// justifyContent: 'center',
-		// backgroundColor: Colors.secondary,
 	},
 	item: {
 		marginRight: 10,
-		// alignItems: 'center',
 		marginTop: 15,
 		padding: 5,
 		paddingHorizontal: 10,

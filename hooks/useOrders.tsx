@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 
-export function useOrders({ user_id }: { user_id: string }) {
+export function useOrders(user_id: string) {
 	return useQuery({
-		queryKey: [`${vendor.vendor_title}-all-items`],
+		queryKey: [`${user_id}-all-orders`],
 		queryFn: () =>
-			fetch(
-				`${process.env.EXPO_PUBLIC_API_URL}/vendors/${vendor._id}/items`
-			).then((res) => res.json()),
+			fetch(`${process.env.EXPO_PUBLIC_API_URL}/orders/${user_id}`).then(
+				(res) => res.json()
+			),
 	});
 }

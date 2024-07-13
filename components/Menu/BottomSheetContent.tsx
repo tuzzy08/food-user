@@ -2,11 +2,10 @@ import { useState } from 'react';
 import Toast from 'react-native-root-toast';
 import { BottomSheetView, TouchableOpacity } from '@gorhom/bottom-sheet';
 import { View, Text } from '../Themed';
-import { Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet } from 'react-native';
 import Colors from '@/constants/Colors';
-import { useBoundStore } from '@/store/store';
+import { useBoundStore, OptionForCartItem, ModifiedItem } from '@/store/store';
 import { FloatingButton } from './FloatingButton';
 
 const minusText = '-';
@@ -16,26 +15,45 @@ export function BottomSheetContent({
 	selectedItem,
 	closeModal,
 }: {
-	selectedItem: Item | undefined;
+	selectedItem: ModifiedItem | undefined;
 	closeModal: () => void;
 }) {
+	// Set Item options, quantity and price
+	const [options, setOptions] = useState<Array<OptionForCartItem>>([]);
 	const [itemQty, setItemQty] = useState(1);
 	const totalPrice = selectedItem?.item_price! * itemQty;
 
-	const [prevItem, setPrevItem] = useState<Item | undefined>(selectedItem);
+	const [prevItem, setPrevItem] = useState<ModifiedItem | undefined>(
+		selectedItem
+	);
 	if (prevItem !== selectedItem) {
 		setPrevItem(selectedItem);
 		setItemQty(1);
 	}
 	const cart = useBoundStore((state) => state.cart);
 	const cart_total = cart.reduce(
-		(acc, item) => acc + item.item.item_price * item.qty,
+		(acc, item) => acc + item.item.item_price * item.quantity,
 		0
 	);
 	const addItem = useBoundStore((state) => state.addItem);
 
 	const handleAddToCart = () => {
-		addItem(selectedItem!, itemQty);
+		console.log('selectedItem', selectedItem);
+		addItem(
+			{
+				_id: selectedItem?._id!,
+				item_title: selectedItem?.item_title!,
+				item_image_url: selectedItem?.item_image_url!,
+				item_description: selectedItem?.item_description!,
+				item_price: selectedItem?.item_price!,
+				item_vendor: selectedItem?.item_vendor!,
+				options: options,
+				vendor_title: selectedItem?.vendor_title!,
+				vendor_id: selectedItem?.vendor_id!,
+				vendor_logo_url: selectedItem?.vendor_logo_url!,
+			},
+			itemQty
+		);
 		Toast.show('Added to cart!', {
 			duration: Toast.durations.SHORT,
 			position: Toast.positions.BOTTOM,

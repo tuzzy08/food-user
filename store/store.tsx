@@ -1,5 +1,6 @@
-import { Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
 import { create, StateCreator } from 'zustand';
+
+const CHECKOUT_URL = `${process.env.EXPO_API_URL}/orders/checkout`;
 
 interface OtpSlice {
 	otp: string | null;
@@ -25,10 +26,61 @@ interface UserLocationSlice {
 	setCurrentAddress: (address: string) => void;
 	setDeliveryAddress: (address: string) => void;
 }
+export interface ModifiedItem extends ItemFromAPI {
+	vendor_id: string;
+	vendor_title: string;
+	vendor_logo_url: string;
+}
+
+export interface OptionForCartItem {
+	title: string;
+	quantity: number;
+	price: number;
+}
+
+export interface OptionFromAPI {
+	title: string;
+	type: string;
+	items: Array<OptionItemFromAPI>;
+}
+
+interface OptionItemFromAPI {
+	title: string;
+	quantity: number;
+	price: number;
+}
+export interface ItemFromAPI {
+	_id: string;
+	item_title: string;
+	item_image_url: string;
+	item_description: string;
+	item_price: number;
+	item_in_stock: boolean;
+	item_cook_time: number;
+	item_category_id: string;
+	item_category: string;
+	item_vendor: string;
+	options: Array<OptionFromAPI>;
+}
+
+export type Item = Pick<
+	ItemFromAPI,
+	| '_id'
+	| 'item_title'
+	| 'item_image_url'
+	| 'item_description'
+	| 'item_price'
+	| 'item_vendor'
+> & {
+	vendor_title: string;
+	vendor_id: string;
+	vendor_logo_url: string;
+	options: Array<OptionForCartItem>;
+};
 
 export interface CartItem {
 	item: Item;
-	qty: number;
+	quantity: number;
 }
 interface CartSlice {
 	cart: Array<CartItem>;
@@ -75,14 +127,14 @@ const createOtpSlice: StateCreator<OtpSlice, [], [], OtpSlice> = (set) => ({
 
 const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
 	cart: [],
-	addItem: (item: Item, qty: number = 1) =>
+	addItem: (item: Item, quantity: number) =>
 		set((state) => ({
-			cart: [...state.cart, { item, qty }],
+			cart: [...state.cart, { item: item, quantity: quantity }],
 		})),
 	deleteItem: (itemId: string) =>
 		set((state) => {
 			const updatedItems = [
-				...state.cart.filter((cart_item, i) => cart_item.item._id !== itemId),
+				...state.cart.filter(({ item }, _) => item._id !== itemId),
 			];
 			return {
 				cart: [...updatedItems],
@@ -91,37 +143,27 @@ const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
 	increaseItemQty: (itemId: string) =>
 		set((state) => {
 			// Fetch the item from array in state
-			const item = state.cart.find(
-				(cart_item) => cart_item.item._id === itemId
-			);
+			const item = state.cart.find(({ item }) => item._id === itemId);
 
-			if (!item || item?.qty < 0) return {};
+			if (!item || item?.quantity < 0) return {};
 			// Update it's quantity
-			item.qty += 1;
+			item.quantity += 1;
 			return {
 				// Filter out the item and merge in the updated item
-				cart: [
-					...state.cart.filter((cart_item) => cart_item.item._id !== itemId),
-					item,
-				],
+				cart: [...state.cart.filter(({ item }) => item._id !== itemId), item],
 			};
 		}),
 	decreaseItemQty: (itemId: string) =>
 		set((state) => {
 			// Fetch the item from array in state
-			const item = state.cart.find(
-				(cart_item) => cart_item.item._id === itemId
-			);
+			const item = state.cart.find(({ item }) => item._id === itemId);
 
-			if (!item || item?.qty <= 0) return {};
+			if (!item || item?.quantity <= 0) return {};
 			// Update it's quantity
-			item.qty -= 1;
+			item.quantity -= 1;
 			return {
 				// Filter out the item and merge in the updated item
-				cart: [
-					...state.cart.filter((cart_item) => cart_item.item._id !== itemId),
-					item,
-				],
+				cart: [...state.cart.filter(({ item }) => item._id !== itemId), item],
 			};
 		}),
 	clearCart: () =>
@@ -130,7 +172,7 @@ const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
 		})),
 	checkout: async (userId: string, items: CartItem[]) => {
 		try {
-			const response = await fetch(`${process.env.EXPO_API_URL}/checkout`, {
+			const response = await fetch(CHECKOUT_URL, {
 				method: 'POST',
 				headers: {
 					Accept: 'application/json',
