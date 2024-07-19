@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction } from 'react';
 import { StyleSheet } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { Item } from '@/app/(authenticated)/(tabs)/[vendorId]';
+import { ModifiedItem } from '@/store/store';
 import { View } from '../Themed';
 import { MenuItem } from './MenuItem';
 
@@ -9,8 +8,8 @@ export function MenuList({
 	showModal,
 	items,
 }: {
-	showModal: (data: Item) => void;
-	items: Item[] | undefined;
+	showModal: (data: ModifiedItem) => void;
+	items: ModifiedItem[] | undefined;
 }) {
 	return (
 		<View style={styles.menu}>
@@ -29,7 +28,7 @@ export function MenuList({
 const styles = StyleSheet.create({
 	menu: {
 		flex: 1,
-		marginHorizontal: 10,
+		marginHorizontal: 5,
 		marginTop: 10,
 	},
 });

@@ -14,11 +14,9 @@ import { Category } from '@/app/(authenticated)/(tabs)/[vendorId]';
 import { BottomSheet, useBottomSheetBackHandler } from './BottomSheet';
 import { MenuList } from './MenuList';
 import { BottomSheetContent } from './BottomSheetContent';
-import { ModifiedItem, useBoundStore } from '@/store/store';
+import { ModifiedItem } from '@/store/store';
 
 export function Menu({ categories }: { categories: Category[] }) {
-	const cart = useBoundStore((state) => state.cart);
-	// Default Category & Items
 	const default_category_name = 'All';
 	const default_items = categories.find(
 		(c) => c.name === default_category_name
@@ -31,8 +29,6 @@ export function Menu({ categories }: { categories: Category[] }) {
 	const [activeCategoryName, setActiveCategoryName] = useState<string>(
 		default_category_name
 	);
-	// Currently selected item
-	const [selectedItem, setSelectedItem] = useState<ModifiedItem | undefined>();
 
 	// * Reference to BottomSheet Modal
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
