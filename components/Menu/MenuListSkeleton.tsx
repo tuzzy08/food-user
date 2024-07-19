@@ -13,11 +13,11 @@ export function MenuListSkeleton() {
 				<Spacer height={8} />
 			</MotiView>
 			<MotiView>
-				<Skeleton width={260} height={180} radius={5} />
+				<Skeleton width={330} height={180} radius={5} />
 				<Spacer height={6} />
-				<Skeleton width={260} height={180} radius={5} />
+				<Skeleton width={330} height={180} radius={5} />
 				<Spacer height={6} />
-				<Skeleton width={260} height={180} radius={5} />
+				<Skeleton width={330} height={180} radius={5} />
 			</MotiView>
 		</MotiView>
 	);

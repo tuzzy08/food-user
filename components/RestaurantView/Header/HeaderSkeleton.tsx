@@ -8,19 +8,19 @@ import { View } from '../../Themed';
 export function HeaderSkeleton() {
 	return (
 		<MotiView style={styles.container}>
-			<MotiView>
-				<Skeleton width={'100%'} height={'100%'} />
-				<Spacer height={8} />
-			</MotiView>
+			<Skeleton width={350} height={200} />
+			<Spacer height={8} />
 		</MotiView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		width: '100%',
-		height: '100%',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		// flex: 1,
+		// width: '100%',
+		// height: '100%',
 	},
 });
 

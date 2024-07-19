@@ -81,24 +81,26 @@ export default function Page() {
 				style={colorScheme === 'dark' ? 'light' : 'dark'}
 			/>
 			<View style={{ flex: 1 }}>
-				<View
-					style={{
-						height: hp('30%'),
-					}}
-				>
-					{isLoading ? (
-						<HeaderSkeleton />
-					) : (
-						<Header imgUrl={vendor.vendor_logo_url} />
-					)}
-				</View>
-				{/* Menu items */}
 				{isLoading ? (
-					<MenuListSkeleton />
+					<>
+						<HeaderSkeleton />
+						<MenuListSkeleton />
+					</>
 				) : (
-					<View style={styles.menu}>
-						<Menu categories={sorted_categories} key={vendor._id} />
-					</View>
+					<>
+						<View
+							style={{
+								height: hp('30%'),
+								width: '100%',
+							}}
+						>
+							<Header imgUrl={vendor.vendor_logo_url} />
+						</View>
+						{/* Menu items */}
+						<View style={styles.menu}>
+							<Menu categories={sorted_categories} key={vendor._id} />
+						</View>
+					</>
 				)}
 			</View>
 		</>

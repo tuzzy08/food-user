@@ -34,6 +34,7 @@ export function MenuItem({
 			]}
 		>
 			<Image
+				contentFit='fill'
 				style={{
 					height: '100%',
 					width: '25%',
@@ -61,47 +62,12 @@ export function MenuItem({
 				{/* Title */}
 				<Text style={styles.title}>{item.item_title}</Text>
 
-				<Text
-					// numberOfLines={2}
-					// ellipsizeMode='tail'
-					style={styles.description}
-				>
+				<Text style={styles.description}>
 					{summarize(item.item_description)}
 				</Text>
-
-				{/* Cooking Time */}
-				{/* <View
-					style={{
-						marginTop: 15,
-						flexDirection: 'row',
-						backgroundColor:
-							color === 'dark'
-								? Colors.dark.alt.background
-								: Colors.light.background,
-					}}
-				>
-					<MaterialCommunityIcons
-						name='pot-steam'
-						color={Colors.secondary}
-						size={14}
-					/>
-					<Text style={styles.prepTimeText}>{`  Cooking Time`}</Text>
-					<Text style={styles.prepTimeText}>{`  ~ ${Math.floor(
-						item.item_cook_time / 60
-					)} Mins.`}</Text>
-				</View> */}
-				{/* Price */}
 				<Text
 					style={{ marginTop: 15, color: Colors.grey, fontWeight: 'bold' }}
 				>{`₦${item.item_price}`}</Text>
-				{/* <TouchableOpacity
-					style={styles.addButton}
-					onPress={() => {
-						showModal(item);
-					}}
-				>
-					<Text style={{ alignSelf: 'center' }}>ADD</Text>
-				</TouchableOpacity> */}
 			</View>
 		</TouchableOpacity>
 	);
