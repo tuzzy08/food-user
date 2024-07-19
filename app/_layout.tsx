@@ -10,6 +10,7 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Location from 'expo-location';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { RootSiblingParent } from 'react-native-root-siblings';
@@ -18,7 +19,7 @@ import { useColorScheme } from '@/components/useColorScheme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getAddressFromCoordinates } from '@/lib';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { Slot, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -39,7 +40,6 @@ export default function RootLayout() {
 	const setUserLocation = useBoundStore((state) => state.setUserLocation);
 	const setCurrentAddress = useBoundStore((state) => state.setCurrentAddress);
 	const currentAddress = useBoundStore((state) => state.currentAddress);
-	const userLocation = useBoundStore((state) => state.userLocation);
 
 	const colorScheme = useColorScheme();
 	const [loaded, error] = useFonts({
@@ -77,8 +77,12 @@ export default function RootLayout() {
 					/**
 					 * ! This call is billed on google, use Sparingly or use the MapBox API in development.
 					 */
-					const address = await getAddressFromCoordinates(location);
-					setCurrentAddress(address);
+					// const address = await getAddressFromCoordinates(location);
+					// setCurrentAddress(address);
+					// TODO: Remove this (for development purposes only)
+					const temp_addres =
+						' 3 Joshua close, Nvigwe Woji, Port harcourt, Nigeria';
+					setCurrentAddress(temp_addres);
 				}
 			} catch (error) {
 				console.log('🚀 ~ RootLayout ~ error:', error);
@@ -99,21 +103,26 @@ export default function RootLayout() {
 					<RootSiblingParent>
 						<BottomSheetModalProvider>
 							<QueryClientProvider client={queryClient}>
-								<Stack>
-									<Stack.Screen
-										name='(authenticated)'
-										options={{ headerShown: false }}
-									/>
-									<Stack.Screen name='login' options={{ headerShown: false }} />
-									<Stack.Screen
-										name='register'
-										options={{ headerShown: false }}
-									/>
-									<Stack.Screen
-										name='confirmation'
-										options={{ headerShown: false }}
-									/>
-								</Stack>
+								<SafeAreaProvider>
+									<Stack>
+										<Stack.Screen
+											name='(authenticated)'
+											options={{ headerShown: false }}
+										/>
+										<Stack.Screen
+											name='login'
+											options={{ headerShown: false }}
+										/>
+										<Stack.Screen
+											name='register'
+											options={{ headerShown: false }}
+										/>
+										<Stack.Screen
+											name='confirmation'
+											options={{ headerShown: false }}
+										/>
+									</Stack>
+								</SafeAreaProvider>
 							</QueryClientProvider>
 						</BottomSheetModalProvider>
 					</RootSiblingParent>

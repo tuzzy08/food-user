@@ -18,8 +18,8 @@ export function Banner() {
 
 const styles = StyleSheet.create({
 	banner: {
-		width: wp('85%'),
-		height: hp('8%'),
+		width: wp('95%'),
+		height: hp('10%'),
 		borderColor: Colors.grey,
 		borderWidth: 0.4,
 		borderRadius: 8,

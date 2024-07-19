@@ -23,9 +23,9 @@ export async function getAddressFromCoordinates(
 }
 
 export function wrapString(input: string): string {
-	const maxLength = 29;
+	const maxLength = 25;
 	if (input && input.length > maxLength) {
-		return input.substring(0, maxLength - 3) + '...';
+		return input.substring(0, maxLength - 3) + '..';
 	}
 	return input;
 }

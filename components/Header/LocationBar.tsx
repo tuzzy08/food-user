@@ -15,10 +15,10 @@ export function LocationBar() {
 		<View style={styles.container}>
 			<TouchableOpacity onPress={() => router.navigate('/mapPage')}>
 				<View style={styles.addressBox}>
-					<MapPin size={15} color={Colors.primary} />
+					<MapPin size={17} color={Colors.primary} />
 					<Text style={styles.addressText}>{summarizedAddress}</Text>
 					<ChevronDown
-						size={19}
+						size={21}
 						color={
 							colorScheme === 'dark' ? Colors.dark.text : Colors.light.text
 						}
@@ -32,10 +32,11 @@ export function LocationBar() {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		// flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
+		// paddingHorizontal: 5,
 	},
 	addressBox: {
 		flexDirection: 'row',
@@ -44,6 +45,6 @@ const styles = StyleSheet.create({
 		gap: 5,
 	},
 	addressText: {
-		fontSize: 13,
+		fontSize: 14,
 	},
 });

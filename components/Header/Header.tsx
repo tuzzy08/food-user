@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, useColorScheme } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { View, Text } from '@/components/Themed';
 import {
 	widthPercentageToDP as wp,
@@ -6,60 +6,52 @@ import {
 } from 'react-native-responsive-screen';
 import Colors from '@/constants/Colors';
 import { LocationBar } from './LocationBar';
-import { Bell, ShoppingBag } from 'lucide-react-native';
-import { Link, router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import { useBoundStore } from '@/store/store';
 
 export function Header() {
-	const colorScheme = useColorScheme();
 	const cart = useBoundStore((state) => state.cart);
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<View
 				style={{
 					flexDirection: 'row',
 					marginTop: 18,
-					padding: 8,
-					paddingHorizontal: 13,
+					justifyContent: 'space-between',
+					alignItems: 'center',
 				}}
 			>
-				<Link href={'/notifications'} asChild>
-					<Bell
-						size={24}
-						style={{ alignSelf: 'flex-end' }}
-						color={Colors.secondary}
-					/>
-				</Link>
 				<LocationBar />
-				<Pressable onPress={() => router.push('/orders')}>
-					<ShoppingBag size={23} color={Colors.secondary} />
-					{cart.length > 0 ? (
-						<View
-							style={[styles.badge, { backgroundColor: Colors.primary }]}
-						></View>
-					) : null}
+				<Pressable
+					style={styles.cartBadge}
+					onPress={() => router.push('/orders')}
+				>
+					<Text style={{ fontSize: 13 }}>View cart ({cart.length})</Text>
 				</Pressable>
 			</View>
-		</View>
+		</SafeAreaView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		height: hp('13%'),
-		justifyContent: 'center',
+		height: hp('10%'),
+		paddingHorizontal: 8,
 	},
 	profileIcon: {
 		width: 28,
 		height: 28,
 		borderRadius: 30,
 	},
-	badge: {
-		position: 'absolute',
-		top: -3,
-		right: -3,
-		width: wp('3%'),
-		height: wp('3%'),
-		borderRadius: wp('10%'),
+	badgeText: {
+		fontSize: 10,
+		fontWeight: '600',
+	},
+	cartBadge: {
+		backgroundColor: Colors.primary,
+		paddingHorizontal: 8,
+		paddingVertical: 2,
+		borderRadius: 10,
 	},
 });
