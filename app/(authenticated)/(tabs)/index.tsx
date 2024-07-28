@@ -61,14 +61,10 @@ export default function Page() {
 const styles = StyleSheet.create({
 	rootContainerscrollView: {
 		flexGrow: 1,
-		// paddingTop: 5,
-		borderWidth: 1,
-		// borderColor: 'yellow',
 		marginHorizontal: 6,
 	},
 	container: {
-		// flex: 1,
-		gap: 18,
+		gap: 20,
 	},
 	title: {
 		fontSize: 20,
@@ -79,22 +75,10 @@ const styles = StyleSheet.create({
 		height: hp('38%'),
 		width: '100%',
 		paddingTop: 5,
-		// borderWidth: 1,
-		// borderColor: 'red',
-
-		// marginTop: 15,
-		// padding: 8,
-		// gap: 15,
 	},
 	vendorList: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		// flex: 1,
-		// marginTop: 15,
-		// paddingTop: 30,
 		paddingBottom: 5,
-		// paddingLeft: 15,
-		borderColor: 'red',
-		borderWidth: 1,
 	},
 });

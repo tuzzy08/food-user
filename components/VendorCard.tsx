@@ -101,9 +101,7 @@ export function VendorCard({
 								<Text
 									style={{ fontSize: 11 }}
 								>{`From  ₦${vendor.vendor_min_price} | `}</Text>
-								<Text style={{ fontSize: 11, color: Colors.primary }}>
-									Closed
-								</Text>
+								<Text style={{ fontSize: 11, color: 'red' }}>Closed</Text>
 							</View>
 						</View>
 					</View>

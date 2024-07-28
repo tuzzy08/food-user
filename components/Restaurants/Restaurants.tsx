@@ -15,8 +15,6 @@ export function Restaurants() {
 		<View
 			style={{
 				minWidth: 320.5,
-				borderWidth: 1,
-				borderColor: 'green',
 			}}
 		>
 			<FlashList

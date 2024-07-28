@@ -69,9 +69,7 @@ export function SpotlightCard() {
 							<Text
 								style={{ fontSize: 11 }}
 							>{`From  ₦${spotlight_vendor.vendor_min_price} | `}</Text>
-							<Text style={{ fontSize: 11, color: Colors.primary }}>
-								Closed
-							</Text>
+							<Text style={{ fontSize: 11, color: 'red' }}>Closed</Text>
 						</View>
 					</View>
 				</View>
@@ -84,8 +82,9 @@ const styles = StyleSheet.create({
 	itemContainer: {
 		marginRight: 15,
 		height: 240,
-		width: 270,
+		width: 335,
 		gap: 5,
+		paddingTop: 10,
 	},
 	HeaderText: {
 		fontSize: 16,

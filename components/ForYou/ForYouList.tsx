@@ -43,8 +43,6 @@ const styles = StyleSheet.create({
 		minHeight: 240,
 		minWidth: 320.5,
 		gap: 5,
-		borderWidth: 1,
-		borderColor: 'red',
 	},
 	HeaderText: {
 		fontSize: 16,
