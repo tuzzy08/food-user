@@ -5,7 +5,6 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Vendor_Data, useVendors } from '@/hooks/useVendors';
-import { useQuery } from '@tanstack/react-query';
 import { SpotlightSkeleton } from './SpotlightSkeleton';
 
 function getRandomItem(vendors: Vendor_Data[]): Vendor_Data {
@@ -16,18 +15,7 @@ function getRandomItem(vendors: Vendor_Data[]): Vendor_Data {
 export function SpotlightCard() {
 	const router = useRouter();
 	const [spotlight_vendor, setSpotlightVendor] = useState<Vendor_Data>();
-
-	const {
-		isPending,
-		error,
-		data: all_vendors,
-	} = useQuery({
-		queryKey: ['allVendors'],
-		queryFn: () =>
-			fetch(`${process.env.EXPO_PUBLIC_API_URL}/vendors`).then((res) =>
-				res.json()
-			),
-	});
+	const { isPending, data: all_vendors, error } = useVendors();
 
 	useEffect(() => {
 		if (all_vendors && all_vendors.length > 0) {
@@ -54,6 +42,7 @@ export function SpotlightCard() {
 			}
 		>
 			<View style={styles.itemContainer}>
+				<Text style={styles.HeaderText}>Spotlight</Text>
 				{/* Image Section */}
 				<View
 					style={{
@@ -96,7 +85,11 @@ const styles = StyleSheet.create({
 		marginRight: 15,
 		height: 240,
 		width: 270,
-		// gap: 5,
+		gap: 5,
+	},
+	HeaderText: {
+		fontSize: 16,
+		fontWeight: '600',
 	},
 	itemImage: {
 		height: '100%',

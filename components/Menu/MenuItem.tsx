@@ -5,7 +5,6 @@ import {
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Image } from 'expo-image';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { View, Text } from '../Themed';
 import Colors from '@/constants/Colors';
 import { ModifiedItem } from '@/store/store';
@@ -49,10 +48,6 @@ export function MenuItem({
 					justifyContent: 'space-between',
 					paddingBottom: 5,
 					paddingTop: 3,
-
-					// gap: 8,
-					// borderWidth: 1,
-					// borderColor: Colors.lightGrey,
 					backgroundColor:
 						color === 'dark'
 							? Colors.dark.alt.background
@@ -81,8 +76,6 @@ const styles = StyleSheet.create({
 		height: hp('12%'),
 		width: '100%',
 		marginBottom: 15,
-		// borderWidth: 1,
-		// borderColor: 'red',
 	},
 	title: {
 		fontSize: 14,

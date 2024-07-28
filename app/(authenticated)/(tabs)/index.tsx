@@ -1,5 +1,4 @@
 import { ScrollView, StyleSheet, useColorScheme } from 'react-native';
-// import { SafeAreaView } from 'react-native';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
@@ -19,7 +18,7 @@ export default function Page() {
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<ScrollView
-				contentContainerStyle={styles.scrollView}
+				style={styles.rootContainerscrollView}
 				showsVerticalScrollIndicator={false}
 			>
 				<View
@@ -31,17 +30,10 @@ export default function Page() {
 						},
 					]}
 				>
-					<View style={styles.banner}>
-						<Banner />
-					</View>
-					<View style={{ marginTop: -4 }}>
-						<CategoryList />
-					</View>
+					<Banner />
+					<CategoryList />
 
-					<View style={styles.foryouContainer}>
-						<Text style={styles.HeaderText}>For You</Text>
-						<ForYou />
-					</View>
+					<ForYou />
 					<View
 						style={[
 							styles.spotlight,
@@ -55,7 +47,6 @@ export default function Page() {
 							},
 						]}
 					>
-						<Text style={styles.HeaderText}>Spotlight</Text>
 						<SpotlightCard />
 					</View>
 					<View style={[styles.vendorList]}>
@@ -68,44 +59,42 @@ export default function Page() {
 }
 
 const styles = StyleSheet.create({
-	scrollView: {
+	rootContainerscrollView: {
 		flexGrow: 1,
-		paddingTop: 5,
+		// paddingTop: 5,
+		borderWidth: 1,
+		// borderColor: 'yellow',
+		marginHorizontal: 6,
 	},
-	container: { flex: 1 },
+	container: {
+		// flex: 1,
+		gap: 18,
+	},
 	title: {
 		fontSize: 20,
 		fontWeight: 'bold',
 	},
-	banner: {
-		alignItems: 'center',
-		// marginTop: -35,
-		paddingBottom: 20,
-	},
-	foryouContainer: {
-		marginTop: 15,
-		paddingVertical: 10,
-		paddingLeft: 10,
-		gap: 5,
-	},
-	HeaderText: {
-		fontSize: 16,
-		fontWeight: '600',
-	},
+
 	spotlight: {
 		height: hp('38%'),
 		width: '100%',
-		marginTop: 15,
-		padding: 8,
-		gap: 15,
+		paddingTop: 5,
+		// borderWidth: 1,
+		// borderColor: 'red',
+
+		// marginTop: 15,
+		// padding: 8,
+		// gap: 15,
 	},
 	vendorList: {
+		justifyContent: 'center',
+		alignItems: 'center',
 		// flex: 1,
-		marginTop: 15,
-		paddingTop: 30,
+		// marginTop: 15,
+		// paddingTop: 30,
 		paddingBottom: 5,
-		paddingLeft: 15,
-		// borderColor: 'red',
-		// borderWidth: 1,
+		// paddingLeft: 15,
+		borderColor: 'red',
+		borderWidth: 1,
 	},
 });

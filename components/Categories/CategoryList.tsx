@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { View, Text } from '@/components/Themed';
+import { View } from '@/components/Themed';
 import { CategoryCard } from './MainCategories/CategoryCard';
 
 const icons = {
 	restaurant: require('@/assets/images/icons/mainCategories/restaurant_line.png'),
 	supermarket: require('@/assets/images/icons/mainCategories/supermarket_line.png'),
 	pharmacy: require('@/assets/images/icons/mainCategories/pharmacy_line.png'),
-	courier: require('@/assets/images/icons/mainCategories/courier_2_line.png'),
+	delivery: require('@/assets/images/icons/mainCategories/courier_2_line.png'),
 };
 
 const CATEGORIES = [
@@ -33,8 +33,8 @@ const CATEGORIES = [
 	},
 	{
 		id: 4,
-		title: 'Courier by Nimbu',
-		img_url: icons.courier,
+		title: 'Delivery',
+		img_url: icons.delivery,
 		href: '',
 		bgColor: '#FEE9E4',
 	},
@@ -54,6 +54,9 @@ const styles = StyleSheet.create({
 	listContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingHorizontal: 5,
+		// paddingHorizontal: 5,
+		// gap: 10,
+		borderWidth: 1,
+		// borderColor: 'red',
 	},
 });

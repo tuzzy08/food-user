@@ -11,10 +11,11 @@ import {
 } from 'react';
 import { View } from '../Themed';
 import { Category } from '@/app/(authenticated)/(tabs)/[vendorId]';
-import { BottomSheet, useBottomSheetBackHandler } from './BottomSheet';
+import { BottomSheet } from './BottomSheet';
 import { MenuList } from './MenuList';
 import { BottomSheetContent } from './BottomSheetContent';
 import { ModifiedItem } from '@/store/store';
+import { useBottomSheetBackHandler } from '@/hooks/useBottomSheetBackHandler';
 
 export function Menu({ categories }: { categories: Category[] }) {
 	const default_category_name = 'All';

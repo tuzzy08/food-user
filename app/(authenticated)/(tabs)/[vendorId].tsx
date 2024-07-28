@@ -44,7 +44,6 @@ export default function Page() {
 			vendor_logo_url: vendor.vendor_logo_url,
 		};
 	});
-	console.log('extended_items', extended_items);
 
 	// Sort the items by category
 	const sorted_categories: Array<Category> = extended_items?.reduce(

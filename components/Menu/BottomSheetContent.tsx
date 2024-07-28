@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Toast from 'react-native-root-toast';
 import { BottomSheetView, TouchableOpacity } from '@gorhom/bottom-sheet';
 import { View, Text } from '../Themed';
@@ -37,8 +37,7 @@ export function BottomSheetContent({
 	);
 	const addItem = useBoundStore((state) => state.addItem);
 
-	const handleAddToCart = () => {
-		console.log('selectedItem', selectedItem);
+	const handleAddToCart = useCallback(() => {
 		addItem(
 			{
 				_id: selectedItem?._id!,
@@ -63,16 +62,16 @@ export function BottomSheetContent({
 			backgroundColor: Colors.primary,
 		});
 		closeModal();
-	};
+	}, [selectedItem]);
+
 	return (
 		<BottomSheetView>
-			{/* Food image here */}
-			<View style={styles.bottomSheetImage}>
-				<Image
-					source={selectedItem?.item_image_url}
-					style={{ height: '100%', width: '100%' }}
-				/>
-			</View>
+			{/* Food image */}
+			<Image
+				contentFit='fill'
+				source={selectedItem?.item_image_url}
+				style={styles.bottomSheetImage}
+			/>
 			{/* Main bottom sheet content */}
 			<BottomSheetView style={styles.bottomSheetContent}>
 				{/* Pricing info */}

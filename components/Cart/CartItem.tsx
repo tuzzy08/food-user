@@ -1,12 +1,16 @@
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { CartItem as Item } from '@/store/store';
-import { Link } from 'expo-router';
 import { Image } from 'expo-image';
 import Colors from '@/constants/Colors';
 
-export function CartItem({ item }: { item: [string, Item[]] }) {
-	console.log(item);
+export function CartItem({
+	item,
+	showModal,
+}: {
+	item: [string, Item[]];
+	showModal: (data: Item) => void;
+}) {
 	return (
 		<View style={styles.container}>
 			{/* Restaurant title */}
@@ -21,11 +25,9 @@ export function CartItem({ item }: { item: [string, Item[]] }) {
 				</View>
 			</View>
 
-			<View>
-				<Link href={``}>
-					<Text>View</Text>
-				</Link>
-			</View>
+			<Pressable onPress={() => showModal(item[1][0])}>
+				<Text>View</Text>
+			</Pressable>
 		</View>
 	);
 }
@@ -33,8 +35,8 @@ export function CartItem({ item }: { item: [string, Item[]] }) {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
-		width: '95%',
-		height: 75,
+		width: '100%',
+		height: 80,
 		alignSelf: 'center',
 		alignItems: 'center',
 		justifyContent: 'space-between',
@@ -43,6 +45,7 @@ const styles = StyleSheet.create({
 		borderRadius: 7,
 		borderColor: Colors.grey,
 		gap: 10,
+		marginBottom: 15,
 	},
 	image: { width: 50, height: 50, borderRadius: 10 },
 	imgAndTextContainer: {

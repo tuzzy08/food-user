@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
+
 export type Vendor_Data = {
 	_id: string;
 	vendor_title: string;
@@ -15,13 +17,12 @@ export type Vendor_Data = {
 	vendor_rating: number;
 };
 
-export async function useVendors(): Promise<Vendor_Data[]> {
-	let vendors;
-	try {
-		const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/vendors`);
-		vendors = await res.json();
-	} catch (error) {
-		console.log('request error', error);
-	}
-	return vendors;
+const QUERY_KEY = 'all-vendors';
+const API_ENDPOINT = `${process.env.EXPO_PUBLIC_API_URL}/vendors`;
+
+export function useVendors() {
+	return useQuery<Vendor_Data[]>({
+		queryKey: [QUERY_KEY],
+		queryFn: () => fetch(API_ENDPOINT).then((res) => res.json()),
+	});
 }
