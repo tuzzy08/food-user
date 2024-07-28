@@ -12,6 +12,7 @@ import { Menu } from '@/components/Menu';
 import { MenuListSkeleton } from '@/components/Menu/MenuListSkeleton';
 import { HeaderSkeleton } from '@/components/RestaurantView/Header/HeaderSkeleton';
 import { ItemFromAPI, ModifiedItem } from '@/store/store';
+import { useVendorItems } from '@/hooks/useVendorItems';
 
 export interface Category {
 	id: string;
@@ -24,17 +25,8 @@ export default function Page() {
 	const params = useLocalSearchParams();
 	const vendor = JSON.parse(params.vendor as string);
 	// Fetch items for this vendor
-	const {
-		isLoading,
-		error,
-		data: items,
-	} = useQuery({
-		queryKey: [`${vendor.vendor_title}-all-items`],
-		queryFn: () =>
-			fetch(
-				`${process.env.EXPO_PUBLIC_API_URL}/vendors/${vendor._id}/items`
-			).then((res) => res.json()),
-	});
+	const { isLoading, error, data: items } = useVendorItems(vendor._id);
+
 	// Extend the items with vendor info
 	const extended_items = items?.map((item: ItemFromAPI) => {
 		return {

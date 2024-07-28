@@ -21,7 +21,7 @@ export function useForYouVendors(
 	lat: number | undefined,
 	lng: number | undefined
 ) {
-	if (!lat || !lng) throw new Error('Missing location information!');
+	// if (!lat || !lng) throw new Error('Missing location information!');
 
 	const QUERY_KEY = `vendors-for-you-${lat}-${lng}`;
 	const API_ENDPOINT = `${process.env.EXPO_PUBLIC_API_URL}/vendors/closest?lat=${lat}&lng=${lng}`;
