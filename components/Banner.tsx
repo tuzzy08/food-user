@@ -1,4 +1,5 @@
-import { StyleSheet, View as UnsThemedView } from 'react-native';
+import { StyleSheet, View as UnThemedView } from 'react-native';
+import Animated, { Easing, FadeIn, FadeOut } from 'react-native-reanimated';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
@@ -8,11 +9,12 @@ import Colors from '@/constants/Colors';
 
 export function Banner() {
 	return (
-		<View>
-			<UnsThemedView style={styles.banner}>
-				<Text>Ads Here</Text>
-			</UnsThemedView>
-		</View>
+		<Animated.View
+			style={styles.banner}
+			entering={FadeIn.duration(500).easing(Easing.ease)}
+		>
+			<Text>Ads Here</Text>
+		</Animated.View>
 	);
 }
 

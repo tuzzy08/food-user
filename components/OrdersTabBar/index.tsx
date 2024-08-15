@@ -37,12 +37,6 @@ const TabTitles = {
 
 const tabs = Object.values(TabTitles);
 
-// const tabs = [
-// 	{ title: TabTitles.MyCart, ref: React.createRef<View>() },
-// 	{ title: TabTitles.InProgress, ref: React.createRef<View>() },
-// 	{ title: TabTitles.Completed, ref: React.createRef<View>() },
-// ];
-
 export function OrdersTabBar({
 	scrollX,
 	onItemPress,
@@ -54,46 +48,6 @@ export function OrdersTabBar({
 		Array<{ x: number; width: number }>
 	>([]);
 	const [active, setActive] = useState(TabTitles.MyCart);
-
-	const containerRef = useRef<View>(null);
-
-	// useEffect(() => {
-	// 	if (containerRef.current) {
-	// 		const containerNode = findNodeHandle(containerRef.current);
-	// 		if (containerNode !== null) {
-	// 			let measurements: Array<{
-	// 				x: number;
-	// 				y: number;
-	// 				width: number;
-	// 				height: number;
-	// 			}> = [];
-	// 			tabs.forEach((tab) => {
-	// 				if (tab.ref.current) {
-	// 					tab.ref.current.measureLayout(
-	// 						containerNode,
-	// 						(x, y, width, height) => {
-	// 							console.log(`Measurements for ${tab.title}:`, {
-	// 								x,
-	// 								y,
-	// 								width,
-	// 								height,
-	// 							});
-	// 							// Handle the measurements here
-	// 							measurements.push({ x, y, width, height });
-	// 							// Set State
-	// 							if (measurements.length === tabs.length) {
-	// 								setMeasurements(measurements);
-	// 							}
-	// 						},
-	// 						() => {
-	// 							console.error(`Failed to measure layout for ${tab.title}`);
-	// 						}
-	// 					);
-	// 				}
-	// 			});
-	// 		}
-	// 	}
-	// }, []);
 
 	const onTabLayout = useCallback((event: LayoutChangeEvent, index: number) => {
 		const { x, width } = event.nativeEvent.layout;

@@ -2,7 +2,6 @@ import {
 	StyleSheet,
 	useWindowDimensions,
 	TouchableOpacity,
-	Pressable,
 } from 'react-native';
 import { View, Text } from '../Themed';
 import { ShoppingBasket } from 'lucide-react-native';
@@ -39,7 +38,8 @@ const styles = StyleSheet.create({
 	container: {
 		position: 'absolute',
 		gap: 5,
-		bottom: -55,
+		bottom: 10,
+		zIndex: 10,
 		marginHorizontal: 13,
 		backgroundColor: Colors.primary,
 		height: 43,

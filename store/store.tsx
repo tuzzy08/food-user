@@ -38,16 +38,16 @@ export interface OptionForCartItem {
 	price: number;
 }
 
-export interface OptionFromAPI {
-	title: string;
-	type: string;
-	items: Array<OptionItemFromAPI>;
-}
-
 interface OptionItemFromAPI {
 	title: string;
 	quantity: number;
 	price: number;
+}
+
+export interface OptionFromAPI {
+	title: string;
+	type: string;
+	items: Array<OptionItemFromAPI>;
 }
 export interface ItemFromAPI {
 	_id: string;

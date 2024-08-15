@@ -77,8 +77,6 @@ const styles = StyleSheet.create({
 		paddingTop: 5,
 	},
 	vendorList: {
-		justifyContent: 'center',
-		alignItems: 'center',
 		paddingBottom: 5,
 	},
 });

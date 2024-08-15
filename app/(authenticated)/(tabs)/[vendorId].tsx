@@ -11,8 +11,12 @@ import { Header } from '@/components/RestaurantView';
 import { Menu } from '@/components/Menu';
 import { MenuListSkeleton } from '@/components/Menu/MenuListSkeleton';
 import { HeaderSkeleton } from '@/components/RestaurantView/Header/HeaderSkeleton';
-import { ItemFromAPI, ModifiedItem } from '@/store/store';
+import { ItemFromAPI, ModifiedItem, useBoundStore } from '@/store/store';
 import { useVendorItems } from '@/hooks/useVendorItems';
+import { FloatingButton } from '@/components/Menu/FloatingButton';
+import { useCallback, useMemo, useRef } from 'react';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useBottomSheetBackHandler } from '@/hooks/useBottomSheetBackHandler';
 
 export interface Category {
 	id: string;
@@ -21,6 +25,11 @@ export interface Category {
 }
 
 export default function Page() {
+	const cart = useBoundStore((state) => state.cart);
+	const cart_total = cart.reduce(
+		(acc, item) => acc + item.item.item_price * item.quantity,
+		0
+	);
 	const colorScheme = useColorScheme();
 	const params = useLocalSearchParams();
 	const vendor = JSON.parse(params.vendor as string);
@@ -36,7 +45,6 @@ export default function Page() {
 			vendor_logo_url: vendor.vendor_logo_url,
 		};
 	});
-
 	// Sort the items by category
 	const sorted_categories: Array<Category> = extended_items?.reduce(
 		(acc: Array<Category>, item: ModifiedItem) => {
@@ -63,7 +71,20 @@ export default function Page() {
 		items: extended_items,
 	});
 
-	if (isLoading) return <MenuListSkeleton />;
+	// * Reference to BottomSheet Modal
+	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+	// * BottomSheet back(hardware) handler
+	const { handleSheetPositionChange } =
+		useBottomSheetBackHandler(bottomSheetModalRef);
+	// * Modal SnapPoints
+	const snapPoints = useMemo(() => ['85%'], []);
+	// * Modal Callbacks
+	const showModal = useCallback((data: ModifiedItem) => {
+		bottomSheetModalRef.current?.present(data);
+	}, []);
+	const closeModal = useCallback(() => {
+		bottomSheetModalRef.current?.dismiss();
+	}, []);
 
 	return (
 		<>
@@ -89,8 +110,23 @@ export default function Page() {
 						</View>
 						{/* Menu items */}
 						<View style={styles.menu}>
-							<Menu categories={sorted_categories} key={vendor._id} />
+							<Menu
+								categories={sorted_categories}
+								key={vendor._id}
+								showModal={showModal}
+								closeModal={closeModal}
+								bottomSheetModalRef={bottomSheetModalRef}
+								handleSheetChanges={handleSheetPositionChange}
+								snapPoints={snapPoints}
+							/>
 						</View>
+						{cart.length > 0 ? (
+							<FloatingButton
+								closeModal={closeModal}
+								cartlength={cart.length}
+								totalPrice={cart_total}
+							/>
+						) : null}
 					</>
 				)}
 			</View>

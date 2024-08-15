@@ -1,27 +1,34 @@
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import Colors from '@/constants/Colors';
 import { Categories } from './Categories';
-import {
-	Dispatch,
-	SetStateAction,
-	useCallback,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { View } from '../Themed';
 import { Category } from '@/app/(authenticated)/(tabs)/[vendorId]';
 import { BottomSheet } from './BottomSheet';
 import { MenuList } from './MenuList';
 import { BottomSheetContent } from './BottomSheetContent';
 import { ModifiedItem } from '@/store/store';
-import { useBottomSheetBackHandler } from '@/hooks/useBottomSheetBackHandler';
 
-export function Menu({ categories }: { categories: Category[] }) {
+export function Menu({
+	categories,
+	showModal,
+	closeModal,
+	bottomSheetModalRef,
+	handleSheetChanges,
+	snapPoints,
+}: {
+	categories: Category[];
+	showModal: (data: ModifiedItem) => void;
+	closeModal: () => void;
+	bottomSheetModalRef: React.RefObject<BottomSheetModal>;
+	handleSheetChanges: (index: number) => void;
+	snapPoints: string[];
+}) {
 	const default_category_name = 'All';
 	const default_items = categories.find(
 		(c) => c.name === default_category_name
 	)?.items;
+
 	// Active Items
 	const [activeItems, setActiveItems] = useState<ModifiedItem[] | undefined>(
 		default_items
@@ -31,20 +38,6 @@ export function Menu({ categories }: { categories: Category[] }) {
 		default_category_name
 	);
 
-	// * Reference to BottomSheet Modal
-	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-	// * BottomSheet back(hardware) handler
-	const { handleSheetPositionChange } =
-		useBottomSheetBackHandler(bottomSheetModalRef);
-	// * Modal SnapPoints
-	const snapPoints = useMemo(() => ['85%'], []);
-	// * Modal Callbacks
-	const showModal = useCallback((data: ModifiedItem) => {
-		bottomSheetModalRef.current?.present(data);
-	}, []);
-	const closeModal = useCallback(() => {
-		bottomSheetModalRef.current?.dismiss();
-	}, []);
 	return (
 		<View style={{ flex: 1 }}>
 			<View
@@ -62,11 +55,13 @@ export function Menu({ categories }: { categories: Category[] }) {
 					}
 				/>
 			</View>
+
 			<MenuList showModal={showModal} items={activeItems} />
+
 			{/* Meal Options Bottom Sheet	 */}
 			<BottomSheet
 				bottomSheetModalRef={bottomSheetModalRef}
-				handleSheetChanges={handleSheetPositionChange}
+				handleSheetChanges={handleSheetChanges}
 				snapPoints={snapPoints}
 			>
 				{({ data }: { data: ModifiedItem }) => (

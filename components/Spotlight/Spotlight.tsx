@@ -4,6 +4,7 @@ import Colors from '@/constants/Colors';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
+import Animated, { Easing, FadeIn, ZoomIn } from 'react-native-reanimated';
 import { Vendor_Data, useVendors } from '@/hooks/useVendors';
 import { SpotlightSkeleton } from './SpotlightSkeleton';
 
@@ -41,7 +42,10 @@ export function SpotlightCard() {
 				})
 			}
 		>
-			<View style={styles.itemContainer}>
+			<Animated.View
+				style={styles.itemContainer}
+				entering={ZoomIn.springify().damping(60).mass(0.5).stiffness(40)}
+			>
 				<Text style={styles.HeaderText}>Spotlight</Text>
 				{/* Image Section */}
 				<View
@@ -73,7 +77,7 @@ export function SpotlightCard() {
 						</View>
 					</View>
 				</View>
-			</View>
+			</Animated.View>
 		</TouchableOpacity>
 	);
 }

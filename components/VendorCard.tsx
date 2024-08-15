@@ -4,6 +4,7 @@ import Colors from '@/constants/Colors';
 import { Image } from 'expo-image';
 import { Rating } from '@/components/Rating';
 import { useRouter } from 'expo-router';
+import Animated from 'react-native-reanimated';
 
 type VendorProps = {
 	_id: string;
@@ -22,13 +23,7 @@ type VendorProps = {
 	vendor_rating: number;
 };
 
-export function VendorCard({
-	vendor,
-}: // style,
-{
-	vendor: VendorProps;
-	// style?: {};
-}) {
+export function VendorCard({ vendor }: { vendor: VendorProps }) {
 	const router = useRouter();
 	const color = useColorScheme();
 	return (
@@ -42,7 +37,7 @@ export function VendorCard({
 						pathname: `/[vendorId]`,
 					})
 				}
-				style={[{ borderRadius: 10 }, { marginBottom: 10 }]}
+				style={{ marginBottom: 20 }}
 			>
 				<View style={styles.container}>
 					<Image
@@ -115,7 +110,6 @@ const styles = StyleSheet.create({
 	container: {
 		width: 320,
 		height: 240,
-		alignItems: 'center',
 	},
 	image: {
 		width: '100%',

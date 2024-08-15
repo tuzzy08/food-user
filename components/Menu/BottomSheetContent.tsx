@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
 import Toast from 'react-native-root-toast';
 import { BottomSheetView, TouchableOpacity } from '@gorhom/bottom-sheet';
-import { View, Text } from '../Themed';
 import { Image } from 'expo-image';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useBoundStore, OptionForCartItem, ModifiedItem } from '@/store/store';
-import { FloatingButton } from './FloatingButton';
+import { ScrollView } from 'react-native-gesture-handler';
+import { ItemOption } from './ItemOption';
 
 const minusText = '-';
 const plusText = '+';
@@ -65,7 +65,7 @@ export function BottomSheetContent({
 	}, [selectedItem]);
 
 	return (
-		<BottomSheetView>
+		<BottomSheetView style={styles.bottomSheetContent}>
 			{/* Food image */}
 			<Image
 				contentFit='fill'
@@ -73,16 +73,30 @@ export function BottomSheetContent({
 				style={styles.bottomSheetImage}
 			/>
 			{/* Main bottom sheet content */}
-			<BottomSheetView style={styles.bottomSheetContent}>
-				{/* Pricing info */}
-				<BottomSheetView style={{ marginTop: 5, padding: 8, gap: 5 }}>
-					<Text style={styles.bottomSheetTitle}>
-						{selectedItem?.item_title}
-					</Text>
-					<Text
-						style={styles.bottomSheetPrice}
-					>{`₦${selectedItem?.item_price}`}</Text>
+			<ScrollView style={{ flexGrow: 1 }}>
+				<BottomSheetView>
+					{/* Item info */}
+					<BottomSheetView style={styles.itemDescription}>
+						<Text style={styles.bottomSheetTitle}>
+							{selectedItem?.item_title}
+						</Text>
+						<Text>{selectedItem?.item_description}</Text>
+						<Text style={styles.price}>{`₦${selectedItem?.item_price}`}</Text>
+					</BottomSheetView>
+					{/* Optional items for the selected item */}
+					{selectedItem?.options && (
+						<BottomSheetView>
+							<BottomSheetView>
+								{selectedItem?.options.map((option, index) => {
+									return <ItemOption option={option} key={index.toString()} />;
+								})}
+							</BottomSheetView>
+						</BottomSheetView>
+					)}
 				</BottomSheetView>
+			</ScrollView>
+			{/* Footer */}
+			<View style={styles.footer}>
 				{/* Add and Minus & Add to cart buttons */}
 				<BottomSheetView style={styles.actionButtonsContainer}>
 					{/* Add and Minus buttons */}
@@ -120,7 +134,7 @@ export function BottomSheetContent({
 						</Pressable>
 					</BottomSheetView>
 					{/* Add to cart button */}
-					<TouchableOpacity
+					<Pressable
 						style={styles.addToCartButton}
 						onPress={() => handleAddToCart()}
 					>
@@ -128,18 +142,9 @@ export function BottomSheetContent({
 						<Text
 							style={styles.addToCartButtonTotalPriceText}
 						>{`(₦${totalPrice})`}</Text>
-					</TouchableOpacity>
+					</Pressable>
 				</BottomSheetView>
-
-				{/*  */}
-			</BottomSheetView>
-			{cart.length > 0 ? (
-				<FloatingButton
-					closeModal={closeModal}
-					cartlength={cart.length}
-					totalPrice={cart_total}
-				/>
-			) : null}
+			</View>
 		</BottomSheetView>
 	);
 }
@@ -151,13 +156,27 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: 15,
 	},
 	bottomSheetContent: {
-		height: '65%',
-		justifyContent: 'space-between',
+		flex: 1,
 	},
 	bottomSheetTitle: {
 		fontSize: 16,
 		fontWeight: '600',
 		color: Colors.dark.background,
+	},
+	itemDescription: {
+		marginTop: 5,
+		paddingHorizontal: 8,
+		paddingBottom: 25,
+		gap: 10,
+	},
+	footer: {
+		width: '100%',
+		height: 100,
+		position: 'absolute',
+		justifyContent: 'center',
+		alignItems: 'center',
+		bottom: 0,
+		backgroundColor: Colors.light.background,
 	},
 	actionButtonsContainer: {
 		flexDirection: 'row',
@@ -184,7 +203,7 @@ const styles = StyleSheet.create({
 	addToCartButtonTotalPriceText: {
 		fontSize: 14,
 	},
-	bottomSheetPrice: { fontSize: 14, color: Colors.dark.background },
+	price: { fontSize: 14, fontWeight: 'bold', color: Colors.dark.background },
 	quantityButtonContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',

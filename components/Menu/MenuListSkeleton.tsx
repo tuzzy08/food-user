@@ -9,7 +9,7 @@ export function MenuListSkeleton() {
 	return (
 		<MotiView style={styles.container}>
 			<MotiView>
-				<Skeleton width={300} height={30} radius={5} />
+				<Skeleton width={330} height={30} />
 				<Spacer height={8} />
 			</MotiView>
 			<MotiView>

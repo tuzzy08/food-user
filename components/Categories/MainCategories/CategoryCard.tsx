@@ -26,7 +26,7 @@ export function CategoryCard({
 				styles.container,
 				{
 					width: width * 0.222,
-					height: height * 0.113,
+					height: height * 0.11,
 					backgroundColor: item.bgColor,
 				},
 			]}
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
 	container: {
 		borderWidth: 0.3,
 		borderColor: Colors.grey,
-		borderRadius: 10,
+		borderRadius: 15,
 		justifyContent: 'center',
 		alignItems: 'center',
 		gap: 8,
