@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useBoundStore, OptionForCartItem, ModifiedItem } from '@/store/store';
 import { ScrollView } from 'react-native-gesture-handler';
-import { ItemOption } from './ItemOption';
+import { ItemOptions } from './ItemOptions';
 
 const minusText = '-';
 const plusText = '+';
@@ -73,7 +73,7 @@ export function BottomSheetContent({
 				style={styles.bottomSheetImage}
 			/>
 			{/* Main bottom sheet content */}
-			<ScrollView style={{ flexGrow: 1 }}>
+			<ScrollView style={{ flexGrow: 1, marginBottom: 120 }}>
 				<BottomSheetView>
 					{/* Item info */}
 					<BottomSheetView style={styles.itemDescription}>
@@ -87,9 +87,12 @@ export function BottomSheetContent({
 					{selectedItem?.options && (
 						<BottomSheetView>
 							<BottomSheetView>
-								{selectedItem?.options.map((option, index) => {
+								{/* {selectedItem?.options.map((option, index) => {
 									return <ItemOption option={option} key={index.toString()} />;
-								})}
+								})} */}
+								{selectedItem?.options && (
+									<ItemOptions options={selectedItem?.options} />
+								)}
 							</BottomSheetView>
 						</BottomSheetView>
 					)}

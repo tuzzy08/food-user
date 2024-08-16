@@ -34,19 +34,16 @@ export interface ModifiedItem extends ItemFromAPI {
 
 export interface OptionForCartItem {
 	title: string;
-	quantity: number;
 	price: number;
 }
 
-interface OptionItemFromAPI {
+export interface OptionItemFromAPI {
 	title: string;
-	quantity: number;
 	price: number;
 }
 
 export interface OptionFromAPI {
-	title: string;
-	type: string;
+	category_title: string;
 	items: Array<OptionItemFromAPI>;
 }
 export interface ItemFromAPI {
@@ -60,7 +57,10 @@ export interface ItemFromAPI {
 	item_category_id: string;
 	item_category: string;
 	item_vendor: string;
-	options: Array<OptionFromAPI>;
+	options?: {
+		required: Array<OptionFromAPI>;
+		optional: Array<OptionFromAPI>;
+	};
 }
 
 export type Item = Pick<
