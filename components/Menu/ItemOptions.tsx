@@ -1,5 +1,5 @@
 import Colors from '@/constants/Colors';
-import { OptionFromAPI } from '@/store/store';
+import { Option } from '@/store/store';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import { OptionAccordion } from './OptionAccordion';
@@ -11,8 +11,8 @@ export function ItemOptions({
 	options,
 }: {
 	options: {
-		required: Array<OptionFromAPI>;
-		optional: Array<OptionFromAPI>;
+		required: Array<Option>;
+		optional: Array<Option>;
 	};
 }) {
 	return (

@@ -4,7 +4,7 @@ import { BottomSheetView, TouchableOpacity } from '@gorhom/bottom-sheet';
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Colors from '@/constants/Colors';
-import { useBoundStore, OptionForCartItem, ModifiedItem } from '@/store/store';
+import { useBoundStore, OptionalItem, ModifiedItem } from '@/store/store';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ItemOptions } from './ItemOptions';
 
@@ -19,7 +19,7 @@ export function BottomSheetContent({
 	closeModal: () => void;
 }) {
 	// Set Item options, quantity and price
-	const [options, setOptions] = useState<Array<OptionForCartItem>>([]);
+	const [options, setOptions] = useState<Array<OptionalItem>>([]);
 	const [itemQty, setItemQty] = useState(1);
 	const totalPrice = selectedItem?.item_price! * itemQty;
 
@@ -48,7 +48,6 @@ export function BottomSheetContent({
 				item_vendor: selectedItem?.item_vendor!,
 				options: options,
 				vendor_title: selectedItem?.vendor_title!,
-				vendor_id: selectedItem?.vendor_id!,
 				vendor_logo_url: selectedItem?.vendor_logo_url!,
 			},
 			itemQty

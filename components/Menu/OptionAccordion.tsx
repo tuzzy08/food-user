@@ -1,4 +1,4 @@
-import { OptionItemFromAPI } from '@/store/store';
+import { OptionalItem } from '@/store/store';
 import { ReactNode, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
@@ -16,7 +16,7 @@ const REQUIRED = 'required';
 type OptionAccordionProps = {
 	category_title: string;
 	category_type: string;
-	items: Array<OptionItemFromAPI>;
+	items: Array<OptionalItem>;
 };
 
 export function OptionAccordion({
@@ -188,11 +188,7 @@ export function AccordionWrapper({
 	);
 }
 
-export function AccordionContent({
-	items,
-}: {
-	items: Array<OptionItemFromAPI>;
-}) {
+export function AccordionContent({ items }: { items: Array<OptionalItem> }) {
 	return (
 		<View style={styles.accordionContent}>
 			{items.map((item, index) => (

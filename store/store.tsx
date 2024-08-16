@@ -32,19 +32,14 @@ export interface ModifiedItem extends ItemFromAPI {
 	vendor_logo_url: string;
 }
 
-export interface OptionForCartItem {
+export interface OptionalItem {
 	title: string;
 	price: number;
 }
 
-export interface OptionItemFromAPI {
-	title: string;
-	price: number;
-}
-
-export interface OptionFromAPI {
+export interface Option {
 	category_title: string;
-	items: Array<OptionItemFromAPI>;
+	items: Array<OptionalItem>;
 }
 export interface ItemFromAPI {
 	_id: string;
@@ -58,24 +53,23 @@ export interface ItemFromAPI {
 	item_category: string;
 	item_vendor: string;
 	options?: {
-		required: Array<OptionFromAPI>;
-		optional: Array<OptionFromAPI>;
+		required: Array<Option>;
+		optional: Array<Option>;
 	};
 }
 
 export type Item = Pick<
 	ItemFromAPI,
 	| '_id'
+	| 'item_vendor'
 	| 'item_title'
 	| 'item_image_url'
 	| 'item_description'
 	| 'item_price'
-	| 'item_vendor'
 > & {
-	vendor_title: string;
-	vendor_id: string;
+	vendor_title: string; // TODO: Remove vendor_title
 	vendor_logo_url: string;
-	options: Array<OptionForCartItem>;
+	options: Array<OptionalItem>;
 };
 
 export interface CartItem {
@@ -172,6 +166,7 @@ const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
 		})),
 	checkout: async (userId: string, items: CartItem[]) => {
 		try {
+			// TODO: Calculate total price
 			const response = await fetch(CHECKOUT_URL, {
 				method: 'POST',
 				headers: {
