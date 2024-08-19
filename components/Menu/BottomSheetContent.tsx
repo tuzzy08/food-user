@@ -1,15 +1,13 @@
 import { useCallback, useState } from 'react';
 import Toast from 'react-native-root-toast';
-import { BottomSheetView, TouchableOpacity } from '@gorhom/bottom-sheet';
+import { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useBoundStore, OptionalItem, ModifiedItem } from '@/store/store';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ItemOptions } from './ItemOptions';
-
-const minusText = '-';
-const plusText = '+';
+import { CircleMinus, CirclePlus } from 'lucide-react-native';
 
 export function BottomSheetContent({
 	selectedItem,
@@ -72,30 +70,23 @@ export function BottomSheetContent({
 				style={styles.bottomSheetImage}
 			/>
 			{/* Main bottom sheet content */}
-			<ScrollView style={{ flexGrow: 1, marginBottom: 120 }}>
-				<BottomSheetView>
-					{/* Item info */}
-					<BottomSheetView style={styles.itemDescription}>
-						<Text style={styles.bottomSheetTitle}>
-							{selectedItem?.item_title}
-						</Text>
-						<Text>{selectedItem?.item_description}</Text>
-						<Text style={styles.price}>{`₦${selectedItem?.item_price}`}</Text>
-					</BottomSheetView>
-					{/* Optional items for the selected item */}
-					{selectedItem?.options && (
-						<BottomSheetView>
-							<BottomSheetView>
-								{/* {selectedItem?.options.map((option, index) => {
-									return <ItemOption option={option} key={index.toString()} />;
-								})} */}
-								{selectedItem?.options && (
-									<ItemOptions options={selectedItem?.options} />
-								)}
-							</BottomSheetView>
-						</BottomSheetView>
-					)}
+			<ScrollView style={{ flexGrow: 1 }}>
+				{/* Item info */}
+				<BottomSheetView style={styles.itemDescription}>
+					<Text style={styles.bottomSheetTitle}>
+						{selectedItem?.item_title}
+					</Text>
+					<Text>{selectedItem?.item_description}</Text>
+					<Text style={styles.price}>{`₦${selectedItem?.item_price}`}</Text>
 				</BottomSheetView>
+				{/* Optional items for the selected item */}
+				{selectedItem?.options && (
+					<BottomSheetView>
+						{selectedItem?.options && (
+							<ItemOptions options={selectedItem?.options} />
+						)}
+					</BottomSheetView>
+				)}
 			</ScrollView>
 			{/* Footer */}
 			<View style={styles.footer}>
@@ -103,7 +94,10 @@ export function BottomSheetContent({
 				<BottomSheetView style={styles.actionButtonsContainer}>
 					{/* Add and Minus buttons */}
 					<BottomSheetView style={styles.quantityButtonContainer}>
-						<Pressable
+						<CircleMinus
+							strokeWidth={0.7}
+							color={Colors.dark.background}
+							size={40}
 							onPress={() => {
 								setItemQty((prevQty) => {
 									if (prevQty > 1) {
@@ -112,28 +106,16 @@ export function BottomSheetContent({
 									return prevQty;
 								});
 							}}
-							style={styles.quantityButton}
-						>
-							<Text style={styles.quantityButtonText}>{minusText}</Text>
-						</Pressable>
-						<Text
-							style={{
-								color: '#000',
-								padding: 18,
-								fontSize: 18,
-								fontWeight: '700',
-							}}
-						>
-							{itemQty}
-						</Text>
-						<Pressable
+						/>
+						<Text style={styles.quantityText}>{itemQty}</Text>
+						<CirclePlus
+							strokeWidth={0.7}
+							color={Colors.dark.background}
+							size={40}
 							onPress={() => {
 								setItemQty((prevQty) => prevQty + 1);
 							}}
-							style={styles.quantityButton}
-						>
-							<Text style={styles.quantityButtonText}>{plusText}</Text>
-						</Pressable>
+						/>
 					</BottomSheetView>
 					{/* Add to cart button */}
 					<Pressable
@@ -173,7 +155,7 @@ const styles = StyleSheet.create({
 	},
 	footer: {
 		width: '100%',
-		height: 100,
+		height: 90,
 		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -185,13 +167,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		gap: 50,
 		marginHorizontal: 20,
+		// borderWidth: 1,
 	},
 	addToCartButton: {
 		flexDirection: 'row',
 		borderColor: '#000',
 		borderRadius: 4,
-		paddingVertical: 15,
-		// flex: 1,
+		height: 40,
 		width: 130,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -208,10 +190,12 @@ const styles = StyleSheet.create({
 	price: { fontSize: 14, fontWeight: 'bold', color: Colors.dark.background },
 	quantityButtonContainer: {
 		flexDirection: 'row',
-		justifyContent: 'center',
+		// justifyContent: 'center',
+		gap: 15,
 		alignItems: 'center',
 		borderRadius: 4,
-		borderWidth: 1,
+		height: 50,
+		// borderWidth: 1,
 		paddingHorizontal: 5,
 		borderColor: Colors.grey,
 	},
@@ -224,9 +208,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	quantityButtonText: {
+	quantityText: {
 		color: Colors.dark.background,
-		fontSize: 20,
+		fontSize: 18,
 		fontWeight: '700',
 	},
 });
