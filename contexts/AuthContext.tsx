@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	}, []);
 
 	const handleSignUp = async (data: RegistrationData): Promise<string> => {
-		return fetch(`${process.env.EXPO_API_URL}/register`, {
+		return fetch(`${process.env.EXPO_PUBLIC_API_URL_DEV}/register`, {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',

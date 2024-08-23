@@ -1,11 +1,10 @@
 import { useCallback, useState } from 'react';
 import Toast from 'react-native-root-toast';
-import { BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetView, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Image } from 'expo-image';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useBoundStore, OptionalItem, ModifiedItem } from '@/store/store';
-import { ScrollView } from 'react-native-gesture-handler';
 import { ItemOptions } from './ItemOptions';
 import { CircleMinus, CirclePlus } from 'lucide-react-native';
 
@@ -13,7 +12,7 @@ export function BottomSheetContent({
 	selectedItem,
 	closeModal,
 }: {
-	selectedItem: ModifiedItem | undefined;
+	selectedItem: any | ModifiedItem | undefined;
 	closeModal: () => void;
 }) {
 	// Set Item options, quantity and price
@@ -70,7 +69,9 @@ export function BottomSheetContent({
 				style={styles.bottomSheetImage}
 			/>
 			{/* Main bottom sheet content */}
-			<ScrollView style={{ flexGrow: 1 }}>
+			<BottomSheetScrollView
+				contentContainerStyle={styles.bottomSheetScrollView}
+			>
 				{/* Item info */}
 				<BottomSheetView style={styles.itemDescription}>
 					<Text style={styles.bottomSheetTitle}>
@@ -81,13 +82,13 @@ export function BottomSheetContent({
 				</BottomSheetView>
 				{/* Optional items for the selected item */}
 				{selectedItem?.options && (
-					<BottomSheetView>
+					<BottomSheetView style={styles.optionsContainer}>
 						{selectedItem?.options && (
 							<ItemOptions options={selectedItem?.options} />
 						)}
 					</BottomSheetView>
 				)}
-			</ScrollView>
+			</BottomSheetScrollView>
 			{/* Footer */}
 			<View style={styles.footer}>
 				{/* Add and Minus & Add to cart buttons */}
@@ -142,6 +143,10 @@ const styles = StyleSheet.create({
 	bottomSheetContent: {
 		flex: 1,
 	},
+	bottomSheetScrollView: {
+		paddingBottom: 100,
+		flexGrow: 1,
+	},
 	bottomSheetTitle: {
 		fontSize: 16,
 		fontWeight: '600',
@@ -149,7 +154,7 @@ const styles = StyleSheet.create({
 	},
 	itemDescription: {
 		marginTop: 5,
-		paddingHorizontal: 8,
+		paddingHorizontal: 10,
 		paddingBottom: 25,
 		gap: 10,
 	},
@@ -212,5 +217,8 @@ const styles = StyleSheet.create({
 		color: Colors.dark.background,
 		fontSize: 18,
 		fontWeight: '700',
+	},
+	optionsContainer: {
+		flex: 1,
 	},
 });

@@ -47,6 +47,7 @@ export function BottomSheet({
 			snapPoints={snapPoints}
 			onChange={handleSheetChanges}
 			backdropComponent={renderBackdrop}
+			enableContentPanningGesture={false}
 		>
 			{(data) => (
 				<BottomSheetView style={styles.contentContainer}>

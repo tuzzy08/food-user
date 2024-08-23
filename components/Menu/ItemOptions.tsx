@@ -3,6 +3,7 @@ import { Option } from '@/store/store';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import { OptionAccordion } from './OptionAccordion';
+import { BottomSheetView } from '@gorhom/bottom-sheet';
 
 const REQUIRED = 'required';
 const OPTIONAL = 'optional';
@@ -17,7 +18,7 @@ export function ItemOptions({
 }) {
 	return (
 		<>
-			<View key={'required'}>
+			<BottomSheetView key={'required'}>
 				{options.required.length > 0
 					? options.required.map((option) => (
 							<OptionAccordion
@@ -28,8 +29,8 @@ export function ItemOptions({
 							/>
 					  ))
 					: null}
-			</View>
-			<View key={'optional'}>
+			</BottomSheetView>
+			<BottomSheetView key={'optional'}>
 				{options.optional.length > 0
 					? options.optional.map((option) => (
 							<OptionAccordion
@@ -40,7 +41,7 @@ export function ItemOptions({
 							/>
 					  ))
 					: null}
-			</View>
+			</BottomSheetView>
 		</>
 	);
 }

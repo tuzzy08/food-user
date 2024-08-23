@@ -18,7 +18,7 @@ export type Vendor_Data = {
 };
 
 const QUERY_KEY = 'all-vendors';
-const API_ENDPOINT = `${process.env.EXPO_PUBLIC_API_URL}/vendors`;
+const API_ENDPOINT = `${process.env.EXPO_PUBLIC_API_URL_DEV}/vendors`;
 
 export function useVendors() {
 	return useQuery<Vendor_Data[]>({
