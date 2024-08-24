@@ -23,11 +23,11 @@ export function OptionCheckbox({
 
 const styles = StyleSheet.create({
 	checkboxBase: {
-		width: 24,
-		height: 24,
+		width: 22,
+		height: 22,
 		justifyContent: 'center',
 		alignItems: 'center',
-		borderRadius: 50,
+		borderRadius: 5,
 		borderWidth: 2,
 		borderColor: 'coral',
 		backgroundColor: 'transparent',

@@ -9,6 +9,7 @@ import { LocationBar } from './LocationBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useBoundStore } from '@/store/store';
+import { ShoppingCart } from 'lucide-react-native';
 
 export function Header() {
 	const cart = useBoundStore((state) => state.cart);
@@ -27,7 +28,8 @@ export function Header() {
 					style={styles.cartBadge}
 					onPress={() => router.push('/orders')}
 				>
-					<Text style={{ fontSize: 13 }}>View cart ({cart.length})</Text>
+					<ShoppingCart size={13} color={'white'} strokeWidth={3} />
+					<Text style={styles.badgeText}>Cart ({cart.length})</Text>
 				</Pressable>
 			</View>
 		</SafeAreaView>
@@ -45,13 +47,17 @@ const styles = StyleSheet.create({
 		borderRadius: 30,
 	},
 	badgeText: {
-		fontSize: 10,
-		fontWeight: '600',
+		fontSize: 14,
+		fontWeight: '500',
 	},
 	cartBadge: {
 		backgroundColor: Colors.primary,
 		paddingHorizontal: 8,
-		paddingVertical: 2,
+		paddingVertical: 4,
 		borderRadius: 10,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		gap: 5,
 	},
 });

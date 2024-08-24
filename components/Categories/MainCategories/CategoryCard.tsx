@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import Colors from '@/constants/Colors';
 import { Image } from 'expo-image';
+import Color from 'color';
 
 export function CategoryCard({
 	item,
@@ -27,7 +28,7 @@ export function CategoryCard({
 				{
 					width: width * 0.222,
 					height: height * 0.11,
-					backgroundColor: item.bgColor,
+					backgroundColor: Color(item.bgColor).lighten(0.2).hex(),
 				},
 			]}
 		>

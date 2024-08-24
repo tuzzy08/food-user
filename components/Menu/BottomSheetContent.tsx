@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
 	},
 	addToCartButtonTotalPriceText: {
 		fontSize: 14,
+		color: Colors.dark.text,
 	},
 	price: { fontSize: 14, fontWeight: 'bold', color: Colors.dark.background },
 	quantityButtonContainer: {
