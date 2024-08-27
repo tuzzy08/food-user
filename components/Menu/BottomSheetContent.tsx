@@ -4,17 +4,50 @@ import { BottomSheetView, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
 import Colors from '@/constants/Colors';
-import { useBoundStore, OptionalItem, ModifiedItem } from '@/store/store';
+import {
+	useBoundStore,
+	OptionalItem,
+	ModifiedItem,
+	Option,
+} from '@/store/store';
 import { ItemOptions } from './ItemOptions';
 import { CircleMinus, CirclePlus } from 'lucide-react-native';
+
+type ItemOptions = {
+	required: Array<Option>;
+	optional: Array<Option>;
+};
 
 export function BottomSheetContent({
 	selectedItem,
 	closeModal,
 }: {
-	selectedItem: any | ModifiedItem | undefined;
+	selectedItem: ModifiedItem;
 	closeModal: () => void;
 }) {
+	const requiredItemOptions: Array<{
+		isSelected: boolean;
+		item: OptionalItem;
+	}> = [];
+	selectedItem?.options?.required?.forEach((option) => {
+		option.items.forEach((item) => {
+			requiredItemOptions.push({ item, isSelected: false });
+		});
+	});
+
+	const optionalItemOptions: Array<{
+		isSelected: boolean;
+		item: OptionalItem;
+	}> = [];
+	selectedItem?.options?.optional?.forEach((option) => {
+		option.items.forEach((item) => {
+			optionalItemOptions.push({ item, isSelected: false });
+		});
+	});
+
+	console.log(requiredItemOptions);
+
+	// const [itemOptions] = useState<ItemOptions>(selectedItem);
 	// Set Item options, quantity and price
 	const [options, setOptions] = useState<Array<OptionalItem>>([]);
 	const [itemQty, setItemQty] = useState(1);
@@ -35,6 +68,7 @@ export function BottomSheetContent({
 	const addItem = useBoundStore((state) => state.addItem);
 
 	const handleAddToCart = useCallback(() => {
+		// Check if any required options are not selected
 		addItem(
 			{
 				_id: selectedItem?._id!,

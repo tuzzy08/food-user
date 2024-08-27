@@ -2,7 +2,7 @@ import Colors from '@/constants/Colors';
 import { Option } from '@/store/store';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 
-import { OptionAccordion } from './OptionAccordion';
+import { OptionAccordion } from './Options/OptionAccordion';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 
 const REQUIRED = 'required';

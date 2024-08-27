@@ -3,20 +3,27 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Check } from 'lucide-react-native';
 
-export function OptionCheckbox({
+const REQUIRED = 'required';
+
+export function RequiredCheckbox({
 	onChange,
-	checked,
+	index,
+	selectedIndex,
 }: {
 	onChange: () => void;
-	checked: boolean;
+	index: number;
+	selectedIndex: number | undefined;
 	key: React.Key;
 }) {
 	return (
 		<Pressable
-			style={[styles.checkboxBase, checked && styles.checkboxChecked]}
+			style={[
+				styles.checkboxBase,
+				selectedIndex === index ? styles.checkboxChecked : null,
+			]}
 			onPress={onChange}
 		>
-			{checked && <Check size={20} color='white' />}
+			{selectedIndex === index && <Check size={20} color='white' />}
 		</Pressable>
 	);
 }

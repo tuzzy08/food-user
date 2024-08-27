@@ -26,21 +26,17 @@ interface UserLocationSlice {
 	setCurrentAddress: (address: string) => void;
 	setDeliveryAddress: (address: string) => void;
 }
-export interface ModifiedItem extends ItemFromAPI {
-	vendor_id: string;
-	vendor_title: string;
-	vendor_logo_url: string;
-}
 
 export interface OptionalItem {
 	title: string;
 	price: number;
+	qty?: number;
 }
-
 export interface Option {
 	category_title: string;
 	items: Array<OptionalItem>;
 }
+
 export interface ItemFromAPI {
 	_id: string;
 	item_title: string;
@@ -56,6 +52,11 @@ export interface ItemFromAPI {
 		required: Array<Option>;
 		optional: Array<Option>;
 	};
+}
+export interface ModifiedItem extends ItemFromAPI {
+	vendor_id: string;
+	vendor_title: string;
+	vendor_logo_url: string;
 }
 
 export type Item = Pick<

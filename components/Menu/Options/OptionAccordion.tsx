@@ -39,7 +39,7 @@ export function OptionAccordion({
 				onPress={onPress}
 			/>
 			<AccordionWrapper isExpanded={open}>
-				<AccordionContent items={items} />
+				<AccordionContent items={items} category_type={category_type} />
 			</AccordionWrapper>
 		</BottomSheetView>
 	);
@@ -142,7 +142,15 @@ export function AccordionWrapper({
 	);
 }
 
-export function AccordionContent({ items }: { items: Array<OptionalItem> }) {
+export function AccordionContent({
+	items,
+	category_type,
+}: {
+	items: Array<OptionalItem>;
+	category_type: string;
+}) {
+	const [checked, setChecked] = useState(false);
+	const [selectedIndex, setSelectedIndex] = useState();
 	return (
 		<BottomSheetView style={styles.accordionContent}>
 			<Text>Select an option</Text>
@@ -154,7 +162,16 @@ export function AccordionContent({ items }: { items: Array<OptionalItem> }) {
 				}}
 			>
 				{items.map((item, index) => (
-					<Option key={index.toString()} index={index} item={item} />
+					<Option
+						key={index.toString()}
+						selectedIndex={selectedIndex}
+						setSelectedIndex={setSelectedIndex}
+						checked={checked}
+						setChecked={setChecked}
+						category_type={category_type}
+						index={index}
+						item={item}
+					/>
 				))}
 			</BottomSheetView>
 		</BottomSheetView>

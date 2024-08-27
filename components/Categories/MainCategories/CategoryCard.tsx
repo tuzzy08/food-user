@@ -28,7 +28,7 @@ export function CategoryCard({
 				{
 					width: width * 0.222,
 					height: height * 0.11,
-					backgroundColor: Color(item.bgColor).lighten(0.2).hex(),
+					backgroundColor: Color(item.bgColor).lighten(0.2).toString(),
 				},
 			]}
 		>
