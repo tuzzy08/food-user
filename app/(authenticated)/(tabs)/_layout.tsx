@@ -10,6 +10,7 @@ import {
 } from 'react-native-responsive-screen';
 import { Header } from '@/components/Header';
 import { StatusBar } from 'expo-status-bar';
+import { ItemSelectionProvider } from '@/contexts/ItemSelectionContext';
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme();

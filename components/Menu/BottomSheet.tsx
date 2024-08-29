@@ -49,6 +49,9 @@ export function BottomSheet({
 			backdropComponent={renderBackdrop}
 			enableContentPanningGesture={false}
 		>
+			{/* <BottomSheetView style={styles.contentContainer}>
+				{children}
+			</BottomSheetView> */}
 			{(data) => (
 				<BottomSheetView style={styles.contentContainer}>
 					<>{typeof children === 'function' ? children(data) : children}</>

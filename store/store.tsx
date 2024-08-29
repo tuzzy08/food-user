@@ -2,6 +2,8 @@ import { create, StateCreator } from 'zustand';
 
 const CHECKOUT_URL = `${process.env.EXPO_API_URL}/orders/checkout`;
 
+type option_type = 'required' | 'optional';
+
 interface OtpSlice {
 	otp: string | null;
 	pinId: string | null;
@@ -27,14 +29,16 @@ interface UserLocationSlice {
 	setDeliveryAddress: (address: string) => void;
 }
 
-export interface OptionalItem {
+// export interface OptionalItem {
+// 	title: string;
+// 	price: number;
+// 	qty?: number;
+// }
+export interface Option {
+	category: string;
 	title: string;
 	price: number;
-	qty?: number;
-}
-export interface Option {
-	category_title: string;
-	items: Array<OptionalItem>;
+	type: option_type;
 }
 
 export interface ItemFromAPI {
@@ -48,30 +52,29 @@ export interface ItemFromAPI {
 	item_category_id: string;
 	item_category: string;
 	item_vendor: string;
-	options?: {
-		required: Array<Option>;
-		optional: Array<Option>;
-	};
+	options: Array<Option>;
 }
-export interface ModifiedItem extends ItemFromAPI {
+export interface Item extends ItemFromAPI {
 	vendor_id: string;
 	vendor_title: string;
 	vendor_logo_url: string;
+	options: Array<Option>;
 }
 
-export type Item = Pick<
-	ItemFromAPI,
-	| '_id'
-	| 'item_vendor'
-	| 'item_title'
-	| 'item_image_url'
-	| 'item_description'
-	| 'item_price'
-> & {
-	vendor_title: string; // TODO: Remove vendor_title
-	vendor_logo_url: string;
-	options: Array<OptionalItem>;
-};
+// export type Item = Pick<
+// 	ItemFromAPI,
+// 	| '_id'
+// 	| 'item_vendor'
+// 	| 'item_title'
+// 	| 'item_image_url'
+// 	| 'item_description'
+// 	| 'item_price'
+// > & {
+// 	vendor_id: string;
+// 	vendor_title: string; // TODO: Remove vendor_title
+// 	vendor_logo_url: string;
+// 	options: Array<Option>;
+// };
 
 export interface CartItem {
 	item: Item;

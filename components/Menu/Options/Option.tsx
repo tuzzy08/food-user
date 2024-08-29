@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { OptionCheckbox } from './OptionCheckbox';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
-import { OptionalItem } from '@/store/store';
+import { Option as OptionalItem } from '@/store/store';
 import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { RequiredCheckbox } from './RequiredCheckbox';
 

@@ -8,7 +8,7 @@ import { View, Text } from '../Themed';
 import Colors from '@/constants/Colors';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Category } from '@/app/(authenticated)/(tabs)/[vendorId]';
-import { ModifiedItem } from '@/store/store';
+import { Item } from '@/store/store';
 
 export function Categories({
 	activeCategoryName,
@@ -17,9 +17,9 @@ export function Categories({
 	setActiveItems,
 }: {
 	activeCategoryName: string;
-	categories: Category[];
+	categories: Category[] | undefined;
 	setActiveCategoryName: Dispatch<SetStateAction<string>>;
-	setActiveItems: Dispatch<SetStateAction<ModifiedItem[] | undefined>>;
+	setActiveItems: Dispatch<SetStateAction<Item[] | undefined>>;
 }) {
 	// Extract category names
 	const categoryNames = categories?.reduce((acc: string[], cat: Category) => {
@@ -27,7 +27,7 @@ export function Categories({
 		return acc;
 	}, []);
 	// Check if there are no categories
-	if (categoryNames.length === 1 && categoryNames[0] === 'All')
+	if (categoryNames?.length === 1 && categoryNames[0] === 'All')
 		return <Text>No categories added.</Text>;
 	return (
 		<View style={styles.container}>
@@ -61,14 +61,16 @@ function CategoryItem({
 }: {
 	item: string;
 	activeCategoryName: string;
-	categories: Category[];
+	categories: Category[] | undefined;
 	setActiveCategoryName: Dispatch<SetStateAction<string>>;
-	setActiveItems: Dispatch<SetStateAction<ModifiedItem[] | undefined>>;
+	setActiveItems: Dispatch<SetStateAction<Item[] | undefined>>;
 }) {
 	const setFoodCategory = (category: string) => {
 		setActiveCategoryName(category);
 		setActiveItems((prev) => {
-			const category_items = categories.find((c) => c.name === category)?.items;
+			const category_items = categories?.find(
+				(c) => c.name === category
+			)?.items;
 			return category_items;
 		});
 	};

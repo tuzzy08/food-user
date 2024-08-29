@@ -1,17 +1,16 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Toast from 'react-native-root-toast';
 import { BottomSheetView, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
 import Colors from '@/constants/Colors';
-import {
-	useBoundStore,
-	OptionalItem,
-	ModifiedItem,
-	Option,
-} from '@/store/store';
+import { useBoundStore, Item, Option as StoreOption } from '@/store/store';
 import { ItemOptions } from './ItemOptions';
 import { CircleMinus, CirclePlus } from 'lucide-react-native';
+import { useItemSelection } from '@/contexts/ItemSelectionContext';
+
+// Add this type definition
+type Option = StoreOption & { selected: boolean };
 
 type ItemOptions = {
 	required: Array<Option>;
@@ -19,47 +18,82 @@ type ItemOptions = {
 };
 
 export function BottomSheetContent({
-	selectedItem,
 	closeModal,
+	selectedItem,
 }: {
-	selectedItem: ModifiedItem;
 	closeModal: () => void;
+	selectedItem: Item;
 }) {
-	const requiredItemOptions: Array<{
-		isSelected: boolean;
-		item: OptionalItem;
-	}> = [];
-	selectedItem?.options?.required?.forEach((option) => {
-		option.items.forEach((item) => {
-			requiredItemOptions.push({ item, isSelected: false });
-		});
-	});
+	const { selectedOptions, addSelectedOption, removeSelectedOption } =
+		useItemSelection();
+	const itemOptions = useMemo(() => {
+		if (!selectedItem) return { required: [], optional: [] };
 
-	const optionalItemOptions: Array<{
-		isSelected: boolean;
-		item: OptionalItem;
-	}> = [];
-	selectedItem?.options?.optional?.forEach((option) => {
-		option.items.forEach((item) => {
-			optionalItemOptions.push({ item, isSelected: false });
-		});
-	});
+		const required = selectedItem.options
+			.filter((option) => option.type === 'required')
+			.map((option) => ({ ...option, selected: false }));
+		const optional = selectedItem.options
+			.filter((option) => option.type === 'optional')
+			.map((option) => ({ ...option, selected: false }));
+		return { required, optional };
+	}, [selectedItem?.options]);
 
-	console.log(requiredItemOptions);
+	// const [itemOptions, setItemOptions] = useState<ItemOptions>({
+	// 	required: [],
+	// 	optional: [],
+	// });
 
-	// const [itemOptions] = useState<ItemOptions>(selectedItem);
-	// Set Item options, quantity and price
-	const [options, setOptions] = useState<Array<OptionalItem>>([]);
+	// useEffect(() => {
+	// 	if (selectedItem) {
+	// 		setItemOptions({
+	// 			required: selectedItem.options
+	// 				.filter((option) => option.option_type === 'required')
+	// 				.map((option) => ({ ...option, selected: false })),
+	// 			optional: selectedItem.options
+	// 				.filter((option) => option.option_type === 'optional')
+	// 				.map((option) => ({ ...option, selected: false })),
+	// 		});
+	// 	}
+	// }, [selectedItem]);
+
+	// const toggleOption = useCallback(
+	// 	(optionType: 'required' | 'optional', index: number) => {
+	// 		const option = itemOptions[optionType][index];
+	// 		if (option.selected) {
+	// 			removeSelectedOption(option.category);
+	// 		} else {
+	// 			addSelectedOption(option.category, option);
+	// 		}
+	// 		setItemOptions((prevOptions) => {
+	// 			const updatedOptions = { ...prevOptions };
+	// 			updatedOptions[optionType][index].selected =
+	// 				!updatedOptions[optionType][index].selected;
+	// 			return updatedOptions;
+	// 		});
+	// 	},
+	// 	[itemOptions, addSelectedOption, removeSelectedOption]
+	// );
+	const toggleOption = useCallback((option: Option) => {
+		if (option.selected) {
+			removeSelectedOption(option.category);
+		} else {
+			addSelectedOption(option.category, option);
+		}
+	}, []);
+	// const areAllRequiredOptionsSelected = useCallback(() => {
+	// 	return itemOptions.required.every((option) => option.selected);
+	// }, [itemOptions.required]);
+
 	const [itemQty, setItemQty] = useState(1);
 	const totalPrice = selectedItem?.item_price! * itemQty;
 
-	const [prevItem, setPrevItem] = useState<ModifiedItem | undefined>(
-		selectedItem
-	);
-	if (prevItem !== selectedItem) {
-		setPrevItem(selectedItem);
-		setItemQty(1);
-	}
+	// const [prevItem, setPrevItem] = useState<ModifiedItem | undefined>(
+	// 	selectedItem
+	// );
+	// if (prevItem !== selectedItem) {
+	// 	setPrevItem(selectedItem);
+	// 	setItemQty(1);
+	// }
 	const cart = useBoundStore((state) => state.cart);
 	const cart_total = cart.reduce(
 		(acc, item) => acc + item.item.item_price * item.quantity,
@@ -68,18 +102,13 @@ export function BottomSheetContent({
 	const addItem = useBoundStore((state) => state.addItem);
 
 	const handleAddToCart = useCallback(() => {
-		// Check if any required options are not selected
+		if (!selectedItem) return;
+
+		const optionsToAdd = Object.values(selectedOptions);
 		addItem(
 			{
-				_id: selectedItem?._id!,
-				item_title: selectedItem?.item_title!,
-				item_image_url: selectedItem?.item_image_url!,
-				item_description: selectedItem?.item_description!,
-				item_price: selectedItem?.item_price!,
-				item_vendor: selectedItem?.item_vendor!,
-				options: options,
-				vendor_title: selectedItem?.vendor_title!,
-				vendor_logo_url: selectedItem?.vendor_logo_url!,
+				...selectedItem,
+				options: optionsToAdd,
 			},
 			itemQty
 		);
@@ -92,7 +121,7 @@ export function BottomSheetContent({
 			backgroundColor: Colors.primary,
 		});
 		closeModal();
-	}, [selectedItem]);
+	}, [selectedItem, selectedOptions, itemQty, addItem, closeModal]);
 
 	return (
 		<BottomSheetView style={styles.bottomSheetContent}>
@@ -118,7 +147,7 @@ export function BottomSheetContent({
 				{selectedItem?.options && (
 					<BottomSheetView style={styles.optionsContainer}>
 						{selectedItem?.options && (
-							<ItemOptions options={selectedItem?.options} />
+							<ItemOptions options={itemOptions} toggleOption={toggleOption} />
 						)}
 					</BottomSheetView>
 				)}
@@ -135,10 +164,7 @@ export function BottomSheetContent({
 							size={40}
 							onPress={() => {
 								setItemQty((prevQty) => {
-									if (prevQty > 1) {
-										return prevQty - 1;
-									}
-									return prevQty;
+									return prevQty > 1 ? prevQty - 1 : prevQty;
 								});
 							}}
 						/>

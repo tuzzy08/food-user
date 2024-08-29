@@ -1,4 +1,4 @@
-import { OptionalItem } from '@/store/store';
+import { Option as ItemOption } from '@/store/store';
 import { ReactNode, useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { CircleChevronDown, CircleChevronUp } from 'lucide-react-native';
@@ -18,7 +18,7 @@ const REQUIRED = 'required';
 type OptionAccordionProps = {
 	category_title: string;
 	category_type: string;
-	items: Array<OptionalItem>;
+	items: Array<ItemOption>;
 };
 
 export function OptionAccordion({
@@ -146,7 +146,7 @@ export function AccordionContent({
 	items,
 	category_type,
 }: {
-	items: Array<OptionalItem>;
+	items: Array<ItemOption>;
 	category_type: string;
 }) {
 	const [checked, setChecked] = useState(false);

@@ -7,19 +7,22 @@ import {
 import { Image } from 'expo-image';
 import { View, Text } from '../Themed';
 import Colors from '@/constants/Colors';
-import { ModifiedItem } from '@/store/store';
+import { Item } from '@/store/store';
+import { useItemSelection } from '@/contexts/ItemSelectionContext';
 
 export function MenuItem({
 	item,
 	showModal,
 }: {
-	item: ModifiedItem;
-	showModal: (data: ModifiedItem) => void;
+	item: Item;
+	showModal: (data: Item) => void;
 }) {
 	const color = useColorScheme();
+	const { addSelectedItem } = useItemSelection();
 	return (
 		<TouchableOpacity
 			onPress={() => {
+				addSelectedItem(item);
 				showModal(item);
 			}}
 			style={[
@@ -40,7 +43,7 @@ export function MenuItem({
 					borderBottomLeftRadius: 10,
 					borderTopLeftRadius: 10,
 				}}
-				source={item.item_image_url}
+				source={item?.item_image_url}
 			/>
 
 			<View
@@ -55,14 +58,14 @@ export function MenuItem({
 				}}
 			>
 				{/* Title */}
-				<Text style={styles.title}>{item.item_title}</Text>
+				<Text style={styles.title}>{item?.item_title}</Text>
 
 				<Text style={styles.description}>
-					{summarize(item.item_description)}
+					{summarize(item?.item_description)}
 				</Text>
 				<Text
 					style={{ marginTop: 15, color: Colors.grey, fontWeight: 'bold' }}
-				>{`₦${item.item_price}`}</Text>
+				>{`₦${item?.item_price}`}</Text>
 			</View>
 		</TouchableOpacity>
 	);
@@ -99,7 +102,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-function summarize(text: string) {
+function summarize(text: string | undefined) {
+	if (!text) return '';
 	const summary = text.split(' ').slice(0, 7).join(' ');
 	return summary + '...';
 }

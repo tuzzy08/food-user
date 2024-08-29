@@ -7,7 +7,7 @@ import { Category } from '@/app/(authenticated)/(tabs)/[vendorId]';
 import { BottomSheet } from './BottomSheet';
 import { MenuList } from './MenuList';
 import { BottomSheetContent } from './BottomSheetContent';
-import { ModifiedItem } from '@/store/store';
+import { Item } from '@/store/store';
 
 export function Menu({
 	categories,
@@ -17,20 +17,20 @@ export function Menu({
 	handleSheetChanges,
 	snapPoints,
 }: {
-	categories: Category[];
-	showModal: (data: ModifiedItem) => void;
+	categories: Category[] | undefined;
+	showModal: (data: Item) => void;
 	closeModal: () => void;
 	bottomSheetModalRef: React.RefObject<BottomSheetModal>;
 	handleSheetChanges: (index: number) => void;
 	snapPoints: string[];
 }) {
 	const default_category_name = 'All';
-	const default_items = categories.find(
+	const default_items = categories?.find(
 		(c) => c.name === default_category_name
 	)?.items;
 
 	// Active Items
-	const [activeItems, setActiveItems] = useState<ModifiedItem[] | undefined>(
+	const [activeItems, setActiveItems] = useState<Item[] | undefined>(
 		default_items
 	);
 	// Default Category
@@ -64,7 +64,8 @@ export function Menu({
 				handleSheetChanges={handleSheetChanges}
 				snapPoints={snapPoints}
 			>
-				{({ data }: { data: ModifiedItem }) => (
+				{/* <BottomSheetContent closeModal={closeModal} /> */}
+				{({ data }: { data: Item }) => (
 					<BottomSheetContent closeModal={closeModal} selectedItem={data} />
 				)}
 			</BottomSheet>
