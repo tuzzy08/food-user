@@ -1,16 +1,19 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
-import { CartItem as Item } from '@/store/store';
+import { CartItem } from '@/store/store';
 import { Image } from 'expo-image';
 import Colors from '@/constants/Colors';
 
-export function CartItem({
+export function CartItemView({
 	item,
+	index,
 	showModal,
 }: {
-	item: [string, Item[]];
-	showModal: (data: Item) => void;
+	item: [string, CartItem[]];
+	index: number;
+	showModal: (data: CartItem) => void;
 }) {
+	// console.log('item', item);
 	return (
 		<View style={styles.container}>
 			{/* Restaurant title */}

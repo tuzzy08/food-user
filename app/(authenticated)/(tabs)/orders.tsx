@@ -30,8 +30,8 @@ export interface Order {
 export default function Page() {
 	// Fetch users orders from API
 	// const {} = useOrders();
-	const [orders, setOrders] = useState<Order[]>([]);
-	const cart = useBoundStore((state) => state.cart);
+	// const [orders, setOrders] = useState<Order[]>([]);
+
 	const scrollX = useRef(new Animated.Value(0)).current;
 
 	const flatlistRef = useRef<FlatList>(null);
@@ -53,12 +53,7 @@ export default function Page() {
 				lightColor='#eee'
 				darkColor='rgba(255,255,255,0.1)'
 			/>
-			<TabPage
-				cart={cart}
-				orders={orders}
-				scrollX={scrollX}
-				ref={flatlistRef}
-			/>
+			<TabPage scrollX={scrollX} ref={flatlistRef} />
 		</View>
 	);
 }

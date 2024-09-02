@@ -16,7 +16,7 @@ type SnapPoints =
 	| Readonly<(string | number)[] | SharedValue<(string | number)[]>>
 	| undefined;
 
-export function BottomSheet({
+export function CartItemViewBottomSheet({
 	children,
 	bottomSheetModalRef,
 	handleSheetChanges,

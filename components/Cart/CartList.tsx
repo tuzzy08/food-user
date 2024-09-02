@@ -1,36 +1,42 @@
 import { useCallback, useMemo, useRef } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Text, View } from '@/components/Themed';
-import { CartItem } from './CartItem';
-import { CartItem as Item, ModifiedItem } from '@/store/store';
+import { CartItemView } from './CartItemView';
+import { CartItem, Item } from '@/store/store';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useBottomSheetBackHandler } from '@/hooks/useBottomSheetBackHandler';
-import { BottomSheet } from './BottomSheet';
-import { BottomSheetContent } from './BottomSheetContent';
+import { CartItemViewBottomSheet } from './CartItemViewBottomSheet';
+import { CartItemBottomSheetContent } from './CartItemBottomSheetContent';
+import { useItemSelection } from '@/contexts/ItemSelectionContext';
 
-export function CartList({ cart }: { cart: [string, Item[]][] }) {
-	// * Reference to BottomSheet Modal
+export function CartList({ cart }: { cart: [string, CartItem[]][] }) {
+	// console.log('cart', cart);
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-	// * BottomSheet back(hardware) handler
 	const { handleSheetPositionChange } =
 		useBottomSheetBackHandler(bottomSheetModalRef);
-	// * Modal SnapPoints
 	const snapPoints = useMemo(() => ['85%'], []);
-	// * Modal Callbacks
-	const showModal = useCallback((data: Item) => {
-		bottomSheetModalRef.current?.present(data);
-	}, []);
+	const { addSelectedItem } = useItemSelection();
+
+	const showModal = useCallback(
+		(data: CartItem) => {
+			addSelectedItem(data.item);
+			bottomSheetModalRef.current?.present(data);
+		},
+		[addSelectedItem]
+	);
+
 	const closeModal = useCallback(() => {
 		bottomSheetModalRef.current?.dismiss();
 	}, []);
+
 	return (
 		<View style={styles.container}>
 			<FlashList
 				estimatedItemSize={100}
 				data={cart}
-				renderItem={({ item }) => (
-					<CartItem item={item} showModal={showModal} />
+				renderItem={({ item, index }) => (
+					<CartItemView item={item} index={index} showModal={showModal} />
 				)}
 				showsHorizontalScrollIndicator={false}
 				keyExtractor={(item) => item[0]}
@@ -39,22 +45,21 @@ export function CartList({ cart }: { cart: [string, Item[]][] }) {
 					<View style={{ height: 1, width: '100%' }} />
 				)}
 			/>
-			<BottomSheet
+			<CartItemViewBottomSheet
 				bottomSheetModalRef={bottomSheetModalRef}
 				handleSheetChanges={handleSheetPositionChange}
 				snapPoints={snapPoints}
 			>
-				{({ data }: { data: ModifiedItem }) => (
-					<BottomSheetContent closeModal={closeModal} data={data} />
+				{({ data }: { data: CartItem }) => (
+					<CartItemBottomSheetContent closeModal={closeModal} data={data} />
 				)}
-			</BottomSheet>
+			</CartItemViewBottomSheet>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		// flexGrow: 1,
 		height: '100%',
 		width: '95%',
 	},

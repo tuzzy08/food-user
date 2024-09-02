@@ -1,5 +1,5 @@
 import Colors from '@/constants/Colors';
-import { Option as StoreOption } from '@/store/store';
+import { Option as ItemOption } from '@/store/store';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import { OptionAccordion } from './Options/OptionAccordion';
@@ -9,7 +9,7 @@ import { useCallback, useState } from 'react';
 const REQUIRED = 'required';
 const OPTIONAL = 'optional';
 
-type Option = StoreOption & { selected: boolean };
+type Option = ItemOption & { selected: boolean };
 
 type ItemOptions = {
 	required: Array<Option>;
@@ -42,26 +42,13 @@ const groupOptionsByCategory = (options: ItemOptions) => {
 
 export function ItemOptions({
 	options,
-	toggleOption,
+	onOptionSelect,
 }: {
 	options: ItemOptions;
-	toggleOption: (option: Option) => void;
+	onOptionSelect: (option: Option, category_type: string) => void;
 }) {
 	const groupedOptions = groupOptionsByCategory(options);
-	console.log(groupedOptions);
 
-	// const [itemOptions, setItemOptions] = useState<ItemOptions>(options);
-	// const toggleOption = useCallback(
-	// 	(optionType: 'required' | 'optional', index: number) => {
-	// 		setItemOptions((prevOptions) => {
-	// 			const updatedOptions = { ...prevOptions };
-	// 			updatedOptions[optionType][index].selected =
-	// 				!updatedOptions[optionType][index].selected;
-	// 			return updatedOptions;
-	// 		});
-	// 	},
-	// 	[]
-	// );
 	return (
 		<BottomSheetView key={'required'}>
 			{groupedOptions
@@ -71,36 +58,11 @@ export function ItemOptions({
 							category_title={key}
 							category_type={value.type}
 							items={value.options}
+							onOptionSelect={(option) => onOptionSelect(option, value.type)}
 						/>
 				  ))
 				: null}
 		</BottomSheetView>
-		// <>
-		// 	<BottomSheetView key={'required'}>
-		// 		{options.required.length > 0
-		// 			? options.required.map((option) => (
-		// 					<OptionAccordion
-		// 						key={option.title.toString()}
-		// 						category_title={option.category}
-		// 						category_type={REQUIRED}
-		// 						items={options.required}
-		// 					/>
-		// 			  ))
-		// 			: null}
-		// 	</BottomSheetView>
-		// 	<BottomSheetView key={'optional'}>
-		// 		{options.optional.length > 0
-		// 			? options.optional.map((option) => (
-		// 					<OptionAccordion
-		// 						key={option.title.toString()}
-		// 						category_title={option.category}
-		// 						category_type={OPTIONAL}
-		// 						items={options.optional}
-		// 					/>
-		// 			  ))
-		// 			: null}
-		// 	</BottomSheetView>
-		// </>
 	);
 }
 

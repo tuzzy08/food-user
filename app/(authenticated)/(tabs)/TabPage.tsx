@@ -7,9 +7,10 @@ import {
 } from 'react-native-responsive-screen';
 import { LegacyRef, forwardRef, useCallback, useRef } from 'react';
 import { Order } from './orders';
-import { CartItem } from '@/store/store';
+import { CartItem, useBoundStore } from '@/store/store';
 import { OrderTab } from '@/components/OrderTab/OrderTab';
 import { CartList } from '@/components/Cart/CartList';
+import { useOrders } from '@/hooks/useOrders';
 
 const TabTitles = {
 	MyCart: 'My Cart',
@@ -23,12 +24,12 @@ export const TabPage = forwardRef(
 	(
 		{
 			scrollX,
-			orders,
-			cart,
-		}: {
+		}: // orders,
+		// cart,
+		{
 			scrollX: any;
-			cart: CartItem[];
-			orders: Order[];
+			// cart: CartItem[];
+			// orders: Order[];
 		},
 		ref: LegacyRef<FlatList<string>>
 	) => {
@@ -48,7 +49,7 @@ export const TabPage = forwardRef(
 					showsHorizontalScrollIndicator={false}
 					renderItem={({ item }: { item: string }) => (
 						<View style={styles.tab}>
-							<TabContent item={item} cart={cart} orders={orders} />
+							<TabContent item={item} />
 						</View>
 					)}
 					keyExtractor={(item) => item}
@@ -59,14 +60,21 @@ export const TabPage = forwardRef(
 );
 
 function TabContent({
-	orders,
-	cart,
+	// orders,
+	// cart,
 	item,
 }: {
-	orders?: Order[];
-	cart?: CartItem[];
+	// orders?: Order[];
+	// cart?: CartItem[];
 	item: string;
 }) {
+	const cart = useBoundStore((state) => state.cart);
+	// TODO: Fetch orders from API using user_id
+	const {
+		isLoading,
+		error,
+		data: orders,
+	} = useOrders('', { refetchOnMount: true });
 	if (item === 'My Cart') {
 		if (cart && cart.length > 0) {
 			const groupedItems = groupCartItemByVendor(cart);
@@ -129,5 +137,6 @@ function groupCartItemByVendor(cart: CartItem[]) {
 		},
 		{}
 	);
+	// console.log('groupedItems', groupedItems);
 	return Object.entries(groupedItems);
 }

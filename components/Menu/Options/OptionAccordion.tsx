@@ -13,23 +13,46 @@ import Animated, {
 import Colors from '@/constants/Colors';
 import { Option } from './Option';
 
+type Option = ItemOption & { selected: boolean };
+
 const REQUIRED = 'required';
 
 type OptionAccordionProps = {
 	category_title: string;
 	category_type: string;
-	items: Array<ItemOption>;
+	items: Array<Option>;
+	onOptionSelect: (option: Option, category_type: string) => void;
 };
 
 export function OptionAccordion({
 	category_title,
 	category_type,
 	items,
+	onOptionSelect,
 }: OptionAccordionProps) {
 	const open = useSharedValue(true);
+	const [selectedItems, setSelectedItems] = useState<Option[]>([]);
+
 	const onPress = () => {
 		open.value = !open.value;
 	};
+
+	const handleOptionSelect = (item: Option) => {
+		if (category_type === REQUIRED) {
+			setSelectedItems([item]);
+		} else {
+			setSelectedItems((prev) => {
+				const isAlreadySelected = prev.some((i) => i.title === item.title);
+				if (isAlreadySelected) {
+					return prev.filter((i) => i.title !== item.title);
+				} else {
+					return [...prev, item];
+				}
+			});
+		}
+		onOptionSelect(item, category_type);
+	};
+
 	return (
 		<BottomSheetView style={{ flex: 1 }}>
 			<AccordionHeader
@@ -39,7 +62,12 @@ export function OptionAccordion({
 				onPress={onPress}
 			/>
 			<AccordionWrapper isExpanded={open}>
-				<AccordionContent items={items} category_type={category_type} />
+				<AccordionContent
+					items={items}
+					category_type={category_type}
+					selectedItems={selectedItems}
+					onOptionSelect={handleOptionSelect}
+				/>
 			</AccordionWrapper>
 		</BottomSheetView>
 	);
@@ -145,12 +173,16 @@ export function AccordionWrapper({
 export function AccordionContent({
 	items,
 	category_type,
+	selectedItems,
+	onOptionSelect,
 }: {
-	items: Array<ItemOption>;
+	items: Array<Option>;
 	category_type: string;
+	selectedItems: Array<Option>;
+	onOptionSelect: (item: Option) => void;
 }) {
-	const [checked, setChecked] = useState(false);
-	const [selectedIndex, setSelectedIndex] = useState();
+	const isOnlyOption = items.length === 1;
+
 	return (
 		<BottomSheetView style={styles.accordionContent}>
 			<Text>Select an option</Text>
@@ -164,13 +196,12 @@ export function AccordionContent({
 				{items.map((item, index) => (
 					<Option
 						key={index.toString()}
-						selectedIndex={selectedIndex}
-						setSelectedIndex={setSelectedIndex}
-						checked={checked}
-						setChecked={setChecked}
-						category_type={category_type}
 						index={index}
 						item={item}
+						isSelected={selectedItems.some((i) => i.title === item.title)}
+						onSelect={onOptionSelect}
+						category_type={category_type}
+						isOnlyOption={isOnlyOption}
 					/>
 				))}
 			</BottomSheetView>

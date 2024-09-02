@@ -12,6 +12,12 @@ import { useItemSelection } from '@/contexts/ItemSelectionContext';
 // Add this type definition
 type Option = StoreOption & { selected: boolean };
 
+const REQUIRED = 'required';
+
+interface SelectedOptions {
+	[key: string]: Option;
+}
+
 type ItemOptions = {
 	required: Array<Option>;
 	optional: Array<Option>;
@@ -24,76 +30,44 @@ export function BottomSheetContent({
 	closeModal: () => void;
 	selectedItem: Item;
 }) {
-	const { selectedOptions, addSelectedOption, removeSelectedOption } =
-		useItemSelection();
-	const itemOptions = useMemo(() => {
-		if (!selectedItem) return { required: [], optional: [] };
-
-		const required = selectedItem.options
-			.filter((option) => option.type === 'required')
-			.map((option) => ({ ...option, selected: false }));
-		const optional = selectedItem.options
-			.filter((option) => option.type === 'optional')
-			.map((option) => ({ ...option, selected: false }));
-		return { required, optional };
-	}, [selectedItem?.options]);
-
-	// const [itemOptions, setItemOptions] = useState<ItemOptions>({
-	// 	required: [],
-	// 	optional: [],
-	// });
-
-	// useEffect(() => {
-	// 	if (selectedItem) {
-	// 		setItemOptions({
-	// 			required: selectedItem.options
-	// 				.filter((option) => option.option_type === 'required')
-	// 				.map((option) => ({ ...option, selected: false })),
-	// 			optional: selectedItem.options
-	// 				.filter((option) => option.option_type === 'optional')
-	// 				.map((option) => ({ ...option, selected: false })),
-	// 		});
-	// 	}
-	// }, [selectedItem]);
-
-	// const toggleOption = useCallback(
-	// 	(optionType: 'required' | 'optional', index: number) => {
-	// 		const option = itemOptions[optionType][index];
-	// 		if (option.selected) {
-	// 			removeSelectedOption(option.category);
-	// 		} else {
-	// 			addSelectedOption(option.category, option);
-	// 		}
-	// 		setItemOptions((prevOptions) => {
-	// 			const updatedOptions = { ...prevOptions };
-	// 			updatedOptions[optionType][index].selected =
-	// 				!updatedOptions[optionType][index].selected;
-	// 			return updatedOptions;
-	// 		});
-	// 	},
-	// 	[itemOptions, addSelectedOption, removeSelectedOption]
-	// );
-	const toggleOption = useCallback((option: Option) => {
-		if (option.selected) {
-			removeSelectedOption(option.category);
-		} else {
-			addSelectedOption(option.category, option);
-		}
-	}, []);
-	// const areAllRequiredOptionsSelected = useCallback(() => {
-	// 	return itemOptions.required.every((option) => option.selected);
-	// }, [itemOptions.required]);
-
+	const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
 	const [itemQty, setItemQty] = useState(1);
-	const totalPrice = selectedItem?.item_price! * itemQty;
 
-	// const [prevItem, setPrevItem] = useState<ModifiedItem | undefined>(
-	// 	selectedItem
-	// );
-	// if (prevItem !== selectedItem) {
-	// 	setPrevItem(selectedItem);
-	// 	setItemQty(1);
-	// }
+	const handleOptionSelect = (option: Option, category_type: string) => {
+		setSelectedOptions((prev) => {
+			const updatedOptions = { ...prev };
+			if (category_type === REQUIRED) {
+				updatedOptions[option.category] = option;
+			} else {
+				if (updatedOptions[option.category]?.title === option.title) {
+					delete updatedOptions[option.category];
+				} else {
+					updatedOptions[option.category] = option;
+				}
+			}
+			return updatedOptions;
+		});
+	};
+
+	const optionsTotal = useMemo(() => {
+		return Object.values(selectedOptions).reduce((total, option) => {
+			return total + (option.price || 0);
+		}, 0);
+	}, [selectedOptions]);
+
+	const totalPrice = useMemo(() => {
+		const basePrice = selectedItem?.item_price || 0;
+		return (basePrice + optionsTotal) * itemQty;
+	}, [selectedItem, optionsTotal, itemQty]);
+
+	const handleIncrement = useCallback(() => {
+		setItemQty((prevQty) => prevQty + 1);
+	}, []);
+
+	const handleDecrement = useCallback(() => {
+		setItemQty((prevQty) => Math.max(1, prevQty - 1));
+	}, []);
+
 	const cart = useBoundStore((state) => state.cart);
 	const cart_total = cart.reduce(
 		(acc, item) => acc + item.item.item_price * item.quantity,
@@ -134,6 +108,7 @@ export function BottomSheetContent({
 			{/* Main bottom sheet content */}
 			<BottomSheetScrollView
 				contentContainerStyle={styles.bottomSheetScrollView}
+				showsVerticalScrollIndicator={false}
 			>
 				{/* Item info */}
 				<BottomSheetView style={styles.itemDescription}>
@@ -147,7 +122,17 @@ export function BottomSheetContent({
 				{selectedItem?.options && (
 					<BottomSheetView style={styles.optionsContainer}>
 						{selectedItem?.options && (
-							<ItemOptions options={itemOptions} toggleOption={toggleOption} />
+							<ItemOptions
+								options={{
+									required: selectedItem.options
+										.filter((option) => option.type === 'required')
+										.map((option) => ({ ...option, selected: false })),
+									optional: selectedItem.options
+										.filter((option) => option.type === 'optional')
+										.map((option) => ({ ...option, selected: false })),
+								}}
+								onOptionSelect={handleOptionSelect}
+							/>
 						)}
 					</BottomSheetView>
 				)}
@@ -162,27 +147,18 @@ export function BottomSheetContent({
 							strokeWidth={0.7}
 							color={Colors.dark.background}
 							size={40}
-							onPress={() => {
-								setItemQty((prevQty) => {
-									return prevQty > 1 ? prevQty - 1 : prevQty;
-								});
-							}}
+							onPress={handleDecrement}
 						/>
 						<Text style={styles.quantityText}>{itemQty}</Text>
 						<CirclePlus
 							strokeWidth={0.7}
 							color={Colors.dark.background}
 							size={40}
-							onPress={() => {
-								setItemQty((prevQty) => prevQty + 1);
-							}}
+							onPress={handleIncrement}
 						/>
 					</BottomSheetView>
 					{/* Add to cart button */}
-					<Pressable
-						style={styles.addToCartButton}
-						onPress={() => handleAddToCart()}
-					>
+					<Pressable style={styles.addToCartButton} onPress={handleAddToCart}>
 						<Text style={styles.addToCartButtonText}>{`ADD `}</Text>
 						<Text
 							style={styles.addToCartButtonTotalPriceText}

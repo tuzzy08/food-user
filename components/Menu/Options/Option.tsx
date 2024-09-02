@@ -1,37 +1,33 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { OptionCheckbox } from './OptionCheckbox';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Option as OptionalItem } from '@/store/store';
+import { useItemSelection } from '@/contexts/ItemSelectionContext';
 import { Dispatch, SetStateAction, useCallback, useState } from 'react';
-import { RequiredCheckbox } from './RequiredCheckbox';
+import { Checkbox } from './Checkbox';
 
 const REQUIRED = 'required';
+
+type Option = OptionalItem & { selected: boolean };
 
 export function Option({
 	index,
 	item,
-	checked,
-	setChecked,
-	selectedIndex,
+	isSelected,
+	onSelect,
 	category_type,
-	setSelectedIndex,
+	isOnlyOption,
 }: {
 	index: number;
-	checked: boolean;
-	setChecked: any;
+	item: Option;
+	isSelected: boolean;
+	onSelect: (item: Option) => void;
 	category_type: string;
-	item: OptionalItem;
-	selectedIndex: number | undefined;
-	setSelectedIndex: any;
+	isOnlyOption: boolean;
 }) {
-	const handleChangeOption = () => {
-		setSelectedIndex(index);
-		setChecked(!checked);
+	const handleChange = () => {
+		onSelect(item);
 	};
 
-	const handleChangeRequired = () => {
-		setSelectedIndex(index);
-	};
 	return (
 		<BottomSheetView
 			style={{
@@ -45,22 +41,12 @@ export function Option({
 				<Text>{item.title}</Text>
 				<Text>{`₦${item.price}`}</Text>
 			</BottomSheetView>
-			{category_type === REQUIRED ? (
-				<RequiredCheckbox
-					onChange={handleChangeRequired}
-					index={index}
-					selectedIndex={selectedIndex}
-					key={item.title}
-				/>
-			) : (
-				<OptionCheckbox
-					onChange={handleChangeOption}
-					index={index}
-					selectedIndex={selectedIndex}
-					checked={checked}
-					key={item.title}
-				/>
-			)}
+			<Checkbox
+				isSelected={isSelected}
+				onPress={handleChange}
+				isRequired={category_type === REQUIRED}
+				isOnlyOption={isOnlyOption}
+			/>
 		</BottomSheetView>
 	);
 }

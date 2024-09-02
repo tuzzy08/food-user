@@ -1,5 +1,5 @@
-import React, { createContext, useState, useContext } from 'react';
-import { Item, Option } from '@/store/store';
+import React, { createContext, useState, useContext, useCallback } from 'react';
+import { Item, Option, useBoundStore } from '@/store/store';
 
 interface SelectedOptions {
 	[key: string]: Option;
@@ -14,6 +14,10 @@ interface ItemSelectionContextType {
 	addSelectedOption: (category: string, option: Option) => void;
 	removeSelectedOption: (category: string) => void;
 	clearSelectedOptions: () => void;
+	itemQty: number;
+	handleIncrement: () => void;
+	handleDecrement: () => void;
+	calculateOrderTotal: () => number;
 }
 
 const defaultContext = {
@@ -25,6 +29,10 @@ const defaultContext = {
 	addSelectedOption: (category: string, option: Option) => {},
 	removeSelectedOption: (category: string) => {},
 	clearSelectedOptions: () => {},
+	itemQty: 1,
+	handleIncrement: () => {},
+	handleDecrement: () => {},
+	calculateOrderTotal: () => 0,
 };
 
 const ItemSelectionContext =
@@ -35,6 +43,9 @@ export const ItemSelectionProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 	const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
+	const [itemQty, setItemQty] = useState(1);
+	const increaseItemQty = useBoundStore((state) => state.increaseItemQty);
+	const decreaseItemQty = useBoundStore((state) => state.decreaseItemQty);
 
 	const addSelectedItem = (item: Item | null) => {
 		setSelectedItem(item);
@@ -59,6 +70,31 @@ export const ItemSelectionProvider: React.FC<{ children: React.ReactNode }> = ({
 		setSelectedOptions({});
 	};
 
+	const handleIncrement = useCallback(() => {
+		if (selectedItem) {
+			increaseItemQty(selectedItem._id);
+			setItemQty((prevQty) => prevQty + 1);
+		}
+	}, [selectedItem, increaseItemQty]);
+
+	const handleDecrement = useCallback(() => {
+		if (selectedItem) {
+			decreaseItemQty(selectedItem._id);
+			setItemQty((prevQty) => Math.max(1, prevQty - 1));
+		}
+	}, [selectedItem, decreaseItemQty]);
+
+	const calculateOrderTotal = useCallback(() => {
+		const basePrice = selectedItem?.item_price || 0;
+		const optionsTotal = Object.values(selectedOptions).reduce(
+			(total, option) => {
+				return total + (option.price || 0);
+			},
+			0
+		);
+		return (basePrice + optionsTotal) * itemQty;
+	}, [selectedItem, selectedOptions, itemQty]);
+
 	return (
 		<ItemSelectionContext.Provider
 			value={{
@@ -70,6 +106,10 @@ export const ItemSelectionProvider: React.FC<{ children: React.ReactNode }> = ({
 				addSelectedOption,
 				removeSelectedOption,
 				clearSelectedOptions,
+				itemQty,
+				handleIncrement,
+				handleDecrement,
+				calculateOrderTotal,
 			}}
 		>
 			{children}

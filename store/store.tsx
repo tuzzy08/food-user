@@ -8,7 +8,6 @@ interface OtpSlice {
 	otp: string | null;
 	pinId: string | null;
 	phone: string | null;
-	// setOtp: (otp: string) => void;
 	setPinId: (pinId: string) => void;
 	setPhone: (phone: string) => void;
 }
@@ -28,12 +27,6 @@ interface UserLocationSlice {
 	setCurrentAddress: (address: string) => void;
 	setDeliveryAddress: (address: string) => void;
 }
-
-// export interface OptionalItem {
-// 	title: string;
-// 	price: number;
-// 	qty?: number;
-// }
 export interface Option {
 	category: string;
 	title: string;
@@ -60,21 +53,6 @@ export interface Item extends ItemFromAPI {
 	vendor_logo_url: string;
 	options: Array<Option>;
 }
-
-// export type Item = Pick<
-// 	ItemFromAPI,
-// 	| '_id'
-// 	| 'item_vendor'
-// 	| 'item_title'
-// 	| 'item_image_url'
-// 	| 'item_description'
-// 	| 'item_price'
-// > & {
-// 	vendor_id: string;
-// 	vendor_title: string; // TODO: Remove vendor_title
-// 	vendor_logo_url: string;
-// 	options: Array<Option>;
-// };
 
 export interface CartItem {
 	item: Item;
@@ -118,7 +96,6 @@ const createOtpSlice: StateCreator<OtpSlice, [], [], OtpSlice> = (set) => ({
 	otp: null,
 	pinId: null,
 	phone: null,
-	// setOtp: (otp: string) => set(() => ({ otp: otp })),
 	setPinId: (pinId: string) => set(() => ({ pinId: pinId })),
 	setPhone: (phone: string) => set(() => ({ phone: phone })),
 });
@@ -140,27 +117,19 @@ const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
 		}),
 	increaseItemQty: (itemId: string) =>
 		set((state) => {
-			// Fetch the item from array in state
 			const item = state.cart.find(({ item }) => item._id === itemId);
-
 			if (!item || item?.quantity < 0) return {};
-			// Update it's quantity
 			item.quantity += 1;
 			return {
-				// Filter out the item and merge in the updated item
 				cart: [...state.cart.filter(({ item }) => item._id !== itemId), item],
 			};
 		}),
 	decreaseItemQty: (itemId: string) =>
 		set((state) => {
-			// Fetch the item from array in state
 			const item = state.cart.find(({ item }) => item._id === itemId);
-
-			if (!item || item?.quantity <= 0) return {};
-			// Update it's quantity
+			if (!item || item?.quantity <= 1) return {};
 			item.quantity -= 1;
 			return {
-				// Filter out the item and merge in the updated item
 				cart: [...state.cart.filter(({ item }) => item._id !== itemId), item],
 			};
 		}),
@@ -170,13 +139,11 @@ const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
 		})),
 	checkout: async (userId: string, items: CartItem[]) => {
 		try {
-			// TODO: Calculate total price
 			const response = await fetch(CHECKOUT_URL, {
 				method: 'POST',
 				headers: {
 					Accept: 'application/json',
 					'Content-Type': 'application/json',
-					// Authorization: `Bearer ${authState.token}`,
 				},
 				body: JSON.stringify({
 					userId,

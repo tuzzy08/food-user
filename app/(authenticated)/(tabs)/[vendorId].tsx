@@ -30,10 +30,22 @@ export interface Category {
 
 export default function Page() {
 	const cart = useBoundStore((state) => state.cart);
-	const cart_total = cart.reduce(
-		(acc, item) => acc + item.item.item_price * item.quantity,
-		0
-	);
+	const calculateCartTotal = useCallback(() => {
+		return cart.reduce((total, cartItem) => {
+			const itemTotal = cartItem.item.item_price * cartItem.quantity;
+			const optionsTotal =
+				cartItem.item.options?.reduce((optionTotal, option) => {
+					return optionTotal + (option.price || 0);
+				}, 0) || 0;
+			return total + itemTotal + optionsTotal * cartItem.quantity;
+		}, 0);
+	}, [cart]);
+
+	const cart_total = calculateCartTotal();
+	// const cart_total = cart.reduce(
+	// 	(acc, item) => acc + item.item.item_price * item.quantity,
+	// 	0
+	// );
 	const colorScheme = useColorScheme();
 	const params = useLocalSearchParams();
 	const vendor = JSON.parse(params.vendor as string);
