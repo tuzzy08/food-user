@@ -77,12 +77,12 @@ export default function RootLayout() {
 					/**
 					 * ! This call is billed on google, use Sparingly or use the MapBox API in development.
 					 */
-					// const address = await getAddressFromCoordinates(location);
-					// setCurrentAddress(address);
+					const address = await getAddressFromCoordinates(location);
+					setCurrentAddress(address);
 					// TODO: Remove this (for development purposes only)
-					const temp_addres =
-						' 3 Joshua close, Nvigwe Woji, Port harcourt, Nigeria';
-					setCurrentAddress(temp_addres);
+					// const temp_addres =
+					// 	' 3 Joshua close, Nvigwe Woji, Port harcourt, Nigeria';
+					// setCurrentAddress(temp_addres);
 				}
 			} catch (error) {
 				console.log('🚀 ~ RootLayout ~ error:', error);
