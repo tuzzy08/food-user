@@ -25,26 +25,6 @@ export interface Category {
 }
 
 export default function Page() {
-	const cart = useBoundStore((state) => state.cart);
-
-	// const calculateCartTotal = useCallback(() => {
-	// 	return cart.reduce((total, order) => {
-	// 		return (
-	// 			total +
-	// 			order.items.reduce((orderTotal, cartItem) => {
-	// 				const itemTotal = cartItem.item.item_price * cartItem.quantity;
-	// 				const optionsTotal =
-	// 					cartItem.item.options?.reduce((optionTotal, option) => {
-	// 						return optionTotal + (option.price || 0);
-	// 					}, 0) || 0;
-	// 				return orderTotal + itemTotal + optionsTotal;
-	// 			}, 0)
-	// 		);
-	// 	}, 0);
-	// }, [cart]);
-
-	// const cart_total = calculateCartTotal();
-
 	const colorScheme = useColorScheme();
 	const params = useLocalSearchParams();
 	const vendor = JSON.parse(params.vendor as string);
