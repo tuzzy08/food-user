@@ -9,8 +9,7 @@
 			"env": {
 				"EXPO_API_URL": "https://nourri-api.onrender.com",
 				"EXPO_PUBLIC_GOOGLE_API_KEY": "AIzaSyAsqciL5ObtnHp55b-K0bsvmTzfVUBCGMs",
-				"EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoidHV6enkwOCIsImEiOiJjbHU0OG83MXQxZWtyMmp0NDd5dWRwdXB0In0.hqEencu4Eqt6FBTCODXULw",
-				"EXPO_USE_METRO_WORKSPACE_ROOT": "1"
+				"EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoidHV6enkwOCIsImEiOiJjbHU0OG83MXQxZWtyMmp0NDd5dWRwdXB0In0.hqEencu4Eqt6FBTCODXULw"
 			}
 		},
 		"preview": {
@@ -21,16 +20,14 @@
 			"env": {
 				"EXPO_API_URL": "https://nourri-api.onrender.com",
 				"EXPO_PUBLIC_GOOGLE_API_KEY": "AIzaSyAsqciL5ObtnHp55b-K0bsvmTzfVUBCGMs",
-				"EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoidHV6enkwOCIsImEiOiJjbHU0OG83MXQxZWtyMmp0NDd5dWRwdXB0In0.hqEencu4Eqt6FBTCODXULw",
-				"EXPO_USE_METRO_WORKSPACE_ROOT": "1"
+				"EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoidHV6enkwOCIsImEiOiJjbHU0OG83MXQxZWtyMmp0NDd5dWRwdXB0In0.hqEencu4Eqt6FBTCODXULw"
 			}
 		},
 		"production": {
 			"env": {
 				"EXPO_API_URL": "https://nourri-api.onrender.com",
 				"EXPO_PUBLIC_GOOGLE_API_KEY": "AIzaSyAsqciL5ObtnHp55b-K0bsvmTzfVUBCGMs",
-				"EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoidHV6enkwOCIsImEiOiJjbHU0OG83MXQxZWtyMmp0NDd5dWRwdXB0In0.hqEencu4Eqt6FBTCODXULw",
-				"EXPO_USE_METRO_WORKSPACE_ROOT": "1"
+				"EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoidHV6enkwOCIsImEiOiJjbHU0OG83MXQxZWtyMmp0NDd5dWRwdXB0In0.hqEencu4Eqt6FBTCODXULw"
 			}
 		}
 	},
