@@ -31,4 +31,4 @@ jobs:
           eas init --id "$EXPO_NOURRI_USER_APP_PROJECT_ID" --force --non-interactive
           echo $(jq '.expo.runtimeVersion.policy = "sdkVersion"' app.json) > app.json
       - name: Build on EAS
-        run: eas build --profile development --platform android --non-interactive --no-wait
+        run: eas build --profile preview --platform android --non-interactive --no-wait
