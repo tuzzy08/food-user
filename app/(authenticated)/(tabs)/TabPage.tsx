@@ -5,8 +5,7 @@ import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { LegacyRef, forwardRef, useCallback, useRef } from 'react';
-import { Order } from './orders';
+import { LegacyRef, forwardRef } from 'react';
 import { CartItem, useBoundStore } from '@/store/store';
 import { OrderTab } from '@/components/OrderTab/OrderTab';
 import { CartList } from '@/components/Cart/CartList';
@@ -24,12 +23,8 @@ export const TabPage = forwardRef(
 	(
 		{
 			scrollX,
-		}: // orders,
-		// cart,
-		{
+		}: {
 			scrollX: any;
-			// cart: CartItem[];
-			// orders: Order[];
 		},
 		ref: LegacyRef<FlatList<string>>
 	) => {
@@ -59,15 +54,7 @@ export const TabPage = forwardRef(
 	}
 );
 
-function TabContent({
-	// orders,
-	// cart,
-	item,
-}: {
-	// orders?: Order[];
-	// cart?: CartItem[];
-	item: string;
-}) {
+function TabContent({ item }: { item: string }) {
 	const cart = useBoundStore((state) => state.cart);
 	// TODO: Fetch orders from API using user_id
 	const {
@@ -77,8 +64,8 @@ function TabContent({
 	} = useOrders('', { refetchOnMount: true });
 	if (item === 'My Cart') {
 		if (cart && cart.length > 0) {
-			const groupedItems = groupCartItemByVendor(cart);
-			return <CartList cart={groupedItems} />;
+			// const groupedItems = groupCartItemByVendor(cart);
+			return <CartList cart={cart} />;
 		} else {
 			return <EmptyCart />;
 		}
@@ -106,18 +93,12 @@ export function EmptyCart() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		// width: '100%',
-		// height: '100%',
-		// borderWidth: 1,
-		// borderColor: 'yellow',
 	},
 	tab: {
 		width: wp('100%'),
 		height: hp('65%'),
 		justifyContent: 'center',
 		alignItems: 'center',
-		// borderWidth: 1,
-		// borderColor: 'blue',
 	},
 	tabContent: {},
 	emptyCart: {},
@@ -137,6 +118,5 @@ function groupCartItemByVendor(cart: CartItem[]) {
 		},
 		{}
 	);
-	// console.log('groupedItems', groupedItems);
 	return Object.entries(groupedItems);
 }

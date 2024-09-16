@@ -36,13 +36,13 @@ const CATEGORIES = [
 		title: 'Delivery',
 		img_url: icons.delivery,
 		href: '',
-		bgColor: '#FEE9E4',
+		bgColor: '#F8777C',
 	},
 ];
 
 export function CategoryList() {
 	return (
-		<View style={styles.listContainer}>
+		<View style={[styles.listContainer]}>
 			{CATEGORIES.map((item) => (
 				<CategoryCard key={item.id} item={item} />
 			))}
@@ -53,10 +53,6 @@ export function CategoryList() {
 const styles = StyleSheet.create({
 	listContainer: {
 		flexDirection: 'row',
-		justifyContent: 'space-between',
-		// paddingHorizontal: 5,
-		// gap: 10,
-		borderWidth: 1,
-		// borderColor: 'red',
+		gap: 8,
 	},
 });

@@ -84,7 +84,7 @@ export function SpotlightCard() {
 
 const styles = StyleSheet.create({
 	itemContainer: {
-		marginRight: 15,
+		// marginRight: 15,
 		height: 240,
 		width: 335,
 		gap: 5,

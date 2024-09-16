@@ -1,8 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Option as OptionalItem } from '@/store/store';
-import { useItemSelection } from '@/contexts/ItemSelectionContext';
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { Checkbox } from './Checkbox';
 
 const REQUIRED = 'required';
@@ -16,25 +14,38 @@ export function Option({
 	onSelect,
 	category_type,
 	isOnlyOption,
+	missingRequiredOptions,
 }: {
 	index: number;
-	item: Option;
+	item: OptionalItem;
 	isSelected: boolean;
-	onSelect: (item: Option) => void;
+	onSelect: (item: OptionalItem) => void;
 	category_type: string;
 	isOnlyOption: boolean;
+	missingRequiredOptions: OptionalItem[];
 }) {
 	const handleChange = () => {
 		onSelect(item);
 	};
+	const isMissing = missingRequiredOptions.some(
+		(option) => option.title === item.title
+	);
 
 	return (
 		<BottomSheetView
-			style={{
-				flexDirection: 'row',
-				justifyContent: 'space-between',
-				paddingRight: 7,
-			}}
+			style={[
+				{
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					paddingRight: 7,
+				},
+				isMissing && {
+					borderColor: 'red',
+					borderWidth: 0.5,
+					padding: 5,
+					borderRadius: 5,
+				},
+			]}
 			key={index.toString()}
 		>
 			<BottomSheetView>

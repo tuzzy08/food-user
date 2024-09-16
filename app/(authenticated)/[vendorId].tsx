@@ -5,8 +5,7 @@ import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { useQuery } from '@tanstack/react-query';
-import { Text, View } from '@/components/Themed';
+import { View } from '@/components/Themed';
 import { Header } from '@/components/RestaurantView';
 import { Menu } from '@/components/Menu';
 import { MenuListSkeleton } from '@/components/Menu/MenuListSkeleton';
@@ -17,10 +16,7 @@ import { FloatingButton } from '@/components/Menu/FloatingButton';
 import { useCallback, useMemo, useRef } from 'react';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useBottomSheetBackHandler } from '@/hooks/useBottomSheetBackHandler';
-import {
-	useItemSelection,
-	ItemSelectionProvider,
-} from '@/contexts/ItemSelectionContext';
+import { ItemSelectionProvider } from '@/contexts/ItemSelectionContext';
 
 export interface Category {
 	id: string;
@@ -30,28 +26,30 @@ export interface Category {
 
 export default function Page() {
 	const cart = useBoundStore((state) => state.cart);
-	const calculateCartTotal = useCallback(() => {
-		return cart.reduce((total, cartItem) => {
-			const itemTotal = cartItem.item.item_price * cartItem.quantity;
-			const optionsTotal =
-				cartItem.item.options?.reduce((optionTotal, option) => {
-					return optionTotal + (option.price || 0);
-				}, 0) || 0;
-			return total + itemTotal + optionsTotal * cartItem.quantity;
-		}, 0);
-	}, [cart]);
 
-	const cart_total = calculateCartTotal();
-	// const cart_total = cart.reduce(
-	// 	(acc, item) => acc + item.item.item_price * item.quantity,
-	// 	0
-	// );
+	// const calculateCartTotal = useCallback(() => {
+	// 	return cart.reduce((total, order) => {
+	// 		return (
+	// 			total +
+	// 			order.items.reduce((orderTotal, cartItem) => {
+	// 				const itemTotal = cartItem.item.item_price * cartItem.quantity;
+	// 				const optionsTotal =
+	// 					cartItem.item.options?.reduce((optionTotal, option) => {
+	// 						return optionTotal + (option.price || 0);
+	// 					}, 0) || 0;
+	// 				return orderTotal + itemTotal + optionsTotal;
+	// 			}, 0)
+	// 		);
+	// 	}, 0);
+	// }, [cart]);
+
+	// const cart_total = calculateCartTotal();
+
 	const colorScheme = useColorScheme();
 	const params = useLocalSearchParams();
 	const vendor = JSON.parse(params.vendor as string);
 	// Fetch items for this vendor
 	const { isLoading, error, data: items } = useVendorItems(vendor._id);
-
 	// Extend the items with vendor info
 	const extended_items = items?.map((item: ItemFromAPI) => {
 		return {
@@ -86,7 +84,6 @@ export default function Page() {
 		name: default_category_name,
 		items: extended_items!,
 	});
-
 	// * Reference to BottomSheet Modal
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 	// * BottomSheet back(hardware) handler
@@ -95,7 +92,6 @@ export default function Page() {
 	// * Modal SnapPoints
 	const snapPoints = useMemo(() => ['85%'], []);
 	// * Modal Callbacks
-	const { addSelectedItem } = useItemSelection();
 	const showModal = useCallback((data: Item) => {
 		bottomSheetModalRef.current?.present(data);
 	}, []);
@@ -138,13 +134,13 @@ export default function Page() {
 									snapPoints={snapPoints}
 								/>
 							</View>
-							{cart.length > 0 ? (
+							{/* {cart.length > 0 ? (
 								<FloatingButton
-									closeModal={closeModal}
+									// closeModal={closeModal}
 									cartlength={cart.length}
 									totalPrice={cart_total}
 								/>
-							) : null}
+							) : null} */}
 						</>
 					)}
 				</View>

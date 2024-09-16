@@ -1,11 +1,8 @@
 import { StyleSheet, Animated, Dimensions, FlatList } from 'react-native';
-
-import { Text, View } from '@/components/Themed';
+import { View } from '@/components/Themed';
 import { OrdersTabBar } from '@/components/OrdersTabBar';
-import { useBoundStore } from '@/store/store';
 import { TabPage } from './TabPage';
-import { useCallback, useRef, useState } from 'react';
-import { useOrders } from '@/hooks/useOrders';
+import { useCallback, useRef } from 'react';
 
 export interface Order {
 	_id: string;
@@ -28,10 +25,6 @@ export interface Order {
 }
 
 export default function Page() {
-	// Fetch users orders from API
-	// const {} = useOrders();
-	// const [orders, setOrders] = useState<Order[]>([]);
-
 	const scrollX = useRef(new Animated.Value(0)).current;
 
 	const flatlistRef = useRef<FlatList>(null);

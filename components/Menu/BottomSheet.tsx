@@ -1,11 +1,10 @@
 import { StyleSheet } from 'react-native';
-
 import {
 	BottomSheetView,
 	BottomSheetModal,
 	BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import { SharedValue } from 'react-native-reanimated/lib/typescript/reanimated2/commonTypes';
 import Colors from '@/constants/Colors';
 
@@ -49,9 +48,6 @@ export function BottomSheet({
 			backdropComponent={renderBackdrop}
 			enableContentPanningGesture={false}
 		>
-			{/* <BottomSheetView style={styles.contentContainer}>
-				{children}
-			</BottomSheetView> */}
 			{(data) => (
 				<BottomSheetView style={styles.contentContainer}>
 					<>{typeof children === 'function' ? children(data) : children}</>

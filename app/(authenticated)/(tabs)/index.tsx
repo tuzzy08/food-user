@@ -1,11 +1,15 @@
-import { ScrollView, StyleSheet, useColorScheme } from 'react-native';
+import {
+	ScrollView,
+	StyleSheet,
+	useColorScheme,
+	StatusBar,
+} from 'react-native';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { Text, View } from '@/components/Themed';
+import { View } from '@/components/Themed';
 import { CategoryList } from '@/components/Categories/CategoryList';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Banner } from '@/components/Banner';
 import { ForYou } from '@/components/ForYou';
 import Colors from '@/constants/Colors';
@@ -16,9 +20,22 @@ export default function Page() {
 	const colorScheme = useColorScheme();
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
+		<>
+			<StatusBar
+				backgroundColor={
+					colorScheme === 'light'
+						? Colors.light.background
+						: Colors.dark.background
+				}
+			/>
 			<ScrollView
-				style={styles.rootContainerscrollView}
+				style={[
+					styles.rootContainerscrollView,
+					{
+						backgroundColor:
+							colorScheme === 'light' ? Colors.light.mainBackGround : '#000',
+					},
+				]}
 				showsVerticalScrollIndicator={false}
 			>
 				<View
@@ -26,13 +43,11 @@ export default function Page() {
 						styles.container,
 						{
 							backgroundColor:
-								colorScheme === 'light' ? Colors.lightGrey : '#000',
+								colorScheme === 'light' ? Colors.light.mainBackGround : '#000',
 						},
 					]}
 				>
-					<Banner />
-					<CategoryList />
-
+					<TopSection />
 					<ForYou />
 					<View
 						style={[
@@ -54,29 +69,42 @@ export default function Page() {
 					</View>
 				</View>
 			</ScrollView>
-		</SafeAreaView>
+		</>
 	);
 }
 
+function TopSection() {
+	return (
+		<View style={styles.topSection}>
+			<Banner />
+			<CategoryList />
+		</View>
+	);
+}
 const styles = StyleSheet.create({
 	rootContainerscrollView: {
 		flexGrow: 1,
-		marginHorizontal: 6,
 	},
 	container: {
-		gap: 20,
+		gap: 10,
 	},
 	title: {
 		fontSize: 20,
 		fontWeight: 'bold',
 	},
-
 	spotlight: {
 		height: hp('38%'),
 		width: '100%',
 		paddingTop: 5,
+		alignItems: 'center',
 	},
 	vendorList: {
 		paddingBottom: 5,
+	},
+	topSection: {
+		// marginTop: 10,
+		gap: 30,
+		paddingVertical: 15,
+		alignItems: 'center',
 	},
 });

@@ -6,8 +6,8 @@ import {
 import { FlashList } from '@shopify/flash-list';
 import { View, Text } from '../Themed';
 import Colors from '@/constants/Colors';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { Category } from '@/app/(authenticated)/(tabs)/[vendorId]';
+import { Dispatch, SetStateAction } from 'react';
+import { Category } from '@/app/(authenticated)/[vendorId]';
 import { Item } from '@/store/store';
 
 export function Categories({
@@ -81,7 +81,9 @@ function CategoryItem({
 			}}
 		>
 			<View style={[styles.item, activeCategoryName === item && styles.active]}>
-				<Text>{item}</Text>
+				<Text style={[activeCategoryName === item && styles.activeText]}>
+					{item}
+				</Text>
 			</View>
 		</Pressable>
 	);
@@ -102,5 +104,8 @@ const styles = StyleSheet.create({
 	},
 	active: {
 		backgroundColor: Colors.secondary,
+	},
+	activeText: {
+		color: Colors.dark.text,
 	},
 });

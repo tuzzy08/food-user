@@ -4,7 +4,6 @@ import {
 	TouchableOpacity,
 	useWindowDimensions,
 } from 'react-native';
-import Colors from '@/constants/Colors';
 import { Image } from 'expo-image';
 import Color from 'color';
 
@@ -28,7 +27,7 @@ export function CategoryCard({
 				{
 					width: width * 0.222,
 					height: height * 0.11,
-					backgroundColor: Color(item.bgColor).lighten(0.2).toString(),
+					backgroundColor: Color(item.bgColor).whiten(0.4).toString(),
 				},
 			]}
 		>
@@ -40,8 +39,6 @@ export function CategoryCard({
 
 const styles = StyleSheet.create({
 	container: {
-		borderWidth: 0.3,
-		borderColor: Colors.grey,
 		borderRadius: 15,
 		justifyContent: 'center',
 		alignItems: 'center',

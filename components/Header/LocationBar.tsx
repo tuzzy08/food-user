@@ -12,13 +12,33 @@ export function LocationBar() {
 	const summarizedAddress = wrapString(currentAddress!);
 
 	return (
-		<View style={styles.container}>
+		<View
+			style={[
+				styles.container,
+				{
+					// backgroundColor:
+					// 	colorScheme === 'light' ? Colors.light.mainBackGround : '#000',
+					borderWidth: colorScheme === 'light' ? 0.7 : undefined,
+					borderColor: colorScheme === 'light' ? Colors.grey : undefined,
+					borderRadius: 20,
+					padding: 4,
+				},
+			]}
+		>
 			<TouchableOpacity onPress={() => router.navigate('/mapPage')}>
-				<View style={styles.addressBox}>
+				<View
+					style={[
+						styles.addressBox,
+						{
+							// backgroundColor:
+							// 	colorScheme === 'light' ? Colors.light.mainBackGround : '#000',
+						},
+					]}
+				>
 					<MapPin size={17} color={Colors.primary} />
 					<Text style={styles.addressText}>{summarizedAddress}</Text>
 					<ChevronDown
-						size={21}
+						size={23}
 						color={
 							colorScheme === 'dark' ? Colors.dark.text : Colors.light.text
 						}
@@ -32,17 +52,15 @@ export function LocationBar() {
 
 const styles = StyleSheet.create({
 	container: {
-		// flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		// paddingHorizontal: 5,
 	},
 	addressBox: {
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		gap: 5,
+		gap: 2,
 	},
 	addressText: {
 		fontSize: 14,

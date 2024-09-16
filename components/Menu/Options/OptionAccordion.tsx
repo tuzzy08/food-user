@@ -20,8 +20,9 @@ const REQUIRED = 'required';
 type OptionAccordionProps = {
 	category_title: string;
 	category_type: string;
-	items: Array<Option>;
-	onOptionSelect: (option: Option, category_type: string) => void;
+	items: Array<ItemOption>;
+	onOptionSelect: (option: ItemOption, category_type: string) => void;
+	missingRequiredOptions: ItemOption[];
 };
 
 export function OptionAccordion({
@@ -29,15 +30,16 @@ export function OptionAccordion({
 	category_type,
 	items,
 	onOptionSelect,
+	missingRequiredOptions,
 }: OptionAccordionProps) {
 	const open = useSharedValue(true);
-	const [selectedItems, setSelectedItems] = useState<Option[]>([]);
+	const [selectedItems, setSelectedItems] = useState<ItemOption[]>([]);
 
 	const onPress = () => {
 		open.value = !open.value;
 	};
 
-	const handleOptionSelect = (item: Option) => {
+	const handleOptionSelect = (item: ItemOption) => {
 		if (category_type === REQUIRED) {
 			setSelectedItems([item]);
 		} else {
@@ -67,6 +69,7 @@ export function OptionAccordion({
 					category_type={category_type}
 					selectedItems={selectedItems}
 					onOptionSelect={handleOptionSelect}
+					missingRequiredOptions={missingRequiredOptions}
 				/>
 			</AccordionWrapper>
 		</BottomSheetView>
@@ -175,11 +178,13 @@ export function AccordionContent({
 	category_type,
 	selectedItems,
 	onOptionSelect,
+	missingRequiredOptions,
 }: {
-	items: Array<Option>;
+	items: Array<ItemOption>;
 	category_type: string;
-	selectedItems: Array<Option>;
-	onOptionSelect: (item: Option) => void;
+	selectedItems: Array<ItemOption>;
+	onOptionSelect: (item: ItemOption) => void;
+	missingRequiredOptions: ItemOption[];
 }) {
 	const isOnlyOption = items.length === 1;
 
@@ -202,6 +207,7 @@ export function AccordionContent({
 						onSelect={onOptionSelect}
 						category_type={category_type}
 						isOnlyOption={isOnlyOption}
+						missingRequiredOptions={missingRequiredOptions}
 					/>
 				))}
 			</BottomSheetView>

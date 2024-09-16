@@ -2,25 +2,23 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Toast from 'react-native-root-toast';
 import { BottomSheetView, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Image } from 'expo-image';
-import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useBoundStore, Item, Option as StoreOption } from '@/store/store';
 import { ItemOptions } from './ItemOptions';
 import { CircleMinus, CirclePlus } from 'lucide-react-native';
-import { useItemSelection } from '@/contexts/ItemSelectionContext';
 
-// Add this type definition
-type Option = StoreOption & { selected: boolean };
+// type Option = StoreOption & { selected: boolean };
 
 const REQUIRED = 'required';
 
 interface SelectedOptions {
-	[key: string]: Option;
+	[key: string]: StoreOption | StoreOption[];
 }
 
 type ItemOptions = {
-	required: Array<Option>;
-	optional: Array<Option>;
+	required: Array<StoreOption>;
+	optional: Array<StoreOption>;
 };
 
 export function BottomSheetContent({
@@ -32,26 +30,97 @@ export function BottomSheetContent({
 }) {
 	const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
 	const [itemQty, setItemQty] = useState(1);
+	const [missingRequiredOptions, setMissingRequiredOptions] = useState<
+		StoreOption[]
+	>([]);
 
-	const handleOptionSelect = (option: Option, category_type: string) => {
+	function checkMissingRequiredOptions(
+		selectedOptions: SelectedOptions,
+		selectedItem: Item
+	): Array<StoreOption> | null {
+		if (!selectedItem.options) {
+			return null;
+		}
+		const missingOptions = [];
+
+		const requiredOptions = selectedItem.options.filter(
+			(option) => option.type === 'required'
+		);
+
+		for (const requiredOption of requiredOptions) {
+			if (!selectedOptions[requiredOption.category]) {
+				missingOptions.push(requiredOption);
+			}
+		}
+		return missingOptions;
+	}
+
+	const handleOptionSelect = (option: StoreOption, category_type: string) => {
 		setSelectedOptions((prev) => {
 			const updatedOptions = { ...prev };
 			if (category_type === REQUIRED) {
+				// For required options, replace the existing option for the category
 				updatedOptions[option.category] = option;
+
+				// Check if this selection resolves any missing required options
+				// const missingOptions = checkMissingRequiredOptions(
+				// 	updatedOptions,
+				// 	selectedItem
+				// );
+				// console.log('missing in option select', missingOptions);
+				// if (!missingOptions || missingOptions.length === 0) {
+				// 	setMissingRequiredOptions([]); // Clear missing options if all are selected
+				// }
 			} else {
-				if (updatedOptions[option.category]?.title === option.title) {
-					delete updatedOptions[option.category];
+				// For optional options, toggle the selection
+				if (Array.isArray(updatedOptions[option.category])) {
+					const existingIndex = (
+						updatedOptions[option.category] as StoreOption[]
+					).findIndex((opt) => opt.title === option.title);
+					if (existingIndex !== -1) {
+						// If the option is already selected, remove it
+						(updatedOptions[option.category] as StoreOption[]).splice(
+							existingIndex,
+							1
+						);
+						if (
+							(updatedOptions[option.category] as StoreOption[]).length === 0
+						) {
+							delete updatedOptions[option.category];
+						}
+					} else {
+						// If the option is not selected, add it
+						(updatedOptions[option.category] as StoreOption[]).push(option);
+					}
 				} else {
-					updatedOptions[option.category] = option;
+					// Initialize the array if it doesn't exist
+					updatedOptions[option.category] = [option];
 				}
 			}
 			return updatedOptions;
+		});
+
+		// Update missingRequiredOptions
+		setMissingRequiredOptions((prev) => {
+			const updatedMissing = prev.filter(
+				(missingOption) => missingOption.category !== option.category
+			);
+			return updatedMissing;
 		});
 	};
 
 	const optionsTotal = useMemo(() => {
 		return Object.values(selectedOptions).reduce((total, option) => {
-			return total + (option.price || 0);
+			if (Array.isArray(option)) {
+				// Sum up prices for optional items (which are now arrays)
+				return (
+					total +
+					option.reduce((subtotal, opt) => subtotal + (opt.price || 0), 0)
+				);
+			} else {
+				// Add price for required items (which are still single objects)
+				return total + (option.price || 0);
+			}
 		}, 0);
 	}, [selectedOptions]);
 
@@ -63,39 +132,76 @@ export function BottomSheetContent({
 	const handleIncrement = useCallback(() => {
 		setItemQty((prevQty) => prevQty + 1);
 	}, []);
-
 	const handleDecrement = useCallback(() => {
 		setItemQty((prevQty) => Math.max(1, prevQty - 1));
 	}, []);
-
-	const cart = useBoundStore((state) => state.cart);
-	const cart_total = cart.reduce(
-		(acc, item) => acc + item.item.item_price * item.quantity,
-		0
-	);
-	const addItem = useBoundStore((state) => state.addItem);
+	const { addItem, getItem, cart } = useBoundStore((state) => state);
 
 	const handleAddToCart = useCallback(() => {
 		if (!selectedItem) return;
 
+		const missingOptions = checkMissingRequiredOptions(
+			selectedOptions,
+			selectedItem
+		);
+		if (missingOptions && missingOptions.length > 0) {
+			setMissingRequiredOptions(missingOptions);
+			// Show a toast or alert to inform the user about missing required options
+			Toast.show('Please select all required options', {
+				duration: Toast.durations.SHORT,
+				position: Toast.positions.BOTTOM - 50,
+				backgroundColor: Colors.errorColor,
+			});
+			return;
+		}
+
+		// console.log('missing in addtocart', missingOptions);
+		// if (missingOptions) {
+		// 	setMissingRequiredOptions(missingOptions);
+		// 	return; // Prevent adding to cart if required options are missing
+		// }
+
+		// Check if item already exists in cart
+		const existingItem = getItem(selectedItem._id);
+		if (existingItem) {
+			closeModal();
+			return;
+		}
+
+		// Retrieve optional items selected by the user
 		const optionsToAdd = Object.values(selectedOptions);
+		// Delete existing options from the item
+		const { options, ...rest } = selectedItem;
+		const itemToAddToCart = rest;
+
+		// Add item to cart
 		addItem(
 			{
-				...selectedItem,
+				...itemToAddToCart,
 				options: optionsToAdd,
 			},
 			itemQty
 		);
+		setSelectedOptions({});
+		setItemQty(1);
 		Toast.show('Added to cart!', {
 			duration: Toast.durations.SHORT,
-			position: Toast.positions.BOTTOM,
-			delay: 350,
-			opacity: 0.8,
+			position: Toast.positions.BOTTOM - 50,
+			delay: 400,
+			opacity: 0.7,
 			hideOnPress: true,
-			backgroundColor: Colors.primary,
+			backgroundColor: Colors.dark.alt.secondary,
 		});
 		closeModal();
-	}, [selectedItem, selectedOptions, itemQty, addItem, closeModal]);
+	}, [
+		selectedItem,
+		selectedOptions,
+		itemQty,
+		closeModal,
+		missingRequiredOptions,
+		addItem,
+		getItem,
+	]);
 
 	return (
 		<BottomSheetView style={styles.bottomSheetContent}>
@@ -132,6 +238,7 @@ export function BottomSheetContent({
 										.map((option) => ({ ...option, selected: false })),
 								}}
 								onOptionSelect={handleOptionSelect}
+								missingRequiredOptions={missingRequiredOptions}
 							/>
 						)}
 					</BottomSheetView>
@@ -232,12 +339,10 @@ const styles = StyleSheet.create({
 	price: { fontSize: 14, fontWeight: 'bold', color: Colors.dark.background },
 	quantityButtonContainer: {
 		flexDirection: 'row',
-		// justifyContent: 'center',
 		gap: 15,
 		alignItems: 'center',
 		borderRadius: 4,
 		height: 50,
-		// borderWidth: 1,
 		paddingHorizontal: 5,
 		borderColor: Colors.grey,
 	},

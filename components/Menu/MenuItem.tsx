@@ -60,11 +60,22 @@ export function MenuItem({
 				{/* Title */}
 				<Text style={styles.title}>{item?.item_title}</Text>
 
-				<Text style={styles.description}>
+				<Text
+					style={[
+						styles.description,
+						{
+							color: color === 'dark' ? Colors.grey : Colors.light.text,
+						},
+					]}
+				>
 					{summarize(item?.item_description)}
 				</Text>
 				<Text
-					style={{ marginTop: 15, color: Colors.grey, fontWeight: 'bold' }}
+					style={{
+						marginTop: 15,
+						color: color === 'dark' ? Colors.grey : Colors.light.text,
+						fontWeight: 'bold',
+					}}
 				>{`₦${item?.item_price}`}</Text>
 			</View>
 		</TouchableOpacity>
@@ -97,7 +108,6 @@ const styles = StyleSheet.create({
 	},
 	description: {
 		fontSize: 12,
-		color: Colors.grey,
 		marginTop: 3,
 	},
 });

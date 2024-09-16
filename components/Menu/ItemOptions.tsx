@@ -1,15 +1,11 @@
 import Colors from '@/constants/Colors';
-import { Option as ItemOption } from '@/store/store';
+import { Option } from '@/store/store';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-
 import { OptionAccordion } from './Options/OptionAccordion';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useCallback, useState } from 'react';
 
-const REQUIRED = 'required';
-const OPTIONAL = 'optional';
-
-type Option = ItemOption & { selected: boolean };
+// type Option = ItemOption & { selected: boolean };
 
 type ItemOptions = {
 	required: Array<Option>;
@@ -18,7 +14,7 @@ type ItemOptions = {
 
 const groupOptionsByCategory = (options: ItemOptions) => {
 	const groupedOptions: {
-		[key: string]: { type: 'required' | 'optional'; options: Option[] };
+		[key: string]: { type: string; options: Option[] };
 	} = {};
 
 	// Group required options
@@ -43,9 +39,11 @@ const groupOptionsByCategory = (options: ItemOptions) => {
 export function ItemOptions({
 	options,
 	onOptionSelect,
+	missingRequiredOptions,
 }: {
 	options: ItemOptions;
 	onOptionSelect: (option: Option, category_type: string) => void;
+	missingRequiredOptions: Option[];
 }) {
 	const groupedOptions = groupOptionsByCategory(options);
 
@@ -59,6 +57,7 @@ export function ItemOptions({
 							category_type={value.type}
 							items={value.options}
 							onOptionSelect={(option) => onOptionSelect(option, value.type)}
+							missingRequiredOptions={missingRequiredOptions}
 						/>
 				  ))
 				: null}

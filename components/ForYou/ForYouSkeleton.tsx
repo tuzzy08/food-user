@@ -25,6 +25,7 @@ export function ForYouSkeleton() {
 
 const styles = StyleSheet.create({
 	container: {
+		marginLeft: 15,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',

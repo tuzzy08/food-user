@@ -1,34 +1,41 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
-import { CartItem } from '@/store/store';
+import { CartItem, ItemsToOrder } from '@/store/store';
 import { Image } from 'expo-image';
 import Colors from '@/constants/Colors';
+import { useRouter } from 'expo-router';
 
 export function CartItemView({
-	item,
+	order,
 	index,
 	showModal,
 }: {
-	item: [string, CartItem[]];
+	order: ItemsToOrder;
 	index: number;
 	showModal: (data: CartItem) => void;
 }) {
 	// console.log('item', item);
+	const router = useRouter();
+	const handlePress = () => {
+		router.push({
+			pathname: '/viewOrder',
+			params: {
+				vendorId: JSON.stringify(order.vendorId),
+			},
+		});
+	};
 	return (
 		<View style={styles.container}>
 			{/* Restaurant title */}
 			<View style={styles.imgAndTextContainer}>
-				<Image
-					source={`${item[1][0].item.vendor_logo_url}`}
-					style={styles.image}
-				/>
+				<Image source={`${order.vendorLogoUrl}`} style={styles.image} />
 				<View>
-					<Text>{item[0]}</Text>
-					<Text style={styles.itemQtyText}>x{item[1].length} items</Text>
+					<Text>{`${order.vendorTitle}`}</Text>
+					<Text style={styles.itemQtyText}>x{order.items.length} items</Text>
 				</View>
 			</View>
 
-			<Pressable onPress={() => showModal(item[1][0])}>
+			<Pressable onPress={handlePress}>
 				<Text>View</Text>
 			</Pressable>
 		</View>

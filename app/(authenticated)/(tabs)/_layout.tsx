@@ -3,23 +3,15 @@ import { StyleSheet } from 'react-native';
 import { Home, ClipboardList, Search, User } from 'lucide-react-native';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
-import { useSegments } from 'expo-router';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Header } from '@/components/Header';
 import { StatusBar } from 'expo-status-bar';
-import { ItemSelectionProvider } from '@/contexts/ItemSelectionContext';
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme();
-	const segment = useSegments();
-	// get the current page from the segment
-	const page = segment[segment.length - 1];
-	// create an array of list pages you want to hide the tab bar in
-	// const pagesToHideTabBar = ['', ''];
-
 	return (
 		<>
 			<StatusBar backgroundColor={colorScheme === 'dark' ? '#000' : '#FFF'} />
@@ -71,17 +63,6 @@ export default function TabLayout() {
 						tabBarIcon: ({ color }) => (
 							<User size={28} color={color} style={styles.tabIcon} />
 						),
-					}}
-				/>
-				<Tabs.Screen
-					name='[vendorId]'
-					options={{
-						href: null,
-						headerShown: false,
-						// header: () => <RestaurantHeader />,
-						tabBarStyle: {
-							display: page === '[vendorId]' ? 'none' : 'flex',
-						},
 					}}
 				/>
 			</Tabs>

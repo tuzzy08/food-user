@@ -33,6 +33,9 @@ export function ForYouList() {
 				keyExtractor={(item) => item._id}
 				horizontal
 				showsHorizontalScrollIndicator={false}
+				contentContainerStyle={{
+					paddingLeft: 15,
+				}}
 			/>
 		</View>
 	);
@@ -42,10 +45,12 @@ const styles = StyleSheet.create({
 	listContainer: {
 		minHeight: 240,
 		minWidth: 320.5,
-		gap: 5,
+		gap: 10,
+		paddingTop: 10,
 	},
 	HeaderText: {
 		fontSize: 16,
 		fontWeight: '600',
+		paddingLeft: 15,
 	},
 });

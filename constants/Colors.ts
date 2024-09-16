@@ -7,6 +7,7 @@ export default {
 	errorColor: '#F83E55',
 	light: {
 		text: '#000',
+		mainBackGround: '#F8F8FF',
 		background: '#fff',
 		tint: tintColorLight,
 		tabIconDefault: '#ccc',

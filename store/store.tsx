@@ -32,6 +32,7 @@ export interface Option {
 	title: string;
 	price: number;
 	type: option_type;
+	isMissing?: boolean;
 }
 
 export interface ItemFromAPI {
@@ -53,14 +54,41 @@ export interface Item extends ItemFromAPI {
 	vendor_logo_url: string;
 	options: Array<Option>;
 }
-
+type CartItemType = {
+	_id: string;
+	item_title: string;
+	item_image_url: string;
+	item_description: string;
+	item_price: number;
+	item_in_stock: boolean;
+	item_cook_time: number;
+	item_category_id: string;
+	item_category: string;
+	item_vendor: string;
+	vendor_id: string;
+	vendor_title: string;
+	vendor_logo_url: string;
+	options: Array<Option | Option[]>;
+};
 export interface CartItem {
-	item: Item;
+	item: CartItemType;
 	quantity: number;
 }
+
+export interface ItemsToOrder {
+	vendorId: string;
+	vendorTitle: string;
+	vendorLogoUrl: string;
+	items: Array<CartItem>;
+	total?: number;
+	createdAt?: string;
+}
+
 interface CartSlice {
-	cart: Array<CartItem>;
-	addItem: (item: Item, qty: number) => void;
+	cart: Array<ItemsToOrder>;
+	addItem: (item: CartItemType, qty: number) => void;
+	getItem: (itemId: string) => CartItem | undefined;
+	getItemToOrder: (vendorId: string) => ItemsToOrder | undefined;
 	deleteItem: (itemId: string) => void;
 	increaseItemQty: (itemId: string) => void;
 	decreaseItemQty: (itemId: string) => void;
@@ -100,43 +128,99 @@ const createOtpSlice: StateCreator<OtpSlice, [], [], OtpSlice> = (set) => ({
 	setPhone: (phone: string) => set(() => ({ phone: phone })),
 });
 
-const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (set) => ({
+const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (
+	set,
+	get
+) => ({
 	cart: [],
-	addItem: (item: Item, quantity: number) =>
-		set((state) => ({
-			cart: [...state.cart, { item: item, quantity: quantity }],
-		})),
+
+	addItem: (item: CartItemType, quantity: number) =>
+		set((state) => {
+			const vendorId = item.vendor_id;
+			const newCartItem: CartItem = { item, quantity };
+
+			const existingVendorIndex = state.cart.findIndex(
+				(order) => order.vendorId === vendorId
+			);
+
+			if (existingVendorIndex !== -1) {
+				// Vendor already exists in cart, add item to existing order
+				const updatedCart = [...state.cart];
+				updatedCart[existingVendorIndex].items.push(newCartItem);
+				return { cart: updatedCart };
+			} else {
+				// New vendor, create a new order
+				const newOrder: ItemsToOrder = {
+					vendorId,
+					vendorTitle: item.vendor_title,
+					vendorLogoUrl: item.vendor_logo_url,
+					items: [newCartItem],
+					createdAt: new Date().toISOString(),
+				};
+				return { cart: [...state.cart, newOrder] };
+			}
+		}),
+
+	getItem: (itemId: string) => {
+		const state = get();
+		const cleanedItemId = itemId.replace(/^"(.*)"$/, '$1');
+		for (const order of state.cart) {
+			const foundItem = order.items.find(
+				(cartItem) => cartItem.item._id === cleanedItemId
+			);
+			if (foundItem) return foundItem;
+		}
+		return undefined;
+	},
+	getItemToOrder: (vendorId: string) => {
+		const state = get();
+		const cleanedVendorId = vendorId.replace(/^"(.*)"$/, '$1');
+		const order = state.cart.find(
+			(order) => order.vendorId === cleanedVendorId
+		);
+		return order ? order : undefined;
+	},
+
 	deleteItem: (itemId: string) =>
-		set((state) => {
-			const updatedItems = [
-				...state.cart.filter(({ item }, _) => item._id !== itemId),
-			];
-			return {
-				cart: [...updatedItems],
-			};
-		}),
-	increaseItemQty: (itemId: string) =>
-		set((state) => {
-			const item = state.cart.find(({ item }) => item._id === itemId);
-			if (!item || item?.quantity < 0) return {};
-			item.quantity += 1;
-			return {
-				cart: [...state.cart.filter(({ item }) => item._id !== itemId), item],
-			};
-		}),
-	decreaseItemQty: (itemId: string) =>
-		set((state) => {
-			const item = state.cart.find(({ item }) => item._id === itemId);
-			if (!item || item?.quantity <= 1) return {};
-			item.quantity -= 1;
-			return {
-				cart: [...state.cart.filter(({ item }) => item._id !== itemId), item],
-			};
-		}),
-	clearCart: () =>
 		set((state) => ({
-			cart: [],
+			cart: state.cart
+				.map((order) => ({
+					...order,
+					items: order.items.filter((cartItem) => cartItem.item._id !== itemId),
+				}))
+				.filter((order) => order.items.length > 0),
 		})),
+
+	increaseItemQty: (itemId: string) =>
+		set((state) => ({
+			cart: state.cart.map((order) => ({
+				...order,
+				items: order.items.map((cartItem) =>
+					cartItem.item._id === itemId
+						? { ...cartItem, quantity: cartItem.quantity + 1 }
+						: cartItem
+				),
+			})),
+		})),
+
+	decreaseItemQty: (itemId: string) =>
+		set((state) => ({
+			cart: state.cart
+				.map((order) => ({
+					...order,
+					items: order.items
+						.map((cartItem) =>
+							cartItem.item._id === itemId && cartItem.quantity > 1
+								? { ...cartItem, quantity: cartItem.quantity - 1 }
+								: cartItem
+						)
+						.filter((cartItem) => cartItem.quantity > 0),
+				}))
+				.filter((order) => order.items.length > 0),
+		})),
+
+	clearCart: () => set({ cart: [] }),
+
 	checkout: async (userId: string, items: CartItem[]) => {
 		try {
 			const response = await fetch(CHECKOUT_URL, {

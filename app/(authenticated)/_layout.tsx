@@ -45,6 +45,11 @@ export default function AuthLayout() {
 			<NotificationsProvider>
 				<Stack>
 					<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+					<Stack.Screen name='[vendorId]' options={{ headerShown: false }} />
+					<Stack.Screen
+						name='viewOrder'
+						options={{ headerTitle: 'Order details' }}
+					/>
 				</Stack>
 			</NotificationsProvider>
 		</ThemeProvider>

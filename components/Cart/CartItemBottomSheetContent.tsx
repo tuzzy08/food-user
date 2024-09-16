@@ -15,8 +15,7 @@ export function CartItemBottomSheetContent({
 	closeModal: () => void;
 }) {
 	console.log('data', data);
-	const { handleIncrement, handleDecrement, removeSelectedOption } =
-		useItemSelection();
+	const { removeSelectedOption } = useItemSelection();
 	const { increaseItemQty, decreaseItemQty } = useBoundStore((state) => state);
 	// Updated function to calculate total for this specific item
 	const calculateItemTotal = (data: CartItem) => {

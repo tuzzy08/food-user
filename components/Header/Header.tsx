@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, useColorScheme } from 'react-native';
 import { View, Text } from '@/components/Themed';
 import {
 	widthPercentageToDP as wp,
@@ -12,13 +12,24 @@ import { useBoundStore } from '@/store/store';
 import { ShoppingCart } from 'lucide-react-native';
 
 export function Header() {
+	const colorScheme = useColorScheme();
 	const cart = useBoundStore((state) => state.cart);
 	return (
-		<SafeAreaView style={styles.container}>
+		<SafeAreaView
+			style={[
+				styles.container,
+				{
+					backgroundColor:
+						colorScheme === 'light'
+							? Colors.light.background
+							: Colors.dark.background,
+				},
+			]}
+		>
 			<View
 				style={{
 					flexDirection: 'row',
-					marginTop: 18,
+					marginTop: 20,
 					justifyContent: 'space-between',
 					alignItems: 'center',
 				}}
@@ -38,7 +49,7 @@ export function Header() {
 
 const styles = StyleSheet.create({
 	container: {
-		height: hp('10%'),
+		height: hp('12%'),
 		paddingHorizontal: 8,
 	},
 	profileIcon: {
@@ -49,6 +60,7 @@ const styles = StyleSheet.create({
 	badgeText: {
 		fontSize: 14,
 		fontWeight: '500',
+		color: 'white',
 	},
 	cartBadge: {
 		backgroundColor: Colors.primary,
