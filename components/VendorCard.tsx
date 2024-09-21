@@ -34,7 +34,7 @@ export function VendorCard({ vendor }: { vendor: VendorProps }) {
 						params: {
 							vendor: JSON.stringify(vendor),
 						},
-						pathname: `/[vendorId]`,
+						pathname: `/(authenticated)/vendor`,
 					})
 				}
 				style={{ marginBottom: 20 }}

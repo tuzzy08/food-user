@@ -7,7 +7,7 @@ import { FlashList } from '@shopify/flash-list';
 import { View, Text } from '../Themed';
 import Colors from '@/constants/Colors';
 import { Dispatch, SetStateAction } from 'react';
-import { Category } from '@/app/(authenticated)/[vendorId]';
+import { Category } from '@/app/(authenticated)/vendor';
 import { Item } from '@/store/store';
 
 export function Categories({
