@@ -1,2 +1,3 @@
-# nourri-user
-Nourri user app repository.
+# food-user
+
+User mobile app for a food delivery business.

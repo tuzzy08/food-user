@@ -1,0 +1,34 @@
+name: EAS Build Staging
+on:
+  push:
+    branches:
+      - staging
+  pull_request:
+    branches:
+      - staging
+
+jobs:
+  build:
+    name: Install and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: npm
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - name: Install dependencies
+        run: npm ci
+      - name: 👷 Configure project
+        env:
+          EXPO_NOURRI_USER_APP_PROJECT_ID: ${{ secrets.EXPO_NOURRI_USER_APP_PROJECT_ID }}
+        run: |
+          eas init --id "$EXPO_NOURRI_USER_APP_PROJECT_ID" --force --non-interactive
+          echo $(jq '.expo.runtimeVersion.policy = "sdkVersion"' app.json) > app.json
+      - name: Build on EAS
+        run: eas build --profile preview --platform android --non-interactive --no-wait

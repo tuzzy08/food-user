@@ -1,0 +1,37 @@
+{
+	"cli": {
+		"version": ">= 7.8.1"
+	},
+	"build": {
+		"development": {
+			"developmentClient": true,
+			"distribution": "internal",
+			"env": {
+				"EXPO_PUBLIC_API_URL": "https://nourri-api.onrender.com",
+				"EXPO_PUBLIC_GOOGLE_API_KEY": "AIzaSyAsqciL5ObtnHp55b-K0bsvmTzfVUBCGMs",
+				"EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoidHV6enkwOCIsImEiOiJjbHU0OG83MXQxZWtyMmp0NDd5dWRwdXB0In0.hqEencu4Eqt6FBTCODXULw"
+			}
+		},
+		"preview": {
+			"distribution": "internal",
+			"android": {
+				"buildType": "apk"
+			},
+			"env": {
+				"EXPO_PUBLIC_API_URL": "https://nourri-api.onrender.com",
+				"EXPO_PUBLIC_GOOGLE_API_KEY": "AIzaSyAsqciL5ObtnHp55b-K0bsvmTzfVUBCGMs",
+				"EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoidHV6enkwOCIsImEiOiJjbHU0OG83MXQxZWtyMmp0NDd5dWRwdXB0In0.hqEencu4EEXPO_PUBLIC_API_URLEXPO_PUBLIC_API_URLqt6FBTCODXULw"
+			}
+		},
+		"production": {
+			"env": {
+				"EXPO_PUBLIC_API_URL": "https://nourri-api.onrender.com",
+				"EXPO_PUBLIC_GOOGLE_API_KEY": "AIzaSyAsqciL5ObtnHp55b-K0bsvmTzfVUBCGMs",
+				"EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoidHV6enkwOCIsImEiOiJjbHU0OG83MXQxZWtyMmp0NDd5dWRwdXB0In0.hqEencu4Eqt6FBTCODXULw"
+			}
+		}
+	},
+	"submit": {
+		"production": {}
+	}
+}

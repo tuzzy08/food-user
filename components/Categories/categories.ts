@@ -1,0 +1,31 @@
+const icons = {
+	soup: require('@/assets/images/icons/categories/soup.png'),
+	rice: require('@/assets/images/icons/categories/rice.png'),
+	pastry: require('@/assets/images/icons/categories/pastry.png'),
+	healthy: require('@/assets/images/icons/categories/healthy.png'),
+	drinks: require('@/assets/images/icons/categories/drinks.png'),
+	pizza: require('@/assets/images/icons/categories/pizza.png'),
+	shawarma: require('@/assets/images/icons/categories/shawarma.png'),
+	iceCream: require('@/assets/images/icons/categories/ice-cream-cone.png'),
+	breakfast: require('@/assets/images/icons/categories/breakfast.png'),
+	grilled: require('@/assets/images/icons/categories/grilled.png'),
+	seafood: require('@/assets/images/icons/categories/seafood.png'),
+	chinese: require('@/assets/images/icons/categories/chinese.png'),
+	mexican: require('@/assets/images/icons/categories/mexican.png'),
+};
+const categories = [
+	{ id: 1, title: 'Soups', imgUrl: icons.soup, href: '' },
+	{ id: 2, title: 'Rice', imgUrl: icons.rice, href: '' },
+	{ id: 3, title: 'Pastry', imgUrl: icons.pastry, href: '' },
+	{ id: 4, title: 'Healthy', imgUrl: icons.healthy, href: '' },
+	{ id: 5, title: 'Drinks', imgUrl: icons.drinks, href: '' },
+	{ id: 6, title: 'Pizza', imgUrl: icons.pizza, href: '' },
+	{ id: 7, title: 'Shawarma', imgUrl: icons.shawarma, href: '' },
+	{ id: 8, title: 'Ice Cream', imgUrl: icons.iceCream, href: '' },
+	{ id: 9, title: 'BreakFast', imgUrl: icons.breakfast, href: '' },
+	{ id: 10, title: 'Grilled', imgUrl: icons.grilled, href: '' },
+	{ id: 11, title: 'Seafood', imgUrl: icons.seafood, href: '' },
+	{ id: 12, title: 'Chinese', imgUrl: icons.chinese, href: '' },
+	{ id: 13, title: 'Mexican', imgUrl: icons.mexican, href: '' },
+];
+export default categories;
