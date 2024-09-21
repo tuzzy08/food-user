@@ -6,20 +6,18 @@ import {
 	heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { LegacyRef, forwardRef } from 'react';
-import { CartItem, useBoundStore } from '@/store/store';
-import { OrderTab } from '@/components/OrderTab/OrderTab';
+import { useBoundStore } from '@/store/store';
+import { OrderHistory } from '@/components/Orders/OrderHistory';
 import { CartList } from '@/components/Cart/CartList';
 import { useOrders } from '@/hooks/useOrders';
 
-const TabTitles = {
+const titles = Object.values({
 	MyCart: 'My Cart',
 	InProgress: 'In Progress',
 	Completed: 'Completed',
-};
+});
 
-const titles = Object.values(TabTitles);
-
-export const TabPage = forwardRef(
+export const OrderTab = forwardRef(
 	(
 		{
 			scrollX,
@@ -71,7 +69,7 @@ function TabContent({ item }: { item: string }) {
 		}
 	} else {
 		if (orders && orders.length > 0) {
-			return <OrderTab orders={orders} />;
+			return <OrderHistory />;
 		} else {
 			return <EmptyCart />;
 		}
@@ -104,19 +102,3 @@ const styles = StyleSheet.create({
 	emptyCart: {},
 	emptyCartText: {},
 });
-
-function groupCartItemByVendor(cart: CartItem[]) {
-	const groupedItems = cart.reduce(
-		(acc: { [key: string]: CartItem[] }, item) => {
-			const { vendor_title } = item.item;
-			if (acc[vendor_title]) {
-				acc[vendor_title].push(item);
-			} else {
-				acc[vendor_title] = [item];
-			}
-			return acc;
-		},
-		{}
-	);
-	return Object.entries(groupedItems);
-}

@@ -1,7 +1,7 @@
 import { StyleSheet, Animated, Dimensions, FlatList } from 'react-native';
 import { View } from '@/components/Themed';
 import { OrdersTabBar } from '@/components/OrdersTabBar';
-import { TabPage } from './TabPage';
+import { OrderTab } from '@/components/Orders/OrderTab';
 import { useCallback, useRef } from 'react';
 
 export interface Order {
@@ -46,7 +46,7 @@ export default function Page() {
 				lightColor='#eee'
 				darkColor='rgba(255,255,255,0.1)'
 			/>
-			<TabPage scrollX={scrollX} ref={flatlistRef} />
+			<OrderTab scrollX={scrollX} ref={flatlistRef} />
 		</View>
 	);
 }
