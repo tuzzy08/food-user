@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Toast from 'react-native-root-toast';
 import { BottomSheetView, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Image } from 'expo-image';
@@ -8,10 +8,7 @@ import { useBoundStore, Item, Option as StoreOption } from '@/store/store';
 import { ItemOptions } from './ItemOptions';
 import { CircleMinus, CirclePlus } from 'lucide-react-native';
 
-// type Option = StoreOption & { selected: boolean };
-
 const REQUIRED = 'required';
-
 interface SelectedOptions {
 	[key: string]: StoreOption | StoreOption[];
 }
@@ -61,16 +58,6 @@ export function BottomSheetContent({
 			if (category_type === REQUIRED) {
 				// For required options, replace the existing option for the category
 				updatedOptions[option.category] = option;
-
-				// Check if this selection resolves any missing required options
-				// const missingOptions = checkMissingRequiredOptions(
-				// 	updatedOptions,
-				// 	selectedItem
-				// );
-				// console.log('missing in option select', missingOptions);
-				// if (!missingOptions || missingOptions.length === 0) {
-				// 	setMissingRequiredOptions([]); // Clear missing options if all are selected
-				// }
 			} else {
 				// For optional options, toggle the selection
 				if (Array.isArray(updatedOptions[option.category])) {
@@ -155,12 +142,6 @@ export function BottomSheetContent({
 			return;
 		}
 
-		// console.log('missing in addtocart', missingOptions);
-		// if (missingOptions) {
-		// 	setMissingRequiredOptions(missingOptions);
-		// 	return; // Prevent adding to cart if required options are missing
-		// }
-
 		// Check if item already exists in cart
 		const existingItem = getItem(selectedItem._id);
 		if (existingItem) {
@@ -190,7 +171,7 @@ export function BottomSheetContent({
 			delay: 400,
 			opacity: 0.7,
 			hideOnPress: true,
-			backgroundColor: Colors.dark.alt.secondary,
+			backgroundColor: Colors.dark.alt.primary,
 		});
 		closeModal();
 	}, [

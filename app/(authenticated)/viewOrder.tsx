@@ -1,9 +1,10 @@
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import Colors from '@/constants/Colors';
 import { View, Text } from '@/components/Themed';
 import { CartItem, ItemsToOrder, useBoundStore } from '@/store/store';
 import OrderSummary from '@/components/Orders/OrderSummary';
+import { getCheckoutUrl } from '@/hooks/getCheckoutUrl';
 
 // function to calculate total for an array of CartItems
 const calculateItemTotal = (cartItems: CartItem[]) => {
@@ -25,27 +26,43 @@ const calculateItemTotal = (cartItems: CartItem[]) => {
 		return total + basePrice + optionsTotalAmount;
 	}, 0);
 };
-const handlePlaceOrder = (order: ItemsToOrder) => {
-	console.log('Placing order', order);
-};
 
 export default function Page() {
 	const { vendorId } = useLocalSearchParams();
 	const { getItemToOrder } = useBoundStore((state) => state);
 	const cartItem = getItemToOrder(vendorId as string);
 
-	console.log('cart item', cartItem);
+	const handlePlaceOrder = async (cart: ItemsToOrder) => {
+		if (!cart) return;
+		console.log('Placing order', cart);
+		const order_total = calculateItemTotal(cart.items);
+		try {
+			const { status, data } = await getCheckoutUrl(cart, order_total);
+			console.log('response from checkout url', status, data);
+			if (!status) return;
+			if (data.authorization_url) {
+				router.push({
+					pathname: '/(authenticated)/checkoutView',
+					params: {
+						authorization_url: data.authorization_url,
+					},
+				});
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	if (!cartItem) {
 		return (
 			<View style={styles.container}>
-				<Text>Item not found.</Text>
+				<Text>This order is empty.</Text>
 			</View>
 		);
 	}
 	return (
 		<ScrollView style={styles.container}>
-			<Text style={styles.headerTitle}>{`${cartItem.vendorTitle}`}</Text>
+			<Text style={styles.headerTitle}>{`${cartItem.vendor_title}`}</Text>
 			{cartItem.items.map((item) => (
 				<OrderSummary item={item} key={item.item.item_title} />
 			))}

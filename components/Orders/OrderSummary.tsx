@@ -8,7 +8,9 @@ import { useItemSelection } from '@/contexts/ItemSelectionContext';
 import { Image } from 'expo-image';
 
 export default function OrderSummary({ item }: { item: CartItem }) {
-	const { increaseItemQty, decreaseItemQty } = useBoundStore((state) => state);
+	const { increaseItemQty, decreaseItemQty, deleteItem } = useBoundStore(
+		(state) => state
+	);
 	const { removeSelectedOption } = useItemSelection();
 
 	const subTotal = item.item.item_price * item.quantity;
@@ -83,11 +85,6 @@ export default function OrderSummary({ item }: { item: CartItem }) {
 															.toString(),
 														borderRadius: 7,
 														padding: 5,
-														// paddingHorizontal: 5,
-														// paddingVertical: 2.5,
-														// flexDirection: 'column',
-														// justifyContent: 'center',
-														// alignItems: 'center',
 													},
 												]}
 												onPress={() => removeSelectedOption(option.category)}
@@ -125,6 +122,7 @@ export default function OrderSummary({ item }: { item: CartItem }) {
 							backgroundColor: Color(Colors.errorColor).whiten(2.2).toString(),
 						},
 					]}
+					onPress={() => deleteItem(item.item._id)}
 				>
 					<Trash size={19} color={Colors.errorColor} />
 				</Pressable>

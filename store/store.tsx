@@ -76,11 +76,11 @@ export interface CartItem {
 }
 
 export interface ItemsToOrder {
-	vendorId: string;
-	vendorTitle: string;
-	vendorLogoUrl: string;
+	vendor_id: string;
+	vendor_title: string;
+	vendor_logo_url: string;
 	items: Array<CartItem>;
-	total?: number;
+	order_total?: number;
 	createdAt?: string;
 }
 
@@ -140,7 +140,7 @@ const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (
 			const newCartItem: CartItem = { item, quantity };
 
 			const existingVendorIndex = state.cart.findIndex(
-				(order) => order.vendorId === vendorId
+				(order) => order.vendor_id === vendorId
 			);
 
 			if (existingVendorIndex !== -1) {
@@ -151,9 +151,9 @@ const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (
 			} else {
 				// New vendor, create a new order
 				const newOrder: ItemsToOrder = {
-					vendorId,
-					vendorTitle: item.vendor_title,
-					vendorLogoUrl: item.vendor_logo_url,
+					vendor_id: vendorId,
+					vendor_title: item.vendor_title,
+					vendor_logo_url: item.vendor_logo_url,
 					items: [newCartItem],
 					createdAt: new Date().toISOString(),
 				};
@@ -176,7 +176,7 @@ const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (
 		const state = get();
 		const cleanedVendorId = vendorId.replace(/^"(.*)"$/, '$1');
 		const order = state.cart.find(
-			(order) => order.vendorId === cleanedVendorId
+			(order) => order.vendor_id === cleanedVendorId
 		);
 		return order ? order : undefined;
 	},

@@ -1,26 +1,17 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
-import { CartItem, ItemsToOrder } from '@/store/store';
+import { ItemsToOrder } from '@/store/store';
 import { Image } from 'expo-image';
 import Colors from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 
-export function CartItemView({
-	order,
-	index,
-	showModal,
-}: {
-	order: ItemsToOrder;
-	index: number;
-	showModal: (data: CartItem) => void;
-}) {
-	// console.log('item', item);
+export function CartItemView({ order }: { order: ItemsToOrder }) {
 	const router = useRouter();
 	const handlePress = () => {
 		router.push({
 			pathname: '/viewOrder',
 			params: {
-				vendorId: JSON.stringify(order.vendorId),
+				vendorId: JSON.stringify(order.vendor_id),
 			},
 		});
 	};
@@ -28,9 +19,9 @@ export function CartItemView({
 		<View style={styles.container}>
 			{/* Restaurant title */}
 			<View style={styles.imgAndTextContainer}>
-				<Image source={`${order.vendorLogoUrl}`} style={styles.image} />
+				<Image source={`${order.vendor_logo_url}`} style={styles.image} />
 				<View>
-					<Text>{`${order.vendorTitle}`}</Text>
+					<Text>{`${order.vendor_title}`}</Text>
 					<Text style={styles.itemQtyText}>x{order.items.length} items</Text>
 				</View>
 			</View>

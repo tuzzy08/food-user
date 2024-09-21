@@ -50,6 +50,10 @@ export default function AuthLayout() {
 						name='viewOrder'
 						options={{ headerTitle: 'Order details' }}
 					/>
+					<Stack.Screen
+						name='checkoutView'
+						options={{ headerTitle: 'Checkout' }}
+					/>
 				</Stack>
 			</NotificationsProvider>
 		</ThemeProvider>

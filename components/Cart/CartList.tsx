@@ -1,55 +1,22 @@
-import { useCallback, useMemo, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { Text, View } from '@/components/Themed';
+import { View } from '@/components/Themed';
 import { CartItemView } from './CartItemView';
-import { CartItem, Item, ItemsToOrder } from '@/store/store';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { useBottomSheetBackHandler } from '@/hooks/useBottomSheetBackHandler';
-import { CartItemViewBottomSheet } from './CartItemViewBottomSheet';
-import { CartItemBottomSheetContent } from './CartItemBottomSheetContent';
-import { useItemSelection } from '@/contexts/ItemSelectionContext';
+import { ItemsToOrder } from '@/store/store';
 
 export function CartList({ cart }: { cart: Array<ItemsToOrder> }) {
-	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-	const { handleSheetPositionChange } =
-		useBottomSheetBackHandler(bottomSheetModalRef);
-	const snapPoints = useMemo(() => ['85%'], []);
-	const { addSelectedItem } = useItemSelection();
-
-	const showModal = useCallback(
-		(data: CartItem) => {
-			addSelectedItem(data.item);
-			bottomSheetModalRef.current?.present(data);
-		},
-		[addSelectedItem]
-	);
-	const closeModal = useCallback(() => {
-		bottomSheetModalRef.current?.dismiss();
-	}, []);
 	return (
 		<View style={styles.container}>
 			<FlashList
 				estimatedItemSize={100}
 				data={cart}
-				renderItem={({ item, index }) => (
-					<CartItemView order={item} index={index} showModal={showModal} />
-				)}
+				renderItem={({ item }) => <CartItemView order={item} />}
 				showsHorizontalScrollIndicator={false}
-				keyExtractor={(item) => item.vendorTitle}
+				keyExtractor={(item) => item.vendor_title}
 				ItemSeparatorComponent={() => (
 					<View style={{ height: 1, width: '100%' }} />
 				)}
 			/>
-			<CartItemViewBottomSheet
-				bottomSheetModalRef={bottomSheetModalRef}
-				handleSheetChanges={handleSheetPositionChange}
-				snapPoints={snapPoints}
-			>
-				{({ data }: { data: CartItem }) => (
-					<CartItemBottomSheetContent closeModal={closeModal} data={data} />
-				)}
-			</CartItemViewBottomSheet>
 		</View>
 	);
 }
