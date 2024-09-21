@@ -3,7 +3,6 @@ import { FlashList } from '@shopify/flash-list';
 import { Item } from '@/store/store';
 import { View } from '../Themed';
 import { MenuItem } from './MenuItem';
-import { useItemSelection } from '@/contexts/ItemSelectionContext';
 
 export function MenuList({
 	showModal,

@@ -3,7 +3,7 @@ import Colors from '@/constants/Colors';
 import { Categories } from './Categories';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { View } from '../Themed';
-import { Category } from '@/app/(authenticated)/[vendorId]';
+import { Category } from '@/app/(authenticated)/vendor';
 import { BottomSheet } from './BottomSheet';
 import { MenuList } from './MenuList';
 import { BottomSheetContent } from './BottomSheetContent';

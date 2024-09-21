@@ -24,14 +24,13 @@ type VendorProps = {
 export function ForYouCard({ vendor }: { vendor: VendorProps }) {
 	const router = useRouter();
 	const color = useColorScheme();
+	console.log(vendor);
 	return (
 		<TouchableOpacity
 			onPress={() =>
 				router.navigate({
-					params: {
-						vendor: JSON.stringify(vendor),
-					},
-					pathname: `/[vendorId]`,
+					params: { vendor: JSON.stringify(vendor) },
+					pathname: `/(authenticated)/vendor`,
 				})
 			}
 		>

@@ -38,7 +38,7 @@ export function SpotlightCard() {
 					params: {
 						vendor: JSON.stringify(spotlight_vendor),
 					},
-					pathname: `/[vendorId]`,
+					pathname: `/vendor`,
 				})
 			}
 		>

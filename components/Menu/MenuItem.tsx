@@ -68,7 +68,9 @@ export function MenuItem({
 						},
 					]}
 				>
-					{summarize(item?.item_description)}
+					{item?.item_description.split(' ').length > 5
+						? summarize(item?.item_description)
+						: item?.item_description}
 				</Text>
 				<Text
 					style={{
@@ -114,6 +116,6 @@ const styles = StyleSheet.create({
 
 function summarize(text: string | undefined) {
 	if (!text) return '';
-	const summary = text.split(' ').slice(0, 7).join(' ');
+	const summary = text.split(' ').slice(0, 5).join(' ');
 	return summary + '...';
 }
