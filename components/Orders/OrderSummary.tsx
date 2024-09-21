@@ -1,25 +1,44 @@
+import React, { useState, useCallback } from 'react';
 import { Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from '@/components/Themed';
 import { CartItem, useBoundStore } from '@/store/store';
 import { CircleMinus, CirclePlus, Trash, Dot } from 'lucide-react-native';
 import Color from 'color';
 import Colors from '@/constants/Colors';
-import { useItemSelection } from '@/contexts/ItemSelectionContext';
 import { Image } from 'expo-image';
 
 export default function OrderSummary({ item }: { item: CartItem }) {
-	const { increaseItemQty, decreaseItemQty, deleteItem } = useBoundStore(
-		(state) => state
+	const [itemOptions, setItemOptions] = useState(item.item.options);
+	const { increaseItemQty, decreaseItemQty, deleteItem, deleteOption } =
+		useBoundStore((state) => state);
+
+	const deleteItemOption = useCallback(
+		(optionTitle: string) => {
+			deleteOption(item.item._id, optionTitle);
+			setItemOptions((prevOptions) =>
+				prevOptions
+					.map((optionOrArray) => {
+						if (Array.isArray(optionOrArray)) {
+							const filteredArray = optionOrArray.filter(
+								(opt) => opt.title !== optionTitle
+							);
+							return filteredArray.length > 0 ? filteredArray : null;
+						}
+						return optionOrArray.title !== optionTitle ? optionOrArray : null;
+					})
+					.filter(
+						(option): option is NonNullable<typeof option> => option !== null
+					)
+			);
+		},
+		[deleteOption, item.item._id]
 	);
-	const { removeSelectedOption } = useItemSelection();
 
 	const subTotal = item.item.item_price * item.quantity;
+
 	return (
 		<View style={styles.container}>
-			{/* <View style={{ gap: 40 }}> */}
-			{/* Item Title & Quantity */}
 			<View style={{ gap: 5 }}>
-				{/* Item Title & Quantity */}
 				<View style={styles.itemTitleAndQuantity}>
 					<View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
 						<View style={styles.optionImage}>
@@ -32,7 +51,6 @@ export default function OrderSummary({ item }: { item: CartItem }) {
 						<Text style={styles.itemTitletext}>{item.item.item_title}</Text>
 					</View>
 
-					{/* Quantity buttons */}
 					<View style={styles.quantityContainer}>
 						<TouchableOpacity onPress={() => decreaseItemQty(item.item._id)}>
 							<CircleMinus size={20} color={Colors.light.text} />
@@ -43,62 +61,27 @@ export default function OrderSummary({ item }: { item: CartItem }) {
 						</TouchableOpacity>
 					</View>
 				</View>
-				{/* Options */}
+
 				<View style={styles.itemOptions}>
-					<Text
-						style={{
-							fontSize: 16,
-							marginTop: 10,
-							marginBottom: 10,
-							fontWeight: '500',
-						}}
-					>
-						Extras
-					</Text>
+					<Text style={styles.extrasTitle}>Extras</Text>
 					<View style={styles.extrasContainer}>
-						{item.item.options.length > 0 ? (
-							item.item.options.flatMap((optionOrArray, index) => {
+						{itemOptions.length > 0 ? (
+							itemOptions.flatMap((optionOrArray, index) => {
 								const options = Array.isArray(optionOrArray)
 									? optionOrArray
 									: [optionOrArray];
 								return options.map((option, subIndex) => (
-									<View
-										style={{
-											flexDirection: 'row',
-											alignItems: 'center',
-											gap: 15,
-											// marginTop: 5,
-											padding: 10,
-										}}
-										key={`${index}-${subIndex}`}
-									>
+									<View style={styles.optionItem} key={`${index}-${subIndex}`}>
 										<Dot size={10} color={Colors.light.text} />
 										<Text
-											style={{ fontSize: 14 }}
+											style={styles.optionText}
 										>{`${option.title}  x1`}</Text>
 										{option.type === 'optional' && (
 											<Pressable
-												style={[
-													{
-														backgroundColor: Color(Colors.errorColor)
-															.whiten(0.4)
-															.toString(),
-														borderRadius: 7,
-														padding: 5,
-													},
-												]}
-												onPress={() => removeSelectedOption(option.category)}
+												style={styles.removeOptionButton}
+												onPress={() => deleteItemOption(option.title)}
 											>
-												{/* <Text
-													style={{
-														alignSelf: 'center',
-														color: Colors.dark.text,
-													}}
-												>
-													remove
-												</Text> */}
 												<Trash size={14} color={Colors.dark.text} />
-												{/*  */}
 											</Pressable>
 										)}
 									</View>
@@ -110,28 +93,19 @@ export default function OrderSummary({ item }: { item: CartItem }) {
 					</View>
 				</View>
 			</View>
-			{/* Separator */}
-			{/* <View style={styles.separator} /> */}
-			{/* Price & Delete button */}
+
 			<View style={styles.priceAndDeleteButton}>
 				<Text style={styles.itemPriceText}>{`₦${subTotal}`}</Text>
 				<Pressable
-					style={[
-						styles.removeOptionButton,
-						{
-							backgroundColor: Color(Colors.errorColor).whiten(2.2).toString(),
-						},
-					]}
+					style={[styles.removeOptionButton, styles.deleteItemButton]}
 					onPress={() => deleteItem(item.item._id)}
 				>
 					<Trash size={19} color={Colors.errorColor} />
 				</Pressable>
 			</View>
-			{/* </View> */}
 		</View>
 	);
 }
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -163,15 +137,6 @@ const styles = StyleSheet.create({
 	itemOptions: {},
 	itemTitletext: { fontSize: 18 },
 	itemPriceText: {},
-	subTotalPriceText: {
-		fontSize: 16,
-	},
-	separator: {
-		// marginVertical: 15,
-		height: 0.3,
-		width: '100%',
-		backgroundColor: Colors.grey,
-	},
 	quantityContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -180,8 +145,25 @@ const styles = StyleSheet.create({
 	removeOptionButton: {
 		padding: 5,
 		borderRadius: 50,
+		backgroundColor: Color(Colors.errorColor).whiten(0.4).toString(),
+	},
+	deleteItemButton: {
+		backgroundColor: Color(Colors.errorColor).whiten(2.2).toString(),
 	},
 	quantityText: {
 		fontSize: 16,
 	},
+	extrasTitle: {
+		fontSize: 16,
+		marginTop: 10,
+		marginBottom: 10,
+		fontWeight: '500',
+	},
+	optionItem: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 15,
+		padding: 10,
+	},
+	optionText: { fontSize: 14 },
 });

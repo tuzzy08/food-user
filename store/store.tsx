@@ -90,6 +90,7 @@ interface CartSlice {
 	getItem: (itemId: string) => CartItem | undefined;
 	getItemToOrder: (vendorId: string) => ItemsToOrder | undefined;
 	deleteItem: (itemId: string) => void;
+	deleteOption: (itemId: string, optionTitle: string) => void;
 	increaseItemQty: (itemId: string) => void;
 	decreaseItemQty: (itemId: string) => void;
 	clearCart: () => void;
@@ -189,6 +190,29 @@ const creatCartSlice: StateCreator<CartSlice, [], [], CartSlice> = (
 					items: order.items.filter((cartItem) => cartItem.item._id !== itemId),
 				}))
 				.filter((order) => order.items.length > 0),
+		})),
+
+	deleteOption: (itemId: string, optionTitle: string) =>
+		set((state) => ({
+			cart: state.cart.map((order) => ({
+				...order,
+				items: order.items.map((cartItem) => {
+					if (cartItem.item._id === itemId) {
+						return {
+							...cartItem,
+							item: {
+								...cartItem.item,
+								options: cartItem.item.options.filter((option) =>
+									Array.isArray(option)
+										? !option.some((opt) => opt.title === optionTitle)
+										: option.title !== optionTitle
+								),
+							},
+						};
+					}
+					return cartItem;
+				}),
+			})),
 		})),
 
 	increaseItemQty: (itemId: string) =>
